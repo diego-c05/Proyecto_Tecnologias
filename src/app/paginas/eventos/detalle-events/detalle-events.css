@@ -1,0 +1,239 @@
+.contenedor-detalle {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.header-detalle {
+  background-color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-volver {
+  background: none;
+  border: none;
+  color: #d1410c;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
+.banner-evento {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-evento img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-finalizado {
+  background-color: #6f7287;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.contenido-principal {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.columna-info {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.titulo-principal {
+  font-size: 2rem;
+  color: #39364f;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+.info-organizador {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.avatar-org {
+  width: 50px;
+  height: 50px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.nombre-org {
+  font-weight: 600;
+  color: #39364f;
+  margin: 0;
+}
+
+.seccion {
+  margin-bottom: 2rem;
+}
+
+.seccion h2 {
+  font-size: 1.5rem;
+  color: #39364f;
+  margin-bottom: 1rem;
+}
+
+.descripcion-larga {
+  color: #6f7287;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.categoria-texto {
+  color: #6f7287;
+  margin-top: 1rem;
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.highlight-item {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #39364f;
+  font-weight: 500;
+}
+
+.info-ubicacion {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.direccion-principal {
+  font-weight: 600;
+  color: #39364f;
+  margin-bottom: 0.5rem;
+}
+
+.ciudad {
+  color: #6f7287;
+}
+
+.columna-inscripcion {
+  position: relative;
+}
+
+.tarjeta-sticky {
+  position: sticky;
+  top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.estado-inscripcion {
+  background: #4CAF50;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.estado-inscripcion.finalizado {
+  background: #6f7287;
+}
+
+.fecha-inscripcion {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #39364f;
+  margin: 1rem 0;
+}
+
+.btn-inscribir {
+  width: 100%;
+  padding: 1rem;
+  background: #d1410c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 1rem;
+}
+
+.btn-inscribir:hover:not(:disabled) {
+  background: #b5360a;
+}
+
+.btn-inscribir:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.info-extra {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.info-extra p {
+  color: #6f7287;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 968px) {
+  .contenido-principal {
+    grid-template-columns: 1fr;
+  }
+  
+  .banner-evento {
+    height: 250px;
+  }
+  
+  .titulo-principal {
+    font-size: 1.5rem;
+  }
+}

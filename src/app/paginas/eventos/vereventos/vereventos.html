@@ -6,18 +6,16 @@
     </div>
     <nav class="navegacion">
       <a href="#">Buscar eventos</a>
-      <a href="#">Mis eventos</a>
       <a href="#">Ayuda</a>
+       <a href="#">Cerrar sesión</a>
     </nav>
   </header>
 
   <!-- Título de sección -->
   <div class="seccion-titulo">
     <h2>Eventos de Vinculación Disponibles</h2>
-    <p class="subtitulo">Encuentra oportunidades de voluntariado y acumula tus horas</p>
+    <p class="subtitulo">Encuentra oportunidades de vinculación y acumula tus horas</p>
   </div>
-
-  <!-- ... todo igual hasta las tarjetas ... -->
 
 <div class="grid-eventos">
   <div 
@@ -46,10 +44,10 @@
         <span class="badge-cupos">👥 {{ evento.cuposDisponibles }} cupos</span>
       </div>
 
-      <!-- BOTÓN CON routerLink como tu compañero -->
+   
       <a 
         class="btn btn-primary" 
-        [routerLink]="['/eventos/detalle', evento.id]"
+        [routerLink]="['/eventos/detalle-events', evento.id]"
         (click)="guardarEvento(evento)">
         Ver detalles del evento
       </a>

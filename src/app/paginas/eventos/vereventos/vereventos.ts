@@ -24,7 +24,7 @@ export class Vereventos {
       descripcionCompleta: 'Un evento de voluntariado para estudiantes que desean realizar horas de vinculación. Participarás en actividades de arteterapia combinadas con café, ayudando a la comunidad local.',
       horasVoluntariado: 4,
       cuposDisponibles: 25,
-      imagen: 'https://via.placeholder.com/400x250/667EEA/FFFFFF?text=Arteterapia',
+      imagen: 'https://www.aboutespanol.com/thmb/71nZ9hc5LFxAQAcWjUTJdwpVelE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cafeypresionarterial-5661b2403df78cedb0b700ae.jpg',
       categoria: 'Caridad y Causas Sociales',
       estado: 'disponible'
     },
@@ -39,7 +39,7 @@ export class Vereventos {
       descripcionCompleta: 'Voluntariado enfocado en el bienestar animal. Actividades incluyen limpieza de instalaciones, alimentación de animales, y mantenimiento general del refugio.',
       horasVoluntariado: 5,
       cuposDisponibles: 30,
-      imagen: 'https://via.placeholder.com/400x250/4CAF50/FFFFFF?text=Refugio+Animales',
+      imagen: 'https://www.laprensa.hn/binrepository/972x648/0c0/0d0/none/11004/VSFK/perros5_2078991_20220727131616.jpg',
       categoria: 'Bienestar Animal',
       estado: 'disponible'
     },
@@ -54,7 +54,7 @@ export class Vereventos {
       descripcionCompleta: 'Actividad de preparación de alimentos para personas sin hogar. Los voluntarios ayudarán en la cocina, preparación de ingredientes, y distribución de comidas.',
       horasVoluntariado: 4,
       cuposDisponibles: 20,
-      imagen: 'https://via.placeholder.com/400x250/FF6B6B/FFFFFF?text=Fundacion+Abrigo',
+      imagen: 'https://www.ahm-honduras.com/zipodemos/wp-content/uploads/2018/05/TRC3.jpg',
       categoria: 'Caridad y Causas Sociales',
       estado: 'disponible'
     },
@@ -69,7 +69,7 @@ export class Vereventos {
       descripcionCompleta: 'Voluntariado ambiental enfocado en la limpieza y embellecimiento de espacios públicos. Incluye recolección de basura, plantación de árboles, y mantenimiento de jardines.',
       horasVoluntariado: 6,
       cuposDisponibles: 50,
-      imagen: 'https://via.placeholder.com/400x250/00BCD4/FFFFFF?text=Limpieza+Parque',
+      imagen: 'https://departamento19.hn/wp-content/uploads/2022/05/parque-La-Leona.jpg',
       categoria: 'Medio Ambiente',
       estado: 'disponible'
     },
@@ -84,7 +84,7 @@ export class Vereventos {
       descripcionCompleta: 'Actividad recreativa con adultos mayores. Los voluntarios guiarán talleres de pintura de mandalas, compartirán conversaciones, y brindarán compañía a los residentes del asilo.',
       horasVoluntariado: 3,
       cuposDisponibles: 15,
-      imagen: 'https://via.placeholder.com/400x250/9C27B0/FFFFFF?text=Asilo',
+      imagen: 'https://clpvd.org/wp-content/uploads/2025/09/mandala-2-600x400.png',
       categoria: 'Adulto Mayor',
       estado: 'finalizado'
     },
@@ -99,7 +99,7 @@ export class Vereventos {
       descripcionCompleta: 'Voluntariado en banco de alimentos. Actividades incluyen recepción de donaciones, clasificación de productos, empaquetado, y preparación de kits de alimentos.',
       horasVoluntariado: 4,
       cuposDisponibles: 35,
-      imagen: 'https://via.placeholder.com/400x250/FF9800/FFFFFF?text=Banco+Alimentos',
+      imagen: 'https://www.bbva.com/wp-content/uploads/2024/04/BBVA-donacion-alimentos-sostenibilidad.jpg',
       categoria: 'Caridad y Causas Sociales',
       estado: 'disponible'
     }

@@ -1,0 +1,66 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 22px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #1f2937;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.title {
+  margin: 0 0 16px 0;
+  font-size: 22px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  background: #f9fafb;
+  color: #6b7280;
+  font-size: 13px;
+  padding: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table td {
+  padding: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: center;
+  font-size: 14px;
+}
+
+.table tr:hover {
+  background: #fafafa;
+}
+
+.total {
+  margin-top: 14px;
+  font-weight: 700;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background: #f9fafb;
+}

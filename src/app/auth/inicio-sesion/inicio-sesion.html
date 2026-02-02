@@ -1,0 +1,29 @@
+<div class="page card">
+  <div class="header">
+    <div>
+      <h1 class="title">Gestión Horas de Vinculación</h1>
+      <p class="subtitle">Inicio de sesión</p>
+    </div>
+  </div>
+
+  <form class="filters">
+    <div class="field">
+      <label>Correo</label>
+      <input type="email" placeholder="correo@ejemplo.com">
+    </div>
+
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" placeholder="********">
+    </div>
+
+    <div class="filters-actions">
+      <button type="button" class="btn btn-primary" routerLink="/eventos/vereventos">Ingresar</button>
+    </div>
+  </form>
+
+  <p class="hint">
+    ¿No tienes cuenta?
+    <a [routerLink]="'/registro'" class="btn btn-ghost btn-sm">Regístrate aquí</a>
+  </p>
+</div>
