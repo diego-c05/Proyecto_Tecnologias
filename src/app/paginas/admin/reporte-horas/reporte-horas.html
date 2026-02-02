@@ -1,0 +1,242 @@
+<div class="page">
+  <header class="header">
+    <div>
+      <h1 class="title">Panel Administrativo</h1>
+      <p class="subtitle">Reporte de horas por estudiante</p>
+    </div>
+
+    <div class="header-actions">
+      <a class="btn btn-ghost" routerLink="/admin/reporte-eventos">
+        Ver reporte de eventos
+      </a>
+    </div>
+  </header>
+  <section class="stats">
+    <div class="card stat">
+      <p class="stat-label">Estudiantes registrados</p>
+      <p class="stat-value">{{ estudiantes?.length || 0 }}</p>
+      <p class="stat-note">Con horas registradas en el sistema</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Estudiantes con horas de vinculación completas</p>
+      <p class="stat-value">8</p>
+      <p class="stat-note">Cumplieron el requisito</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Estudiantes pendientes de horas de vinculación</p>
+      <p class="stat-value">12</p>
+      <p class="stat-note">Aún no completan las horas</p>
+    </div>
+  </section>
+  <section class="card filters">
+    <div class="filters-row">
+      <div class="field">
+        <label>Buscar por número de cuenta</label>
+        <input type="text" placeholder="Ej: 32211089" />
+      </div>
+
+      <div class="field">
+        <label>Estado</label>
+        <select>
+          <option>Todos</option>
+          <option>Horas completas</option>
+          <option>Pendiente</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Ordenar</label>
+        <select>
+          <option>Mayor a menor (horas)</option>
+          <option>Menor a mayor (horas)</option>
+          <option>Por número de cuenta</option>
+        </select>
+      </div>
+
+      <div class="filters-actions">
+        <button class="btn btn-primary" type="button">Aplicar</button>
+        <button class="btn btn-light" type="button">Limpiar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head">
+      <h2 class="section-title">Estudiantes con horas de vinculación completas</h2>
+      <span class="badge badge-success">Completas</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cuenta</th>
+            <th>Estudiante</th>
+            <th>Horas</th>
+            <th class="col-actions">Modificar</th>
+            <th class="col-actions">Detalles</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="mono">32211089</td>
+            <td>
+              <div class="student">
+                <div class="student-name">Josue Gonzales</div>
+                <div class="student-desc">Horas completadas</div>
+              </div>
+            </td>
+            <td><span class="pill pill-primary">40</span></td>
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+            </td>
+            <td class="col-actions">
+              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="mono">32144556</td>
+            <td>
+              <div class="student">
+                <div class="student-name">Maria Lopez</div>
+                <div class="student-desc">Horas completadas</div>
+              </div>
+            </td>
+            <td><span class="pill pill-primary">42</span></td>
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+            </td>
+            <td class="col-actions">
+              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head">
+      <h2 class="section-title">Estudiantes pendientes de horas de vinculación</h2>
+      <span class="badge badge-warning">Pendientes</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cuenta</th>
+            <th>Estudiante</th>
+            <th>Horas</th>
+            <th>Horas faltantes</th>
+            <th class="col-actions">Modificar</th>
+            <th class="col-actions">Detalles</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="mono">32199887</td>
+            <td>
+              <div class="student">
+                <div class="student-name">Carlos Mejia</div>
+                <div class="student-desc">Pendiente de horas</div>
+              </div>
+            </td>
+            <td><span class="pill pill-primary">18</span></td>
+            <td><span class="pill pill-neutral">22</span></td>
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+            </td>
+            <td class="col-actions">
+              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="mono">32122334</td>
+            <td>
+              <div class="student">
+                <div class="student-name">Ana Martinez</div>
+                <div class="student-desc">Pendiente de horas</div>
+              </div>
+            </td>
+            <td><span class="pill pill-primary">30</span></td>
+            <td><span class="pill pill-neutral">10</span></td>
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+            </td>
+            <td class="col-actions">
+              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <section class="card table-card">
+    <div class="table-head">
+      <h2 class="section-title">Listado general de estudiantes</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cuenta</th>
+            <th>Estudiante</th>
+            <th>Horas registradas</th>
+            <th>Estado</th>
+            <th class="col-actions">Modificar</th>
+            <th class="col-actions">Detalles</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let s of estudiantes">
+            <td class="mono">{{ s.cuenta }}</td>
+
+            <td>
+              <div class="student">
+                <div class="student-name">{{ s.nombre }}</div>
+                <div class="student-desc">Historial de participación en vinculación</div>
+              </div>
+            </td>
+
+            <td>
+              <span class="pill pill-primary">{{ s.horas }}</span>
+            </td>
+
+            <td>
+              <span class="status status-open">Registrado</span>
+            </td>
+
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+            </td>
+
+            <td class="col-actions">
+              <button class="btn btn-ghost btn-sm" type="button">Ver detalles del estudiante</button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!estudiantes || estudiantes.length === 0">
+            <td colspan="6" class="empty">
+              No hay registros de horas todavía.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Reporte administrativo</span>
+  </footer>
+</div>

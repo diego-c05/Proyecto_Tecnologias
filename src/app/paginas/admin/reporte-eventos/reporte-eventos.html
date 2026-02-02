@@ -1,0 +1,146 @@
+<div class="page">
+  <header class="header">
+    <div>
+      <h1 class="title">Panel Administrativo</h1>
+      <p class="subtitle">Reporte de eventos de vinculación</p>
+    </div>
+
+    <div class="header-actions">
+      <a class="btn btn-ghost" routerLink="/admin/reporte-horas">
+        Ver reporte de horas
+      </a>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="card stat">
+      <p class="stat-label">Eventos publicados</p>
+      <p class="stat-value">{{ eventos?.length || 0 }}</p>
+      <p class="stat-note">Registrados en el sistema</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Eventos activos</p>
+      <p class="stat-value">3</p>
+      <p class="stat-note">Disponibles actualmente</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Eventos cerrados</p>
+      <p class="stat-value">1</p>
+      <p class="stat-note">Finalizados</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Cupos totales</p>
+      <p class="stat-value">120</p>
+      <p class="stat-note">Suma de cupos publicados</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Horas disponibles</p>
+      <p class="stat-value">45</p>
+      <p class="stat-note">Horas asignadas en eventos</p>
+    </div>
+  </section>
+
+  <section class="card filters">
+    <div class="filters-row">
+      <div class="field">
+        <label>Buscar evento</label>
+        <input type="text" placeholder="Ej: reforestación, donación..." />
+      </div>
+
+      <div class="field">
+        <label>Estado</label>
+        <select>
+          <option>Todos</option>
+          <option>Abierto</option>
+          <option>Cerrado</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Ordenar</label>
+        <select>
+          <option>Más recientes</option>
+          <option>Más horas</option>
+          <option>Más cupos</option>
+        </select>
+      </div>
+
+      <div class="filters-actions">
+        <button class="btn btn-primary" type="button">Aplicar</button>
+        <button class="btn btn-light" type="button">Limpiar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head">
+      <h2 class="section-title">Listado de eventos</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Evento</th>
+            <th>Fecha</th>
+            <th>Lugar</th>
+            <th>Cupos</th>
+            <th>Horas</th>
+            <th>Estado</th>
+            <th class="col-actions">Modificar</th>
+            <th class="col-actions">Eliminar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let e of eventos">
+            <td>
+              <div class="event">
+                <div class="event-name">{{ e.nombre }}</div>
+                <div class="event-desc">Actividad de voluntariado institucional</div>
+              </div>
+            </td>
+
+            <td>{{ e.fecha }}</td>
+            <td>{{ e.lugar }}</td>
+            <td>{{ e.cupos }}</td>
+
+            <td>
+              <span class="pill pill-primary">{{ e.horas }}</span>
+            </td>
+
+            <td>
+              <span class="status status-open">Abierto</span>
+            </td>
+
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" type="button">
+                Modificar
+              </button>
+            </td>
+
+            <td class="col-actions">
+              <button class="btn btn-danger btn-sm" type="button">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!eventos || eventos.length === 0">
+            <td colspan="8" class="empty">No hay eventos registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Panel administrativo</span>
+  </footer>
+</div>
