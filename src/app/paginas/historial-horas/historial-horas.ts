@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './historial-horas.css',
 })
 export class HistorialHoras {
-
+  
 }
