@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>Eventos Disponibles</h1>
+  
+  <div class="eventos-grid">
+    <div class="evento-card" *ngFor="let evento of eventos">
+      <h3>{{ evento.nombre }}</h3>
+      <p><strong>Fecha:</strong> {{ evento.fecha }}</p>
+      <p><strong>Hora:</strong> {{ evento.hora }}</p>
+      <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+      <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+      <p><strong>Horas acreditadas:</strong> {{ evento.horasAcreditadas }}</p>
+      <p><strong>Cupos disponibles:</strong> {{ evento.cuposDisponibles }}</p>
+      <button class="btn-inscribir">Inscribirse</button>
+    </div>
+  </div>
+</div>
