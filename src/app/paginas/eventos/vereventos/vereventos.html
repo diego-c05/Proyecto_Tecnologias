@@ -1,16 +1,58 @@
-<div class="container">
-  <h1>Eventos Disponibles</h1>
-  
-  <div class="eventos-grid">
-    <div class="evento-card" *ngFor="let evento of eventos">
-      <h3>{{ evento.nombre }}</h3>
-      <p><strong>Fecha:</strong> {{ evento.fecha }}</p>
-      <p><strong>Hora:</strong> {{ evento.hora }}</p>
-      <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
-      <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
-      <p><strong>Horas acreditadas:</strong> {{ evento.horasAcreditadas }}</p>
-      <p><strong>Cupos disponibles:</strong> {{ evento.cuposDisponibles }}</p>
-      <button class="btn-inscribir">Inscribirse</button>
+<div class="contenedor-principal">
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <h1>🎓 CEUTEC Vinculación</h1>
+    </div>
+    <nav class="navegacion">
+      <a href="#">Buscar eventos</a>
+      <a href="#">Mis eventos</a>
+      <a href="#">Ayuda</a>
+    </nav>
+  </header>
+
+  <!-- Título de sección -->
+  <div class="seccion-titulo">
+    <h2>Eventos de Vinculación Disponibles</h2>
+    <p class="subtitulo">Encuentra oportunidades de voluntariado y acumula tus horas</p>
+  </div>
+
+  <!-- ... todo igual hasta las tarjetas ... -->
+
+<div class="grid-eventos">
+  <div 
+    class="tarjeta-evento" 
+    *ngFor="let evento of eventos"
+    [class.finalizado]="evento.estado === 'finalizado'">
+    
+    <div class="imagen-evento">
+      <img [src]="evento.imagen" [alt]="evento.nombre">
+      <div class="badge-estado" *ngIf="evento.estado === 'finalizado'">
+        Evento Finalizado
+      </div>
+    </div>
+
+    <div class="contenido-tarjeta">
+      <h3 class="titulo-evento">{{ evento.nombre }}</h3>
+      
+      <p class="fecha-evento">
+        📅 {{ formatearFecha(evento.fecha) }}, {{ evento.hora }}
+      </p>
+      
+      <p class="precio">Gratis</p>
+      
+      <div class="info-adicional">
+        <span class="badge-horas">⏱️ {{ evento.horasVoluntariado }} horas</span>
+        <span class="badge-cupos">👥 {{ evento.cuposDisponibles }} cupos</span>
+      </div>
+
+      <!-- BOTÓN CON routerLink como tu compañero -->
+      <a 
+        class="btn btn-primary" 
+        [routerLink]="['/eventos/detalle', evento.id]"
+        (click)="guardarEvento(evento)">
+        Ver detalles del evento
+      </a>
     </div>
   </div>
 </div>
