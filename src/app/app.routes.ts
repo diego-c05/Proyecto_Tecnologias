@@ -10,7 +10,7 @@ import { Navegacion } from './paginas/navegacion/navegacion';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'admin/reporte-eventos', pathMatch: 'full' },
+  { path: '', redirectTo: 'inicio-sesion', pathMatch: 'full' },
   {
     path: '', component: Navegacion,
     children: [{ path: 'admin/reporte-eventos', component: ReporteEventos },

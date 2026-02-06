@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/gestion-horas-vinculacion/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
