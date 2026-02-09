@@ -1,0 +1,19 @@
+<h2>{{titulo}}</h2>
+
+<form (ngSubmit)="guardar()">
+
+  <label>Nombre</label><br>
+  <input type="text" [(ngModel)]="materia.nombre" name="nombre" required>
+  <br><br>
+
+  <label>Código</label><br>
+  <input type="text" [(ngModel)]="materia.codigo" name="codigo" required>
+  <br><br>
+
+  <label>Sección</label><br>
+  <input type="text" [(ngModel)]="materia.seccion" name="seccion" required>
+  <br><br>
+
+  <button type="submit">Guardar</button>
+
+</form>
