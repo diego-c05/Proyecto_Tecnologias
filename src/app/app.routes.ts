@@ -3,8 +3,8 @@ import { Vereventos } from './paginas/eventos/vereventos/vereventos';
 import { DetalleEvents } from './paginas/eventos/detalle-events/detalle-events';
 import { ReporteEventos } from './paginas/admin/reporte-eventos/reporte-eventos';
 import { ReporteHoras } from './paginas/admin/reporte-horas/reporte-horas';
-import { InicioSesion } from './auth/inicio-sesion/inicio-sesion';
-import { Registro } from './auth/registro/registro';
+import { InicioSesionComponent } from './auth/inicio-sesion/inicio-sesion';
+import { RegistroComponent } from './auth/registro/registro';
 import { HistorialHoras } from './paginas/historial-horas/historial-horas';
 import { Navegacion } from './paginas/navegacion/navegacion';
 
@@ -19,6 +19,6 @@ export const routes: Routes = [
       { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
     { path: 'historial-horas', component: HistorialHoras }]
   },
-  { path: 'inicio-sesion', component: InicioSesion },
-  { path: 'registro', component: Registro },
+  { path: 'inicio-sesion', component: InicioSesionComponent },
+  { path: 'registro', component: RegistroComponent },
 ];

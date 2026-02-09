@@ -5,28 +5,77 @@
       <p class="subtitle">Registro de estudiantes</p>
     </div>
   </div>
-
-  <form class="filters">
+ 
+  <form class="filters" (ngSubmit)="registrarse()">
     <div class="field">
-      <label>Nombre</label>
-      <input type="text" placeholder="Nombre completo">
+      <label>Nombre Completo</label>
+      <input 
+        type="text" 
+        [(ngModel)]="nombreCompleto"
+        name="nombreCompleto"
+        placeholder="Nombre completo"
+        [disabled]="cargando"
+        required>
     </div>
 
     <div class="field">
-      <label>Correo</label>
-      <input type="email" placeholder="correo@ejemplo.com">
+      <label>Correo Electrónico</label>
+      <input 
+        type="email" 
+        [(ngModel)]="correoElectronico"
+        name="correoElectronico"
+        placeholder="correo@ejemplo.com"
+        [disabled]="cargando"
+        required>
     </div>
 
+    <div class="field">
+      <label>Nombre de Usuario</label>
+      <input 
+        type="text" 
+        [(ngModel)]="nombreUsuario"
+        name="nombreUsuario"
+        placeholder="nombre_usuario"
+        [disabled]="cargando"
+        required>
+    </div>
+ 
     <div class="field">
       <label>Contraseña</label>
-      <input type="password" placeholder="********">
+      <input 
+        type="password" 
+        [(ngModel)]="contrasena"
+        name="contrasena"
+        placeholder="Mínimo 6 caracteres"
+        [disabled]="cargando"
+        required>
     </div>
 
+    <div class="field">
+      <label>Confirmar Contraseña</label>
+      <input 
+        type="password" 
+        [(ngModel)]="confirmarContrasena"
+        name="confirmarContrasena"
+        placeholder="Repite tu contraseña"
+        [disabled]="cargando"
+        required>
+    </div>
+
+    <p *ngIf="mensaje" class="mensaje" [class.error]="mensaje.includes('❌')">
+      {{ mensaje }}
+    </p>
+ 
     <div class="filters-actions">
-      <button type="button" class="btn btn-primary">Registrarse</button>
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="cargando">
+        {{ cargando ? 'Registrando...' : 'Registrarse' }}
+      </button>
     </div>
   </form>
-
+ 
   <p class="hint">
     ¿Ya tienes cuenta?
     <a [routerLink]="'/inicio-sesion'" class="btn btn-ghost btn-sm">Inicia sesión</a>
