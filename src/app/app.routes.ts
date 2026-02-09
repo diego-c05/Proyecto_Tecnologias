@@ -7,6 +7,7 @@ import { InicioSesionComponent } from './auth/inicio-sesion/inicio-sesion';
 import { RegistroComponent } from './auth/registro/registro';
 import { HistorialHoras } from './paginas/historial-horas/historial-horas';
 import { Navegacion } from './paginas/navegacion/navegacion';
+import { MateriasPagina } from './paginas/materias/materias-pagina/materias-pagina';
 
 
 export const routes: Routes = [
@@ -16,8 +17,10 @@ export const routes: Routes = [
     children: [{ path: 'admin/reporte-eventos', component: ReporteEventos },
     { path: 'admin/reporte-horas', component: ReporteHoras },
     { path: 'eventos/vereventos', component: Vereventos },
-      { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
-    { path: 'historial-horas', component: HistorialHoras }]
+    { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
+    { path: 'historial-horas', component: HistorialHoras },
+    { path: 'materias/materias-pagina', component: MateriasPagina },
+    ]
   },
   { path: 'inicio-sesion', component: InicioSesionComponent },
   { path: 'registro', component: RegistroComponent },
