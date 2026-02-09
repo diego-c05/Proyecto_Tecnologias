@@ -1,0 +1,15 @@
+<nav *ngIf="rol">
+
+  <ng-container *ngIf="rol === 'usuario'">
+    <a routerLink="/eventos/vereventos">Ver Eventos</a>
+    <a routerLink="/historial-horas">Historial de Horas</a>
+  </ng-container>
+
+  <ng-container *ngIf="rol === 'coordinador'">
+    <a routerLink="/admin/reporte-eventos">Reportes de Eventos</a>
+    <a routerLink="/admin/reporte-horas">Reporte de Horas</a>
+  </ng-container>
+
+</nav>
+
+<router-outlet></router-outlet>
