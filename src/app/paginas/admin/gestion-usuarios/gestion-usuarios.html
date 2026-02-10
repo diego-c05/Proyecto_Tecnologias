@@ -1,0 +1,164 @@
+<div class="page">
+  <input id="toggleCrear" class="toggle" type="checkbox" />
+
+  <header class="header">
+    <div>
+      <h1 class="title">Panel Administrativo</h1>
+      <p class="subtitle">Gestión de usuarios</p>
+    </div>
+
+    <div class="header-actions">
+      <label for="toggleCrear" class="btn btn-primary">+ Crear usuario</label>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="card stat">
+      <p class="stat-label">Usuarios registrados</p>
+      <p class="stat-value">{{ usuarios?.length || 0 }}</p>
+      <p class="stat-note">Total en la colección usuarios</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Usuarios normales</p>
+      <p class="stat-value">{{ totalUsuariosNormales }}</p>
+      <p class="stat-note">Rol: usuario</p>
+    </div>
+
+    <div class="card stat">
+      <p class="stat-label">Coordinadores</p>
+      <p class="stat-value">{{ totalCoordinadores }}</p>
+      <p class="stat-note">Rol: coordinador</p>
+    </div>
+  </section>
+
+  <section class="card form-card">
+    <div class="form-head">
+      <h2 class="section-title">Crear nuevo usuario</h2>
+      <label for="toggleCrear" class="btn btn-light btn-sm">Cerrar</label>
+    </div>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="crear()">
+      <div class="grid">
+        <div class="field">
+          <label>Nombre completo</label>
+          <input type="text" formControlName="nombreCompleto" placeholder="Ej: Pedro Hernández" />
+          <small class="help" *ngIf="form.get('nombreCompleto')?.touched && form.get('nombreCompleto')?.invalid">
+            Escribe mínimo 3 caracteres.
+          </small>
+        </div>
+
+        <div class="field">
+          <label>Usuario</label>
+          <input type="text" formControlName="nombreUsuario" placeholder="Ej: pedrohernandez01" />
+          <small class="help" *ngIf="form.get('nombreUsuario')?.touched && form.get('nombreUsuario')?.invalid">
+            Escribe mínimo 3 caracteres.
+          </small>
+        </div>
+
+        <div class="field">
+          <label>Correo</label>
+          <input type="email" formControlName="correoElectronico" placeholder="Ej: pedro@gmail.com" />
+          <small class="help" *ngIf="form.get('correoElectronico')?.touched && form.get('correoElectronico')?.invalid">
+            Correo inválido.
+          </small>
+        </div>
+
+        <div class="field">
+          <label>Rol</label>
+          <select formControlName="rol">
+            <option value="usuario">usuario</option>
+            <option value="coordinador">coordinador</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Crear usuario</button>
+        <label for="toggleCrear" class="btn btn-ghost">Cancelar</label>
+      </div>
+    </form>
+  </section>
+
+  <section class="card table-card">
+    <div class="table-head">
+      <h2 class="section-title">Listado de usuarios</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre completo</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th class="col-actions">Modificar</th>
+            <th class="col-actions">Eliminar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let u of usuarios">
+            <ng-container *ngIf="editandoDocId !== u.docId; else editRow">
+              <td>{{ u.nombreCompleto }}</td>
+              <td>@{{ u.nombreUsuario }}</td>
+              <td>{{ u.correoElectronico }}</td>
+              <td>
+                <span class="pill pill-primary" *ngIf="u.rol === 'coordinador'">coordinador</span>
+                <span class="pill pill-neutral" *ngIf="u.rol !== 'coordinador'">usuario</span>
+              </td>
+              <td class="col-actions">
+                <button class="btn btn-light btn-sm" type="button" (click)="empezarEdicion(u)">Modificar</button>
+              </td>
+              <td class="col-actions">
+                <button class="btn btn-danger btn-sm" type="button" (click)="eliminar(u.docId)">Eliminar</button>
+              </td>
+            </ng-container>
+
+            <ng-template #editRow>
+              <ng-container [formGroup]="editForm">
+                <td>
+                  <label class="mini">Nombre</label>
+                  <input type="text" formControlName="nombreCompleto" />
+                </td>
+                <td>
+                  <label class="mini">Usuario</label>
+                  <input type="text" formControlName="nombreUsuario" />
+                </td>
+                <td>
+                  <label class="mini">Correo</label>
+                  <input type="email" formControlName="correoElectronico" />
+                </td>
+                <td>
+                  <label class="mini">Rol</label>
+                  <select formControlName="rol">
+                    <option value="usuario">usuario</option>
+                    <option value="coordinador">coordinador</option>
+                  </select>
+                </td>
+                <td class="col-actions">
+                  <button class="btn btn-primary btn-sm" type="button" (click)="guardarEdicion()">Guardar</button>
+                  <button class="btn btn-ghost btn-sm" type="button" (click)="cancelarEdicion()">Cancelar</button>
+                </td>
+                <td class="col-actions">
+                  <span class="status status-open">Editando</span>
+                </td>
+              </ng-container>
+            </ng-template>
+          </tr>
+
+          <tr *ngIf="!usuarios || usuarios.length === 0">
+            <td colspan="6" class="empty">No hay usuarios registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Panel administrativo</span>
+  </footer>
+</div>

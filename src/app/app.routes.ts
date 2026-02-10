@@ -9,6 +9,9 @@ import { HistorialHoras } from './paginas/historial-horas/historial-horas';
 import { Navegacion } from './paginas/navegacion/navegacion';
 import { EventsList } from './paginas/eventos/events-list/events-list';
 import { EventsForm} from './paginas/eventos/events-form/events-form';
+import { GestionUsuarios } from './paginas/admin/gestion-usuarios/gestion-usuarios';
+import { MateriasPagina } from './paginas/materias/materias-pagina/materias-pagina';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio-sesion', pathMatch: 'full' },
@@ -16,6 +19,7 @@ export const routes: Routes = [
     path: '', component: Navegacion,
     children: [{ path: 'admin/reporte-eventos', component: ReporteEventos },
     { path: 'admin/reporte-horas', component: ReporteHoras },
+    { path: 'admin/gestion-usuarios', component: GestionUsuarios },
     { path: 'eventos/vereventos', component: Vereventos },
       { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
 
@@ -23,7 +27,11 @@ export const routes: Routes = [
  { path: 'eventos/crear', component: EventsForm },
       { path: 'eventos/editar/:id', component: EventsForm },
 
-    { path: 'historial-horas', component: HistorialHoras }]
+    { path: 'historial-horas', component: HistorialHoras },
+    { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
+    { path: 'historial-horas', component: HistorialHoras },
+    { path: 'materias/materias-pagina', component: MateriasPagina },
+    ]
   },
   { path: 'inicio-sesion', component: InicioSesionComponent },
   { path: 'registro', component: RegistroComponent },

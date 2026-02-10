@@ -1,0 +1,59 @@
+<div class="materias-lista">
+
+  <div class="header">
+    <h2>Lista de Materias</h2>
+    <span class="count" *ngIf="!cargando">({{ materias.length || 0 }})</span>
+  </div>
+
+  <!-- Estado de carga -->
+  <div class="loading" *ngIf="cargando">
+    <span class="spinner"></span>
+    Cargando materias...
+  </div>
+
+  <!-- Tabla -->
+  <ng-container *ngIf="!cargando">
+    <div class="table-wrapper" *ngIf="(materias.length || 0) > 0; else sinMaterias">
+      <table class="materias-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Sección</th>
+            <th class="acciones">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let m of materias">
+            <td class="nombre">{{ m.nombre }}</td>
+            <td>{{ m.codigo }}</td>
+            <td>{{ m.seccion }}</td>
+            <td class="acciones">
+              <button class="btn btn-ghost" (click)="editMateria(m)">
+                Editar
+              </button>
+              <button class="btn btn-danger" (click)="eliminarMateria(m.id)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vacío -->
+    <ng-template #sinMaterias>
+      <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <div>
+          <strong>No hay materias registradas.</strong>
+          <div class="empty-sub">
+            Crea una nueva materia para que aparezca en la tabla.
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+
+</div>

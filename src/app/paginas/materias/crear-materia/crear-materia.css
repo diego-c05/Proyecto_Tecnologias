@@ -1,0 +1,95 @@
+/* ========================= */
+/* CONTENEDOR                */
+/* ========================= */
+.crear-materia {
+  width: 100%;
+}
+
+/* ========================= */
+/* TÍTULO                    */
+/* ========================= */
+.crear-materia h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+  color: #b71c1c;
+}
+
+/* ========================= */
+/* FORMULARIO                */
+/* ========================= */
+form {
+  display: grid;
+  gap: 18px;
+}
+
+/* ========================= */
+/* GRUPOS                    */
+/* ========================= */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* ========================= */
+/* INPUTS                    */
+/* ========================= */
+.form-group input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+}
+
+/* ========================= */
+/* BOTONES                   */
+/* ========================= */
+.form-actions {
+  margin-top: 10px;
+}
+
+.btn-primary {
+  background: #d32f2f;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: #b71c1c;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ========================= */
+/* RESPONSIVE                */
+/* ========================= */
+@media (max-width: 768px) {
+  .crear-materia h2 {
+    font-size: 1.15rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+}

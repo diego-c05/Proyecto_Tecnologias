@@ -1,0 +1,105 @@
+/* ========================= */
+/* CONTENEDOR GENERAL        */
+/* ========================= */
+.materias-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+/* ========================= */
+/* ENCABEZADO                */
+/* ========================= */
+.page-header {
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #b71c1c;
+  margin: 0 0 8px;
+  letter-spacing: 0.2px;
+}
+
+.page-header h1::after {
+  content: "";
+  display: block;
+  width: 74px;
+  height: 4px;
+  background: #d32f2f;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* ========================= */
+/* SECCIONES (TARJETAS)      */
+/* ========================= */
+.materias-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #222;
+}
+
+/* ========================= */
+/* DIVISOR                   */
+/* ========================= */
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d32f2f, transparent);
+  margin: 34px 0;
+}
+
+/* ========================= */
+/* RESPONSIVE                */
+/* ========================= */
+@media (max-width: 768px) {
+  .materias-page {
+    padding: 16px 14px 30px;
+  }
+
+  .page-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .materias-section {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .section-header h2 {
+    font-size: 1.05rem;
+  }
+
+  .divider {
+    margin: 26px 0;
+  }
+}
