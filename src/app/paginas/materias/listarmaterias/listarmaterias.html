@@ -1,0 +1,13 @@
+<h2>Lista de Materias</h2>
+
+<div *ngIf="cargando">Cargando materias...</div>
+
+<ng-container *ngIf="!cargando">
+  <ul>
+    <li *ngFor="let m of materias">
+      {{ m.nombre }} - {{ m.codigo }} - {{ m.seccion }}
+      <button (click)="eliminarMateria(m.id)">Eliminar</button>
+      <button (click)="editMateria(m)">Editar</button>
+    </li>
+  </ul>
+</ng-container>

@@ -18,8 +18,10 @@ export const routes: Routes = [
     { path: 'admin/reporte-horas', component: ReporteHoras },
     { path: 'admin/gestion-usuarios', component: GestionUsuarios },
     { path: 'eventos/vereventos', component: Vereventos },
-      { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
-    { path: 'historial-horas', component: HistorialHoras }]
+    { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
+    { path: 'historial-horas', component: HistorialHoras },
+    { path: 'materias/materias-pagina', component: MateriasPagina },
+    ]
   },
   { path: 'inicio-sesion', component: InicioSesionComponent },
   { path: 'registro', component: RegistroComponent },
