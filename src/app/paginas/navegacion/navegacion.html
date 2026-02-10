@@ -1,9 +1,32 @@
-<nav *ngIf="rol">
+<!-- ================= BANNER ================= -->
+<header class="banner">
+  <div class="banner-left">
+    <img
+      src="https://firebasestorage.googleapis.com/v0/b/gestion-horas-de-vinculacion.firebasestorage.app/o/logo%2Flogo.png?alt=media&token=546ab76a-b545-4b19-80ee-e107c8342842"
+      alt="Logo CEUTEC"
+      class="banner-logo"
+      loading="lazy"
+    />
+    <span class="banner-title">CEUTEC VINCULACIÓN</span>
+  </div>
+</header>
 
-  <ng-container *ngIf="rol === 'usuario'">
-    <a routerLink="/eventos/vereventos">Ver Eventos</a>
-    <a routerLink="/historial-horas">Historial de Horas</a>
-  </ng-container>
+<!-- ================= TOPBAR ================= -->
+<nav class="topbar">
+  <a
+    routerLink="/eventos/vereventos"
+    routerLinkActive="active"
+    class="nav-link"
+    title="Ver Eventos"
+  >
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M8 2v3M16 2v3M3.5 9h17" />
+      <path
+        d="M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"
+      />
+    </svg>
+    <span>Ver Eventos</span>
+  </a>
 
   <ng-container *ngIf="rol === 'coordinador'">
     <a routerLink="/admin/reporte-eventos">Reportes de Eventos</a>
@@ -11,7 +34,59 @@
     <a routerLink="/admin/gestion-usuarios">Gestión de Usuarios</a>
     <a routerLink="/materias/materias-pagina">Materias</a>
   </ng-container>
+  <a
+    routerLink="/historial-horas"
+    routerLinkActive="active"
+    class="nav-link"
+    title="Historial de Horas"
+  >
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M12 7v6l4 2" />
+      <path d="M21 12a9 9 0 1 1-18 0a9 9 0 0 1 18 0z" />
+    </svg>
+    <span>Historial</span>
+  </a>
 
+  <a
+    routerLink="/admin/reporte-eventos"
+    routerLinkActive="active"
+    class="nav-link"
+    title="Reportes"
+  >
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M4 19V5" />
+      <path d="M4 19h16" />
+      <path d="M8 16v-5" />
+      <path d="M12 16v-8" />
+      <path d="M16 16v-3" />
+    </svg>
+    <span>Reportes</span>
+  </a>
+
+  <a
+    routerLink="/admin/reporte-horas"
+    routerLinkActive="active"
+    class="nav-link"
+    title="Horas"
+  >
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <path d="M8 13h8" />
+      <path d="M8 17h8" />
+    </svg>
+    <span>Horas</span>
+  </a>
+
+  <!-- BOTÓN CERRAR SESIÓN -->
+  <button class="logout-btn" title="Cerrar sesión">
+    <svg viewBox="0 0 24 24" class="logout-icon">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="M16 17l5-5-5-5" />
+      <path d="M21 12H9" />
+    </svg>
+    <span>Cerrar sesión</span>
+  </button>
 </nav>
 
 <router-outlet></router-outlet>
