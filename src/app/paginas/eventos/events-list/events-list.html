@@ -1,0 +1,43 @@
+<h2>Administrar eventos</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Imagen</th>
+      <th>Nombre</th>
+      <th>Fecha</th>
+      <th>Horas</th>
+      <th>Cupos</th>
+      <th>Modalidad</th>
+      <th>Ubicación</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let event of events">
+      <td>
+        <img 
+          *ngIf="event.imageUrl"
+          [src]="event.imageUrl"
+          alt="Evento"
+          class="event-img"
+        >
+      </td>
+      <td>{{ event.name }}</td>
+      <td>{{ event.date }}</td>
+      <td>{{ event.hours }}</td>
+      <td>{{ event.slots }}</td>
+      <td>{{ event.modality }}</td>
+      <td>{{ event.location }}</td>
+      <td>
+        <button [routerLink]="['/eventos/editar', event.id]">
+          Editar
+        </button>
+        <button (click)="deleteEvent(event.id)">
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

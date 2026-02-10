@@ -1,0 +1,29 @@
+<h2>{{ event.id ? 'Editar Evento' : 'Crear Evento' }}</h2>
+<form (ngSubmit)="saveEvent()">
+  <label>Nombre:</label>
+  <input [(ngModel)]="event.name" name="name" required>
+
+  <label>Fecha:</label>
+  <input type="date" [(ngModel)]="event.date" name="date" required>
+
+  <label>Ubicación:</label>
+  <input [(ngModel)]="event.location" name="location" required>
+
+  <label>Descripción:</label>
+  <textarea [(ngModel)]="event.description" name="description"></textarea>
+
+  <label>Horas que otorga:</label>
+<input type="number" [(ngModel)]="event.hours" name="hours" required>
+
+<label>Cupos:</label>
+<input type="number" [(ngModel)]="event.slots" name="slots" required>
+
+<label>Modalidad:</label>
+<select [(ngModel)]="event.modality" name="modality" required>
+  <option value="Presencial">Presencial</option>
+  <option value="Virtual">Virtual</option>
+</select>
+
+  <button type="submit">{{ event.id ? 'Actualizar' : 'Crear' }}</button>
+</form>
+
