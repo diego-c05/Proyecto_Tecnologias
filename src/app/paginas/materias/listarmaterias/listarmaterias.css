@@ -1,0 +1,167 @@
+.materias-lista {
+  width: 100%;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.materias-lista h2 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 0;
+  color: #b71c1c;
+}
+
+.count {
+  color: #666;
+  font-weight: 700;
+}
+
+/* Loading */
+.loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 12px;
+  color: #666;
+  font-style: italic;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  border-top-color: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Tabla */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.materias-table {
+  width: 100%;
+  min-width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.materias-table thead {
+  background: #d32f2f;
+}
+
+.materias-table th {
+  padding: 16px 18px;
+  text-align: left;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.materias-table th.acciones {
+  text-align: right;
+}
+
+.materias-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 1rem;
+  color: #333;
+}
+
+.materias-table tr:last-child td {
+  border-bottom: none;
+}
+
+.materias-table tbody tr:hover {
+  background: rgba(211, 47, 47, 0.05);
+}
+
+.materias-table td.nombre {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+/* Acciones */
+.acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.btn {
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+
+.btn-ghost {
+  background: rgba(0, 0, 0, 0.06);
+  color: #222;
+}
+
+.btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.btn-danger {
+  background: #d32f2f;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #b71c1c;
+}
+
+/* Estado vacío */
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  color: #444;
+}
+
+.empty-icon {
+  font-size: 1.6rem;
+}
+
+.empty-sub {
+  color: #666;
+  font-size: 0.92rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .materias-table th,
+  .materias-table td {
+    padding: 12px;
+  }
+
+  .acciones {
+    font-size: 0.95rem;
+    padding: 12px 14px;
+  }
+}

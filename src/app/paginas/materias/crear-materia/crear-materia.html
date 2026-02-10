@@ -1,19 +1,51 @@
-<h2>{{titulo}}</h2>
+<div class="crear-materia">
 
-<form (ngSubmit)="guardar()">
+  <h2>{{ titulo }}</h2>
 
-  <label>Nombre</label><br>
-  <input type="text" [(ngModel)]="materia.nombre" name="nombre" required>
-  <br><br>
+  <form (ngSubmit)="guardar()" #materiaForm="ngForm">
 
-  <label>Código</label><br>
-  <input type="text" [(ngModel)]="materia.codigo" name="codigo" required>
-  <br><br>
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input
+        type="text"
+        id="nombre"
+        name="nombre"
+        [(ngModel)]="materia.nombre"
+        required
+        placeholder="Ej. Matemática I"
+      />
+    </div>
 
-  <label>Sección</label><br>
-  <input type="text" [(ngModel)]="materia.seccion" name="seccion" required>
-  <br><br>
+    <div class="form-group">
+      <label for="codigo">Código</label>
+      <input
+        type="text"
+        id="codigo"
+        name="codigo"
+        [(ngModel)]="materia.codigo"
+        required
+        placeholder="Ej. MAT-101"
+      />
+    </div>
 
-  <button type="submit">Guardar</button>
+    <div class="form-group">
+      <label for="seccion">Sección</label>
+      <input
+        type="text"
+        id="seccion"
+        name="seccion"
+        [(ngModel)]="materia.seccion"
+        required
+        placeholder="Ej. A"
+      />
+    </div>
 
-</form>
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+
+</div>
