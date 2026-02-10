@@ -8,6 +8,7 @@ import { RegistroComponent } from './auth/registro/registro';
 import { HistorialHoras } from './paginas/historial-horas/historial-horas';
 import { Navegacion } from './paginas/navegacion/navegacion';
 import { GestionUsuarios } from './paginas/admin/gestion-usuarios/gestion-usuarios';
+import { MateriasPagina } from './paginas/materias/materias-pagina/materias-pagina';
 
 
 export const routes: Routes = [
