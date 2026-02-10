@@ -7,7 +7,8 @@ import { Materias } from '../../../services/materia/materias';
   selector: 'app-listarmaterias',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './listarmaterias.html'
+  templateUrl: './listarmaterias.html',
+  styleUrl: './listarmaterias.css'
 })
 export class ListarMaterias implements OnInit, OnDestroy  {
 
