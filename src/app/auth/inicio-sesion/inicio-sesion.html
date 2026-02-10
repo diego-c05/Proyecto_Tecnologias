@@ -6,19 +6,40 @@
     </div>
   </div>
 
-  <form class="filters">
+  <form class="filters" (ngSubmit)="ingresar()">
     <div class="field">
       <label>Correo</label>
-      <input type="email" placeholder="correo@ejemplo.com">
+      <input 
+        type="email" 
+        [(ngModel)]="correo"
+        name="correo"
+        placeholder="correo@ejemplo.com"
+        [disabled]="cargando"
+        required>
     </div>
 
     <div class="field">
       <label>Contraseña</label>
-      <input type="password" placeholder="********">
+      <input 
+        type="password" 
+        [(ngModel)]="contrasena"
+        name="contrasena"
+        placeholder="********"
+        [disabled]="cargando"
+        required>
     </div>
 
+    <p *ngIf="mensaje" class="mensaje" [class.error]="mensaje.includes('❌')">
+      {{ mensaje }}
+    </p>
+
     <div class="filters-actions">
-      <button type="button" class="btn btn-primary" routerLink="/eventos/vereventos">Ingresar</button>
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="cargando">
+        {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+      </button>
     </div>
   </form>
 
