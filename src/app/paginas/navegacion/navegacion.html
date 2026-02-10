@@ -25,6 +25,21 @@
     <span>Ver Eventos</span>
   </a>
 
+  <ng-container *ngIf="rol === 'coordinador'">
+    <a routerLink="/admin/reporte-eventos">Reportes de Eventos</a>
+    <a routerLink="/admin/reporte-horas">Reporte de Horas</a>
+    <a routerLink="/admin/gestion-usuarios">Gestión de Usuarios</a>
+    <a routerLink="/materias/materias-pagina">Materias</a>
+
+        <a routerLink="/eventos/events-list">Administrar Eventos</a>
+    <a routerLink="/eventos/crear">Crear Evento</a>
+  </ng-container>
+  <a
+    routerLink="/historial-horas"
+    routerLinkActive="active"
+    class="nav-link"
+    title="Historial de Horas"
+  >
   <!-- USUARIOS -->
   <a routerLink="/admin/gestion-usuarios" routerLinkActive="active" class="nav-link">
     <!-- Usuarios -->
@@ -38,7 +53,8 @@
   </a>
 
   <!-- HISTORIAL -->
-  <a routerLink="/historial-horas" routerLinkActive="active" class="nav-link">
+  <a routerLink="/historial-horas" routerLinkActive="active" class="nav-link"></a>
+
     <!-- Reloj -->
     <svg class="icon" viewBox="0 0 24 24">
       <circle cx="12" cy="12" r="9" />
