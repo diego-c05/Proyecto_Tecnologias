@@ -23,7 +23,11 @@ export interface Evento {
   modality: 'Presencial' | 'Virtual';
   location: string;
   description?: string;
-   imageUrl?: string;  
+  imageUrl?: string; 
+  materiaId?: string;
+  materiaNombre?: string;
+  materiaCodigo?: string;
+  materiaSeccion?: string; 
 }
 
 

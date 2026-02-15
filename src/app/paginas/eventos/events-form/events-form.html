@@ -24,6 +24,14 @@
   <option value="Virtual">Virtual</option>
 </select>
 
+<label>Materia:</label>
+<select [(ngModel)]="event.materiaId" name="materiaId" (change)="onMateriaChange()" required>
+  <option value="">Seleccione una materia</option>
+  <option *ngFor="let m of materias" [value]="m.id">
+    {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
+  </option>
+</select>
+
   <button type="submit">{{ event.id ? 'Actualizar' : 'Crear' }}</button>
 </form>
 
