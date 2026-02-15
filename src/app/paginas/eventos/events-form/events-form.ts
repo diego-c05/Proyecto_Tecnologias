@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
+import { Materias } from '../../../services/materia/materias';
 
 @Component({
   selector: 'app-events-form',
@@ -27,17 +28,22 @@ export class EventsForm {
 
   constructor(
     private eventsService: EventsService,
+    private materiasService: Materias,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
+
+  materias: any[] = [];
 
   async ngOnInit() {
     this.eventId = this.route.snapshot.paramMap.get('id');
 
+    this.materias = await this.materiasService.listarMaterias();
+
     if (this.eventId) {
       const data = await this.eventsService.getEventById(this.eventId);
       if (data) {
-        this.event = data; 
+        this.event = data;
       } else {
         alert('Evento no encontrado');
         this.router.navigate(['/eventos/events-list']);
@@ -61,6 +67,18 @@ export class EventsForm {
     } catch (err) {
       console.error('Error guardando:', err);
       alert('Ocurrió un error');
+    }
+  }
+
+  onMateriaChange() {
+    const materia = this.materias.find(
+      m => m.id === this.event.materiaId
+    );
+
+    if (materia) {
+      this.event.materiaNombre = materia.nombre;
+      this.event.materiaCodigo = materia.codigo;
+      this.event.materiaSeccion = materia.seccion;
     }
   }
 }
