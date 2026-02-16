@@ -1,48 +1,81 @@
-<h2>Administrar eventos</h2>
+<div class="page">
+  <header class="page-header">
+    <h1>Administrar eventos</h1>
+    <p class="subtitle">Gestión, edición y eliminación de eventos registrados en el sistema.</p>
+  </header>
 
-<table>
-  <thead>
-    <tr>
-      <th>Imagen</th>
-      <th>Nombre</th>
-      <th>Fecha</th>
-      <th>Horas</th>
-      <th>Cupos</th>
-      <th>Modalidad</th>
-      <th>Ubicación</th>
-      <th>Materia</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+  <section class="card">
+    <div class="card-header">
+      <h2>Listado de eventos</h2>
+      <span class="count">({{ events?.length || 0 }})</span>
+    </div>
 
-  <tbody>
-    <tr *ngFor="let event of events">
-      <td>
-        <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="Evento" class="event-img">
-      </td>
-      <td>{{ event.name }}</td>
-      <td>{{ event.date }}</td>
-      <td>{{ event.hours }}</td>
-      <td>{{ event.slots }}</td>
-      <td>{{ event.modality }}</td>
-      <td>{{ event.location }}</td>
-      <td>
-        <span *ngIf="event.materiaNombre; else sinMateria">
-          {{ event.materiaNombre }} {{ event.materiaCodigo }} - {{ event.materiaSeccion }}
-        </span>
+    <div class="table-wrapper" *ngIf="(events?.length || 0) > 0; else sinEventos">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="col-img">Imagen</th>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Horas</th>
+            <th>Cupos</th>
+            <th>Modalidad</th>
+            <th>Ubicación</th>
+            <th>Materia</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
 
-        <ng-template #sinMateria>
-          <em>Sin materia asignada</em>
-        </ng-template>
-      </td>
-      <td>
-        <button [routerLink]="['/eventos/editar', event.id]">
-          Editar
-        </button>
-        <button (click)="deleteEvent(event.id)">
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <tbody>
+          <tr *ngFor="let event of events">
+            <td class="col-img">
+              <img
+                *ngIf="event.imageUrl"
+                [src]="event.imageUrl"
+                alt="Imagen del evento"
+                class="event-img"
+                loading="lazy"
+              />
+              <span *ngIf="!event.imageUrl" class="img-placeholder">Sin imagen</span>
+            </td>
+
+            <td class="strong">{{ event.name }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.hours }}</td>
+            <td>{{ event.slots }}</td>
+            <td>{{ event.modality }}</td>
+            <td>{{ event.location }}</td>
+
+            <td>
+              <span *ngIf="event.materiaNombre; else sinMateria">
+                {{ event.materiaNombre }} {{ event.materiaCodigo }} - {{ event.materiaSeccion }}
+              </span>
+              <ng-template #sinMateria>
+                <em class="muted">Sin materia asignada</em>
+              </ng-template>
+            </td>
+
+            <td class="col-actions">
+              <button class="btn btn-ghost" [routerLink]="['/eventos/editar', event.id]">
+                Editar
+              </button>
+              <button class="btn btn-danger" (click)="deleteEvent(event.id)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #sinEventos>
+      <div class="empty-state">
+        <div class="empty-icon">📅</div>
+        <div class="empty-text">
+          <strong>No hay eventos registrados.</strong>
+          <div class="empty-sub">Crea un evento para que aparezca en el listado.</div>
+        </div>
+      </div>
+    </ng-template>
+  </section>
+</div>

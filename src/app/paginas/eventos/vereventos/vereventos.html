@@ -1,47 +1,69 @@
-<div class="contenedor-principal">
-  <!-- Header -->
-  
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1>Eventos disponibles</h1>
+      <p class="subtitle">Encuentra oportunidades de vinculación y acumula tus horas.</p>
+    </div>
+  </header>
 
-  <!-- Título de sección -->
-  <div class="seccion-titulo">
-    <h2>Eventos de Vinculación Disponibles</h2>
-    <p class="subtitulo">Encuentra oportunidades de vinculación y acumula tus horas</p>
-  </div>
+  <section class="card">
+    <div class="card-header">
+      <h2>Eventos de vinculación</h2>
+      <span class="count">({{ eventos?.length || 0 }})</span>
+    </div>
 
-<div class="grid-eventos">
-  <div 
-    class="tarjeta-evento" 
-    *ngFor="let evento of eventos"
-    [class.finalizado]="evento.estado === 'finalizado'">
-    
-    <div class="imagen-evento">
-      <img [src]="evento.imagen" [alt]="evento.nombre">
-      <div class="badge-estado" *ngIf="evento.estado === 'finalizado'">
-        Evento Finalizado
+    <div class="grid-eventos" *ngIf="(eventos?.length || 0) > 0; else sinEventos">
+      <div
+        class="tarjeta-evento"
+        *ngFor="let evento of eventos"
+        [class.finalizado]="evento.estado === 'finalizado'"
+      >
+        <div class="imagen-evento">
+          <img [src]="evento.imagen" [alt]="evento.nombre" loading="lazy" />
+          <div class="badge-estado" *ngIf="evento.estado === 'finalizado'">
+            Evento finalizado
+          </div>
+        </div>
+
+        <div class="contenido-tarjeta">
+          <h3 class="titulo-evento">{{ evento.nombre }}</h3>
+
+          <p class="fecha-evento">
+            📅 {{ formatearFecha(evento.fecha) }}, {{ evento.hora }}
+          </p>
+
+          <p class="precio">Gratis</p>
+
+          <div class="info-adicional">
+            <span class="badge badge-horas">⏱️ {{ evento.horasVoluntariado }} horas</span>
+            <span class="badge badge-cupos">👥 {{ evento.cuposDisponibles }} cupos</span>
+          </div>
+
+          <a
+            class="btn btn-primary"
+            [routerLink]="['/eventos/detalle-events', evento.id]"
+            (click)="guardarEvento(evento)"
+          >
+            Ver detalles del evento
+          </a>
+        </div>
       </div>
     </div>
 
-    <div class="contenido-tarjeta">
-      <h3 class="titulo-evento">{{ evento.nombre }}</h3>
-      
-      <p class="fecha-evento">
-        📅 {{ formatearFecha(evento.fecha) }}, {{ evento.hora }}
-      </p>
-      
-      <p class="precio">Gratis</p>
-      
-      <div class="info-adicional">
-        <span class="badge-horas">⏱️ {{ evento.horasVoluntariado }} horas</span>
-        <span class="badge-cupos">👥 {{ evento.cuposDisponibles }} cupos</span>
+    <ng-template #sinEventos>
+      <div class="empty-state">
+        <div class="empty-icon">📅</div>
+        <div class="empty-text">
+          <strong>No hay eventos disponibles.</strong>
+          <div class="empty-sub">Vuelve más tarde o consulta con tu coordinador.</div>
+        </div>
       </div>
+    </ng-template>
+  </section>
 
-   
-      <a 
-        class="btn btn-primary" 
-        [routerLink]="['/eventos/detalle-events', evento.id]"
-        (click)="guardarEvento(evento)">
-        Ver detalles del evento
-      </a>
-    </div>
-  </div>
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Eventos</span>
+  </footer>
 </div>

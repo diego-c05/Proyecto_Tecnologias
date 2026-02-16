@@ -1,10 +1,11 @@
 <div class="page">
+  <!-- Toggle (no cambia TS) -->
   <input id="toggleCrear" class="toggle" type="checkbox" />
 
-  <header class="header">
+  <header class="page-header">
     <div>
-      <h1 class="title">Panel Administrativo</h1>
-      <p class="subtitle">Gestión de usuarios</p>
+      <h1>Gestión de usuarios</h1>
+      <p class="subtitle">Panel administrativo para crear, editar y eliminar usuarios del sistema.</p>
     </div>
 
     <div class="header-actions">
@@ -12,6 +13,7 @@
     </div>
   </header>
 
+  <!-- Stats -->
   <section class="stats">
     <div class="card stat">
       <p class="stat-label">Usuarios registrados</p>
@@ -32,10 +34,11 @@
     </div>
   </section>
 
+  <!-- Form card (toggle) -->
   <section class="card form-card">
-    <div class="form-head">
-      <h2 class="section-title">Crear nuevo usuario</h2>
-      <label for="toggleCrear" class="btn btn-light btn-sm">Cerrar</label>
+    <div class="card-header">
+      <h2>Crear nuevo usuario</h2>
+      <label for="toggleCrear" class="btn btn-ghost btn-sm">Cerrar</label>
     </div>
 
     <form class="form" [formGroup]="form" (ngSubmit)="crear()">
@@ -80,9 +83,13 @@
     </form>
   </section>
 
+  <hr class="divider" />
+
+  <!-- Table card -->
   <section class="card table-card">
-    <div class="table-head">
-      <h2 class="section-title">Listado de usuarios</h2>
+    <div class="card-header">
+      <h2>Listado de usuarios</h2>
+      <span class="count">({{ usuarios?.length || 0 }})</span>
     </div>
 
     <div class="table-wrap">
@@ -101,15 +108,15 @@
         <tbody>
           <tr *ngFor="let u of usuarios">
             <ng-container *ngIf="editandoDocId !== u.docId; else editRow">
-              <td>{{ u.nombreCompleto }}</td>
-              <td>@{{ u.nombreUsuario }}</td>
+              <td class="strong">{{ u.nombreCompleto }}</td>
+              <td class="muted">@{{ u.nombreUsuario }}</td>
               <td>{{ u.correoElectronico }}</td>
               <td>
                 <span class="pill pill-primary" *ngIf="u.rol === 'coordinador'">coordinador</span>
                 <span class="pill pill-neutral" *ngIf="u.rol !== 'coordinador'">usuario</span>
               </td>
               <td class="col-actions">
-                <button class="btn btn-light btn-sm" type="button" (click)="empezarEdicion(u)">Modificar</button>
+                <button class="btn btn-ghost btn-sm" type="button" (click)="empezarEdicion(u)">Modificar</button>
               </td>
               <td class="col-actions">
                 <button class="btn btn-danger btn-sm" type="button" (click)="eliminar(u.docId)">Eliminar</button>

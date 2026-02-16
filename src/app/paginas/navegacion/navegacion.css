@@ -1,8 +1,9 @@
 /* ================= BANNER ================= */
 .banner {
-  background: rgba(255, 255, 255, 0.8)1c;
+  background: white;
   color: #ffffff;
   padding: 16px 24px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 .banner-left {
@@ -33,6 +34,7 @@
   align-items: center;
   gap: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 /* LINKS */

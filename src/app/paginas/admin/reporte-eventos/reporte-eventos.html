@@ -1,8 +1,9 @@
 <div class="page">
-  <header class="header">
+  <!-- Header -->
+  <header class="page-header">
     <div>
-      <h1 class="title">Panel Administrativo</h1>
-      <p class="subtitle">Reporte de eventos de vinculación</p>
+      <h1>Reporte de eventos</h1>
+      <p class="subtitle">Panel administrativo · Reporte de eventos de vinculación</p>
     </div>
 
     <div class="header-actions">
@@ -12,6 +13,7 @@
     </div>
   </header>
 
+  <!-- Stats -->
   <section class="stats">
     <div class="card stat">
       <p class="stat-label">Eventos publicados</p>
@@ -44,7 +46,13 @@
     </div>
   </section>
 
+  <!-- Filters -->
   <section class="card filters">
+    <div class="card-header">
+      <h2>Filtros</h2>
+      <span class="hint">Opcional</span>
+    </div>
+
     <div class="filters-row">
       <div class="field">
         <label>Buscar evento</label>
@@ -76,9 +84,13 @@
     </div>
   </section>
 
+  <hr class="divider" />
+
+  <!-- Tabla -->
   <section class="card table-card">
     <div class="table-head">
       <h2 class="section-title">Listado de eventos</h2>
+      <span class="count">({{ eventos?.length || 0 }})</span>
     </div>
 
     <div class="table-wrap">
@@ -118,15 +130,11 @@
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">
-                Modificar
-              </button>
+              <button class="btn btn-light btn-sm" type="button">Modificar</button>
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-danger btn-sm" type="button">
-                Eliminar
-              </button>
+              <button class="btn btn-danger btn-sm" type="button">Eliminar</button>
             </td>
           </tr>
 

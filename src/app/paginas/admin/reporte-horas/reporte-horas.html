@@ -1,16 +1,17 @@
 <div class="page">
-  <header class="header">
+  <!-- Header -->
+  <header class="page-header">
     <div>
-      <h1 class="title">Panel Administrativo</h1>
-      <p class="subtitle">Reporte de horas por estudiante</p>
+      <h1>Reporte de horas</h1>
+      <p class="subtitle">Panel administrativo · Reporte de horas por estudiante</p>
     </div>
 
     <div class="header-actions">
-      <a class="btn btn-ghost" routerLink="/admin/reporte-eventos">
-        Ver reporte de eventos
-      </a>
+      <a class="btn btn-ghost" routerLink="/admin/reporte-eventos">Ver reporte de eventos</a>
     </div>
   </header>
+
+  <!-- Stats -->
   <section class="stats">
     <div class="card stat">
       <p class="stat-label">Estudiantes registrados</p>
@@ -19,18 +20,25 @@
     </div>
 
     <div class="card stat">
-      <p class="stat-label">Estudiantes con horas de vinculación completas</p>
+      <p class="stat-label">Horas completas</p>
       <p class="stat-value">8</p>
       <p class="stat-note">Cumplieron el requisito</p>
     </div>
 
     <div class="card stat">
-      <p class="stat-label">Estudiantes pendientes de horas de vinculación</p>
+      <p class="stat-label">Horas pendientes</p>
       <p class="stat-value">12</p>
       <p class="stat-note">Aún no completan las horas</p>
     </div>
   </section>
+
+  <!-- Filters -->
   <section class="card filters">
+    <div class="card-header">
+      <h2>Filtros</h2>
+      <span class="hint">Opcional</span>
+    </div>
+
     <div class="filters-row">
       <div class="field">
         <label>Buscar por número de cuenta</label>
@@ -62,6 +70,9 @@
     </div>
   </section>
 
+  <hr class="divider" />
+
+  <!-- Tabla: Completas -->
   <section class="card table-card">
     <div class="table-head">
       <h2 class="section-title">Estudiantes con horas de vinculación completas</h2>
@@ -81,6 +92,7 @@
         </thead>
 
         <tbody>
+          <!-- Ejemplos (puedes reemplazar por ngFor cuando lo conectes) -->
           <tr>
             <td class="mono">32211089</td>
             <td>
@@ -119,6 +131,7 @@
     </div>
   </section>
 
+  <!-- Tabla: Pendientes -->
   <section class="card table-card">
     <div class="table-head">
       <h2 class="section-title">Estudiantes pendientes de horas de vinculación</h2>
@@ -139,6 +152,7 @@
         </thead>
 
         <tbody>
+          <!-- Ejemplos -->
           <tr>
             <td class="mono">32199887</td>
             <td>
@@ -178,6 +192,8 @@
       </table>
     </div>
   </section>
+
+  <!-- Tabla: General (ya con ngFor que tenías) -->
   <section class="card table-card">
     <div class="table-head">
       <h2 class="section-title">Listado general de estudiantes</h2>
@@ -225,9 +241,7 @@
           </tr>
 
           <tr *ngIf="!estudiantes || estudiantes.length === 0">
-            <td colspan="6" class="empty">
-              No hay registros de horas todavía.
-            </td>
+            <td colspan="6" class="empty">No hay registros de horas todavía.</td>
           </tr>
         </tbody>
       </table>
