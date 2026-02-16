@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
+import { MatIconModule, MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-navegacion',
     standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './navegacion.html',
   styleUrl: './navegacion.css',
 })
