@@ -1,37 +1,126 @@
-<h2>{{ event.id ? 'Editar Evento' : 'Crear Evento' }}</h2>
-<form (ngSubmit)="saveEvent()">
-  <label>Nombre:</label>
-  <input [(ngModel)]="event.name" name="name" required>
+<div class="page">
+  <header class="page-header">
+    <h1>{{ event.id ? 'Editar evento' : 'Crear evento' }}</h1>
+    <p class="subtitle">
+      {{ event.id ? 'Actualiza la información del evento seleccionado.' : 'Completa el formulario para registrar un nuevo evento.' }}
+    </p>
+  </header>
 
-  <label>Fecha:</label>
-  <input type="date" [(ngModel)]="event.date" name="date" required>
+  <section class="card">
+    <div class="card-header">
+      <h2>Formulario de evento</h2>
+    </div>
 
-  <label>Ubicación:</label>
-  <input [(ngModel)]="event.location" name="location" required>
+    <form class="form" (ngSubmit)="saveEvent()">
+      <div class="grid">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            type="text"
+            [(ngModel)]="event.name"
+            name="name"
+            required
+            placeholder="Ej. Jornada de reforestación"
+          />
+        </div>
 
-  <label>Descripción:</label>
-  <textarea [(ngModel)]="event.description" name="description"></textarea>
+        <div class="form-group">
+          <label for="date">Fecha</label>
+          <input
+            id="date"
+            type="date"
+            [(ngModel)]="event.date"
+            name="date"
+            required
+          />
+        </div>
 
-  <label>Horas que otorga:</label>
-<input type="number" [(ngModel)]="event.hours" name="hours" required>
+        <div class="form-group">
+          <label for="location">Ubicación</label>
+          <input
+            id="location"
+            type="text"
+            [(ngModel)]="event.location"
+            name="location"
+            required
+            placeholder="Ej. Campus Central"
+          />
+        </div>
 
-<label>Cupos:</label>
-<input type="number" [(ngModel)]="event.slots" name="slots" required>
+        <div class="form-group">
+          <label for="modality">Modalidad</label>
+          <select
+            id="modality"
+            [(ngModel)]="event.modality"
+            name="modality"
+            required
+          >
+            <option value="" disabled>Seleccione una modalidad</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+          </select>
+        </div>
 
-<label>Modalidad:</label>
-<select [(ngModel)]="event.modality" name="modality" required>
-  <option value="Presencial">Presencial</option>
-  <option value="Virtual">Virtual</option>
-</select>
+        <div class="form-group">
+          <label for="hours">Horas que otorga</label>
+          <input
+            id="hours"
+            type="number"
+            [(ngModel)]="event.hours"
+            name="hours"
+            required
+            min="0"
+            placeholder="Ej. 4"
+          />
+        </div>
 
-<label>Materia:</label>
-<select [(ngModel)]="event.materiaId" name="materiaId" (change)="onMateriaChange()" required>
-  <option value="">Seleccione una materia</option>
-  <option *ngFor="let m of materias" [value]="m.id">
-    {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
-  </option>
-</select>
+        <div class="form-group">
+          <label for="slots">Cupos</label>
+          <input
+            id="slots"
+            type="number"
+            [(ngModel)]="event.slots"
+            name="slots"
+            required
+            min="0"
+            placeholder="Ej. 50"
+          />
+        </div>
 
-  <button type="submit">{{ event.id ? 'Actualizar' : 'Crear' }}</button>
-</form>
+        <div class="form-group form-group-full">
+          <label for="materiaId">Materia</label>
+          <select
+            id="materiaId"
+            [(ngModel)]="event.materiaId"
+            name="materiaId"
+            (change)="onMateriaChange()"
+            required
+          >
+            <option value="">Seleccione una materia</option>
+            <option *ngFor="let m of materias" [value]="m.id">
+              {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
+            </option>
+          </select>
+        </div>
 
+        <div class="form-group form-group-full">
+          <label for="description">Descripción</label>
+          <textarea
+            id="description"
+            [(ngModel)]="event.description"
+            name="description"
+            rows="4"
+            placeholder="Describe el objetivo, requisitos o detalles importantes del evento..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">
+          {{ event.id ? 'Actualizar' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

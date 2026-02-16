@@ -1,91 +1,111 @@
-.contenedor-principal {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-}
-
-.header {
-  background-color: #fff;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo h1 {
-  font-size: 1.5rem;
-  color: #d1410c;
-  margin: 0;
-}
-
-.navegacion {
-  display: flex;
-  gap: 2rem;
-}
-
-.navegacion a {
-  text-decoration: none;
-  color: #39364f;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.navegacion a:hover {
-  color: #d1410c;
-}
-
-.seccion-titulo {
-  padding: 2rem 2rem 1rem;
-  max-width: 1400px;
+/* ========================= */
+/* BASE (igual Materias)     */
+/* ========================= */
+.page {
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 24px 20px 40px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #1f2937;
 }
 
-.seccion-titulo h2 {
-  font-size: 2rem;
-  color: #39364f;
-  margin-bottom: 0.5rem;
+/* Header */
+.page-header {
+  margin-bottom: 16px;
 }
 
-.subtitulo {
-  color: #6f7287;
-  font-size: 1.1rem;
+.page-header h1 {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #b71c1c;
+  margin: 0 0 8px;
+  letter-spacing: 0.2px;
 }
 
+.page-header h1::after {
+  content: "";
+  display: block;
+  width: 74px;
+  height: 4px;
+  background: #d32f2f;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #222;
+}
+
+.count {
+  color: #666;
+  font-weight: 700;
+}
+
+/* ========================= */
+/* GRID EVENTOS              */
+/* ========================= */
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
 }
 
+/* Card de evento */
 .tarjeta-evento {
-  background: white;
-  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
 .tarjeta-evento:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
 }
 
 .tarjeta-evento.finalizado {
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
+/* Imagen */
 .imagen-evento {
   position: relative;
   width: 100%;
   height: 180px;
   overflow: hidden;
-  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .imagen-evento img {
@@ -98,112 +118,162 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #6f7287;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 800;
 }
 
+/* Contenido */
 .contenido-tarjeta {
-  padding: 1.25rem;
+  padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 .titulo-evento {
-  font-size: 1.1rem;
-  color: #39364f;
-  margin: 0 0 0.75rem 0;
-  font-weight: 600;
-  line-height: 1.4;
-  min-height: 2.8rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: 1.05rem;
+  color: #222;
+  margin: 0 0 8px 0;
+  font-weight: 900;
+  line-height: 1.35;
 }
 
 .fecha-evento {
-  color: #d32f2f;
-  font-weight: 600;
-  margin: 0.5rem 0;
+  color: #b71c1c;
+  font-weight: 800;
+  margin: 6px 0;
   font-size: 0.95rem;
 }
 
 .precio {
-  color: #39364f;
-  font-weight: 600;
-  margin: 0.5rem 0 1rem 0;
+  color: #333;
+  font-weight: 800;
+  margin: 6px 0 10px 0;
 }
 
+/* Badges */
 .info-adicional {
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
-  margin-bottom: 0.5rem;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  margin-bottom: 10px;
 }
 
-.badge-horas,
-.badge-cupos {
-  background-color: #f5f5f5;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #39364f;
-  font-weight: 500;
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #374151;
 }
 
-/* BOTÓN */
+/* Botones (mismo estilo institucional) */
 .btn {
-  display: block;
-  width: 90%;
-  padding:  9px 11px;
-  margin-top: 0.75rem;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  border: none;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  user-select: none;
+  transition: background 0.2s ease, transform 0.1s ease;
+  font-weight: 900;
+}
+
+.btn:active {
+  transform: scale(0.98);
 }
 
 .btn-primary {
   background: #d32f2f;
-  color: white;
+  color: #ffffff;
 }
 
 .btn-primary:hover {
-  background: #d32f2f;
-  transform: translateY(-2px);
+  background: #b71c1c;
 }
 
+/* Si está finalizado, el botón se ve “deshabilitado” */
 .tarjeta-evento.finalizado .btn-primary {
-  background: #6f7287;
+  background: rgba(0, 0, 0, 0.35);
 }
 
 .tarjeta-evento.finalizado .btn-primary:hover {
-  background: #5a5d73;
+  background: rgba(0, 0, 0, 0.42);
 }
 
+/* Empty state */
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  color: #444;
+}
+
+.empty-icon {
+  font-size: 1.6rem;
+}
+
+.empty-sub {
+  color: #666;
+  font-size: 0.92rem;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  color: #9ca3af;
+  font-size: 0.92rem;
+}
+
+.dot {
+  opacity: 0.6;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 1rem;
+  .page {
+    padding: 16px 14px 30px;
   }
-  
-  .grid-eventos {
-    grid-template-columns: 1fr;
-    padding: 1rem;
+
+  .page-header h1 {
+    font-size: 1.6rem;
   }
-  
-  .seccion-titulo {
-    padding: 1rem;
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .imagen-evento {
+    height: 170px;
   }
 }

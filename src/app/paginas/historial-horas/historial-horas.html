@@ -1,43 +1,76 @@
 <div class="page">
-    <div class="card">
-        <h1 class="title">Historial de Horas de Vinculación</h1>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Evento</th>
-                    <th>Fecha</th>
-                    <th>Clase</th>
-                    <th>Horas</th>
-                    <th>Coordinador</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Reforestación</td>
-                    <td>10/11/2025</td>
-                    <td>Biologia</td>
-                    <td>5</td>
-                    <td>Juan Castillo</td>
-                </tr>
-                <tr>
-                    <td>Remodelación Escuela</td>
-                    <td>18/07/2025</td>
-                    <td>Gestión de Proyectos</td>
-                    <td>6</td>
-                    <td>Claudia Romero</td>
-                </tr>
-                <tr>
-                    <td>Limpieza de Playas</td>
-                    <td>15/04/2025</td>
-                    <td>Comunicación Oral y Escrita</td>
-                    <td>4</td>
-                    <td>Ximena Pavón</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p class="total">Total acumulado: 12 horas</p>
-        
+  <header class="page-header">
+    <div>
+      <h1>Historial de horas</h1>
+      <p class="subtitle">Consulta tus eventos registrados y el total de horas acumuladas.</p>
     </div>
+
+    <div class="header-actions">
+      <a class="btn btn-ghost" routerLink="/eventos/vereventos">Ver eventos</a>
+    </div>
+  </header>
+
+  <section class="card table-card">
+    <div class="card-header">
+      <h2>Registro de participación</h2>
+      <span class="count">(3)</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Evento</th>
+            <th>Fecha</th>
+            <th>Clase</th>
+            <th>Horas</th>
+            <th>Coordinador</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="strong">Reforestación</td>
+            <td>10/11/2025</td>
+            <td>Biología</td>
+            <td><span class="pill pill-primary">5</span></td>
+            <td>Juan Castillo</td>
+          </tr>
+
+          <tr>
+            <td class="strong">Remodelación Escuela</td>
+            <td>18/07/2025</td>
+            <td>Gestión de Proyectos</td>
+            <td><span class="pill pill-primary">6</span></td>
+            <td>Claudia Romero</td>
+          </tr>
+
+          <tr>
+            <td class="strong">Limpieza de Playas</td>
+            <td>15/04/2025</td>
+            <td>Comunicación Oral y Escrita</td>
+            <td><span class="pill pill-primary">4</span></td>
+            <td>Ximena Pavón</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summary">
+      <div class="summary-item">
+        <span class="summary-label">Total acumulado</span>
+        <span class="summary-value">12 horas</span>
+      </div>
+
+      <div class="summary-actions">
+        <a class="btn btn-primary" routerLink="/eventos/vereventos">Inscribirme a más eventos</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Historial del estudiante</span>
+  </footer>
 </div>
