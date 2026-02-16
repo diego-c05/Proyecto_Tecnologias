@@ -13,31 +13,41 @@
     </div>
 
     <div class="grid-eventos" *ngIf="(eventos?.length || 0) > 0; else sinEventos">
-      <div
-        class="tarjeta-evento"
-        *ngFor="let evento of eventos"
-        [class.finalizado]="evento.estado === 'finalizado'"
-      >
+      <div class="tarjeta-evento" *ngFor="let evento of eventos" [class.finalizado]="esFinalizado(evento)">
         <div class="imagen-evento">
-          <img [src]="evento.imagen" [alt]="evento.nombre" loading="lazy" />
-          <div class="badge-estado" *ngIf="evento.estado === 'finalizado'">
-            Evento finalizado
-          </div>
+          <img
+            *ngIf="evento.imageUrl; else sinImg"
+            [src]="evento.imageUrl"
+            [alt]="evento.name"
+            loading="lazy"
+          />
+          <ng-template #sinImg>
+            <div class="img-placeholder">Sin imagen</div>
+          </ng-template>
         </div>
 
         <div class="contenido-tarjeta">
-          <h3 class="titulo-evento">{{ evento.nombre }}</h3>
+          <h3 class="titulo-evento">{{ evento.name }}</h3>
 
           <p class="fecha-evento">
-            📅 {{ formatearFecha(evento.fecha) }}, {{ evento.hora }}
+            📅 {{ formatearFecha(evento.date) }}
           </p>
 
-          <p class="precio">Gratis</p>
+          <p class="muted">
+            📍 {{ evento.location }} • {{ evento.modality }}
+          </p>
 
           <div class="info-adicional">
-            <span class="badge badge-horas">⏱️ {{ evento.horasVoluntariado }} horas</span>
-            <span class="badge badge-cupos">👥 {{ evento.cuposDisponibles }} cupos</span>
+            <span class="badge badge-horas">⏱️ {{ evento.hours }} horas</span>
+            <span class="badge badge-cupos">👥 {{ evento.slots }} cupos</span>
           </div>
+
+          <div class="materia" *ngIf="evento.materiaNombre; else sinMateria">
+            📚 {{ evento.materiaNombre }} {{ evento.materiaCodigo }} - {{ evento.materiaSeccion }}
+          </div>
+          <ng-template #sinMateria>
+            <em class="muted">Sin materia asignada</em>
+          </ng-template>
 
           <a
             class="btn btn-primary"
