@@ -3,6 +3,7 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule, MatIcon } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navegacion',
@@ -14,7 +15,8 @@ import { MatIconModule, MatIcon } from '@angular/material/icon';
 export class Navegacion implements OnInit{
         rol: string | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
+
 
   async ngOnInit() {
     const user = this.authService.getCurrentUser();
@@ -23,4 +25,18 @@ export class Navegacion implements OnInit{
       this.rol = datos?.rol ?? null;
     }
   }
+
+  async logout() {
+  const res = await this.authService.cerrarSesion();
+
+  if (res.success) {
+    
+    localStorage.removeItem('eventoSeleccionado');
+
+    this.router.navigate(['/inicio-sesion']);
+  } else {
+    alert(res.error || 'No se pudo cerrar sesión');
+  }
+}
+
 }

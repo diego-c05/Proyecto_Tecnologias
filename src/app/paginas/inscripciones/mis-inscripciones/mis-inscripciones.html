@@ -1,0 +1,55 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Mis inscripciones</h1>
+    <p class="subtitle">Aquí ves tus eventos inscritos y su estado.</p>
+  </header>
+
+  <section class="card">
+    <div *ngIf="cargando">Cargando...</div>
+
+    <div *ngIf="!cargando && inscripciones.length === 0" class="empty-state">
+      <div class="empty-icon">📝</div>
+      <div class="empty-text">
+        <strong>No tienes inscripciones aún.</strong>
+        <div class="empty-sub">
+          Ve a <a routerLink="/eventos/vereventos">Eventos</a> para inscribirte.
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!cargando && inscripciones.length > 0" class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Evento</th>
+            <th>Fecha</th>
+            <th>Horas</th>
+            <th>Estado</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let i of inscripciones">
+            <td class="strong">{{ i.eventoNombre || i.eventoId }}</td>
+            <td>{{ i.eventoFecha || '-' }}</td>
+            <td>{{ i.eventoHoras || '-' }}</td>
+            <td>
+              <span class="badge">{{ estadoBonito(i.estado) }}</span>
+            </td>
+            <td class="col-actions">
+              <button
+                class="btn btn-danger"
+                (click)="cancelar(i)"
+                [disabled]="i.estado !== 'inscrito'"
+              >
+                Cancelar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+

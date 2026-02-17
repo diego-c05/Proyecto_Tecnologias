@@ -14,19 +14,37 @@
 <!-- ================= TOPBAR ================= -->
 <nav class="topbar">
 
-  <!-- EVENTOS -->
-  <a routerLink="/eventos/vereventos" routerLinkActive="active" class="nav-link" title="Ver Eventos">
-    <!-- Calendario -->
-    <mat-icon>event</mat-icon>
-    <span>Ver Eventos</span>
-  </a>
+ <!-- SOLO USUARIO -->
+  <ng-container *ngIf="rol === 'usuario'">
 
-  <!-- HISTORIAL -->
-  <a routerLink="/historial-horas" routerLinkActive="active" class="nav-link" title="Historial de Horas">
-    <!-- Reloj -->
-   <mat-icon>schedule</mat-icon>
-    <span>Historial</span>
-  </a>
+    <!-- VER EVENTOS -->
+    <a routerLink="/eventos/vereventos"
+       routerLinkActive="active"
+       class="nav-link"
+       title="Ver Eventos">
+      <mat-icon>event</mat-icon>
+      <span>Ver Eventos</span>
+    </a>
+
+    <!-- MIS INSCRIPCIONES -->
+    <a routerLink="/mis-inscripciones"
+       routerLinkActive="active"
+       class="nav-link"
+       title="Mis inscripciones">
+      <mat-icon>list</mat-icon>
+      <span>Mis inscripciones</span>
+    </a>
+
+    <!-- HISTORIAL -->
+    <a routerLink="/historial-horas"
+       routerLinkActive="active"
+       class="nav-link"
+       title="Historial de Horas">
+      <mat-icon>schedule</mat-icon>
+      <span>Historial</span>
+    </a>
+
+  </ng-container>
 
   <!-- SOLO COORDINADOR -->
   <ng-container *ngIf="rol === 'coordinador'">
@@ -73,14 +91,21 @@
       <span>Crear Evento</span>
     </a>
 
+     <a routerLink="/inscripciones/admi-inscripciones" routerLinkActive="active" class="nav-link" title="Administrar Inscripciones">
+      <!-- Lista / check -->
+      <mat-icon>checklist</mat-icon>
+      <span>Admin Inscripciones</span>
+    </a>
+
   </ng-container>
 
   <!-- LOGOUT -->
-  <button class="logout-btn" title="Cerrar sesión" type="button">
+  <button class="logout-btn" title="Cerrar sesión" type="button" (click)="logout()">
     <!-- Salir -->
     <mat-icon>logout</mat-icon>
     <span>Cerrar sesión</span>
   </button>
+ 
 
 </nav>
 
