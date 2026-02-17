@@ -1,15 +1,23 @@
+/* ====================================
+   REGISTRO - MOBILE FIRST
+   ==================================== */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
+
+/* ====================================
+   ESTILOS BASE - MÓVILES (≤480px)
+   Sin media queries
+   ==================================== */
 
 :host {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 18px 14px; 
+  padding: 18px 14px;
 }
-
 
 .page {
   width: 100%;
@@ -23,7 +31,7 @@
 .card {
   width: 100%;
   max-width: 520px;
-  margin: 0 auto; 
+  margin: 0 auto;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 14px;
@@ -91,6 +99,11 @@
   background: #ffffff;
 }
 
+.field input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .filters-actions {
   margin-top: 14px;
   display: flex;
@@ -103,6 +116,7 @@
   padding: 10px 16px;
   font-size: 14px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .btn-primary {
@@ -112,6 +126,11 @@
 
 .btn-primary:hover {
   filter: brightness(0.95);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-ghost {
@@ -125,6 +144,11 @@
 
 .btn-ghost:hover {
   background: rgba(99, 102, 241, 0.08);
+}
+
+.btn-sm {
+  font-size: 13px;
+  padding: 6px 10px;
 }
 
 .mensaje {
@@ -156,6 +180,10 @@
   justify-content: center;
 }
 
+/* ====================================
+   BREAKPOINT 1: Teléfonos grandes (≥480px)
+   ==================================== */
+
 @media (min-width: 480px) {
   .page {
     max-width: 420px;
@@ -168,7 +196,11 @@
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+/* ====================================
+   BREAKPOINT 2: Tablets (≥768px)
+   ==================================== */
+
+@media (min-width: 768px) {
   :host {
     align-items: center;
   }
@@ -188,6 +220,7 @@
     margin-bottom: 0;
   }
 
+  /* Formulario en 2 columnas */
   .filters {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -204,6 +237,10 @@
     justify-content: center;
   }
 }
+
+/* ====================================
+   BREAKPOINT 3: Escritorio (≥1024px)
+   ==================================== */
 
 @media (min-width: 1024px) {
   :host {
@@ -222,6 +259,7 @@
     margin-bottom: 18px;
   }
 
+  /* Vuelve a 1 columna en escritorio */
   .filters {
     display: flex;
     flex-direction: column;
@@ -235,5 +273,10 @@
   .field input {
     font-size: 15px;
   }
-}
 
+  .filters-actions,
+  .mensaje,
+  .hint {
+    grid-column: auto;
+  }
+}
