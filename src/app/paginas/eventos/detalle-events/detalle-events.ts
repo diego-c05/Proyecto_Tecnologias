@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
+import { InscripcionesService } from '../../../services/inscripciones.service';
+import { AuthService } from '../../../services/auth.service';
+
 
 @Component({
   selector: 'app-detalle-events',
@@ -17,7 +20,9 @@ export class DetalleEvents implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private inscripcionesService: InscripcionesService,
+    private authService: AuthService
   ) {}
 
   async ngOnInit() {
@@ -43,9 +48,37 @@ export class DetalleEvents implements OnInit {
     this.router.navigate(['/eventos/vereventos']);
   }
 
-  inscribirse() {
-    alert('¡Inscripción registrada! (Aquí luego conectas Firestore para guardar la inscripción)');
+ async inscribirse() {
+  if (!this.evento?.id) return;
+
+  const user = this.authService.getCurrentUser();
+  if (!user) {
+    alert('Debes iniciar sesión para inscribirte.');
+    this.router.navigate(['/inicio-sesion']);
+    return;
   }
+
+  try {
+    await this.inscripcionesService.crearInscripcion({
+      eventoId: this.evento.id,
+      usuarioId: user.uid,
+      estado: 'inscrito',
+      usuarioCorreo: user.email ?? 'Sin correo',
+
+      // snapshot 
+      eventoNombre: this.evento.name,
+      eventoHoras: this.evento.hours,
+      eventoFecha: this.evento.date,
+      materiaNombre: this.evento.materiaNombre,
+      materiaCodigo: this.evento.materiaCodigo,
+      materiaSeccion: this.evento.materiaSeccion,
+    });
+
+    alert('¡Inscripción registrada!');
+  } catch (e: any) {
+    alert(e?.message || 'No se pudo inscribir.');
+  }
+}
 
   esFinalizado(e: Evento): boolean {
     const hoy = new Date();

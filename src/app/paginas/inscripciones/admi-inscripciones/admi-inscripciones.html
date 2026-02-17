@@ -1,0 +1,39 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Administrar inscripciones</h1>
+    <p class="subtitle">Inscripciones agrupadas por evento.</p>
+  </header>
+
+  <section class="card" *ngFor="let grupo of inscripcionesPorEvento">
+    <div class="card-header">
+      <h2>{{ grupo.eventoNombre }}</h2>
+      <span class="count">({{ grupo.lista.length }})</span>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let i of grupo.lista">
+            <td>{{ i.usuarioCorreo || i.usuarioId }}</td>
+            <td><span class="badge">{{ i.estado }}</span></td>
+            <td class="col-actions">
+              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'asistio')">Asistió</button>
+              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'acreditado')">Acreditar</button>
+              <button class="btn btn-danger" (click)="eliminar(i)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+

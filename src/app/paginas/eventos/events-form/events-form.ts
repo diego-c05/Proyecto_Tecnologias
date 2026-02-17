@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
@@ -51,24 +51,28 @@ export class EventsForm {
     }
   }
 
-  async saveEvent() {
-    try {
-      if (this.eventId) {
-        // EDITAR
-        await this.eventsService.updateEvent(this.eventId, this.event);
-        alert('Evento actualizado');
-      } else {
-        // CREAR
-        await this.eventsService.createEvent(this.event);
-        alert('Evento creado');
-      }
-
-      this.router.navigate(['/eventos/events-list']);
-    } catch (err) {
-      console.error('Error guardando:', err);
-      alert('Ocurrió un error');
-    }
+ async saveEvent(form: NgForm) {
+  if (form.invalid) {
+    form.control.markAllAsTouched();
+    return;
   }
+
+  try {
+    if (this.eventId) {
+      await this.eventsService.updateEvent(this.eventId, this.event);
+      alert('Evento actualizado');
+    } else {
+      await this.eventsService.createEvent(this.event);
+      alert('Evento creado');
+    }
+
+    this.router.navigate(['/eventos/events-list']);
+  } catch (err) {
+    console.error('Error guardando:', err);
+    alert('Ocurrió un error');
+  }
+}
+
 
   onMateriaChange() {
     const materia = this.materias.find(

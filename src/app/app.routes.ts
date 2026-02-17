@@ -11,6 +11,9 @@ import { EventsList } from './paginas/eventos/events-list/events-list';
 import { EventsForm} from './paginas/eventos/events-form/events-form';
 import { GestionUsuarios } from './paginas/admin/gestion-usuarios/gestion-usuarios';
 import { MateriasPagina } from './paginas/materias/materias-pagina/materias-pagina';
+import { MisInscripcionesComponent } from './paginas/inscripciones/mis-inscripciones/mis-inscripciones';
+import { AdminInscripcionesComponent } from './paginas/inscripciones/admi-inscripciones/admi-inscripciones';
+
 
 
 export const routes: Routes = [
@@ -29,6 +32,9 @@ export const routes: Routes = [
 
     { path: 'historial-horas', component: HistorialHoras },
     { path: 'eventos/detalle-events/:id', component: DetalleEvents  },
+     { path: 'mis-inscripciones', component: MisInscripcionesComponent },
+{ path: 'inscripciones/admi-inscripciones', component: AdminInscripcionesComponent },
+
     { path: 'historial-horas', component: HistorialHoras },
     { path: 'materias/materias-pagina', component: MateriasPagina },
     ]

@@ -11,116 +11,157 @@
       <h2>Formulario de evento</h2>
     </div>
 
-    <form class="form" (ngSubmit)="saveEvent()">
-      <div class="grid">
-        <div class="form-group">
-          <label for="name">Nombre</label>
-          <input
-            id="name"
-            type="text"
-            [(ngModel)]="event.name"
-            name="name"
-            required
-            placeholder="Ej. Jornada de reforestación"
-          />
-        </div>
+    <form class="form" #f="ngForm" (ngSubmit)="saveEvent(f)">
+  <div class="grid">
 
-        <div class="form-group">
-          <label for="date">Fecha</label>
-          <input
-            id="date"
-            type="date"
-            [(ngModel)]="event.date"
-            name="date"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="location">Ubicación</label>
-          <input
-            id="location"
-            type="text"
-            [(ngModel)]="event.location"
-            name="location"
-            required
-            placeholder="Ej. Campus Central"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="modality">Modalidad</label>
-          <select
-            id="modality"
-            [(ngModel)]="event.modality"
-            name="modality"
-            required
-          >
-            <option value="" disabled>Seleccione una modalidad</option>
-            <option value="Presencial">Presencial</option>
-            <option value="Virtual">Virtual</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="hours">Horas que otorga</label>
-          <input
-            id="hours"
-            type="number"
-            [(ngModel)]="event.hours"
-            name="hours"
-            required
-            min="0"
-            placeholder="Ej. 4"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="slots">Cupos</label>
-          <input
-            id="slots"
-            type="number"
-            [(ngModel)]="event.slots"
-            name="slots"
-            required
-            min="0"
-            placeholder="Ej. 50"
-          />
-        </div>
-
-        <div class="form-group form-group-full">
-          <label for="materiaId">Materia</label>
-          <select
-            id="materiaId"
-            [(ngModel)]="event.materiaId"
-            name="materiaId"
-            (change)="onMateriaChange()"
-            required
-          >
-            <option value="">Seleccione una materia</option>
-            <option *ngFor="let m of materias" [value]="m.id">
-              {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group form-group-full">
-          <label for="description">Descripción</label>
-          <textarea
-            id="description"
-            [(ngModel)]="event.description"
-            name="description"
-            rows="4"
-            placeholder="Describe el objetivo, requisitos o detalles importantes del evento..."
-          ></textarea>
-        </div>
+    <!-- NOMBRE -->
+    <div class="form-group">
+      <label for="name">Nombre</label>
+      <input
+        id="name"
+        type="text"
+        [(ngModel)]="event.name"
+        name="name"
+        required
+        #nameModel="ngModel"
+        placeholder="Ej. Jornada de reforestación"
+      />
+      <div class="error" *ngIf="nameModel.invalid && (nameModel.touched || f.submitted)">
+        El nombre es obligatorio.
       </div>
+    </div>
 
-      <div class="form-actions">
-        <button type="submit" class="btn-primary">
-          {{ event.id ? 'Actualizar' : 'Crear' }}
-        </button>
+    <!-- FECHA -->
+    <div class="form-group">
+      <label for="date">Fecha</label>
+      <input
+        id="date"
+        type="date"
+        [(ngModel)]="event.date"
+        name="date"
+        required
+        #dateModel="ngModel"
+      />
+      <div class="error" *ngIf="dateModel.invalid && (dateModel.touched || f.submitted)">
+        La fecha es obligatoria.
       </div>
-    </form>
+    </div>
+
+    <!-- UBICACIÓN -->
+    <div class="form-group">
+      <label for="location">Ubicación</label>
+      <input
+        id="location"
+        type="text"
+        [(ngModel)]="event.location"
+        name="location"
+        required
+        #locModel="ngModel"
+        placeholder="Ej. Campus Central"
+      />
+      <div class="error" *ngIf="locModel.invalid && (locModel.touched || f.submitted)">
+        La ubicación es obligatoria.
+      </div>
+    </div>
+
+    <!-- MODALIDAD -->
+    <div class="form-group">
+      <label for="modality">Modalidad</label>
+      <select
+        id="modality"
+        [(ngModel)]="event.modality"
+        name="modality"
+        required
+        #modModel="ngModel"
+      >
+        <option value="" disabled>Seleccione una modalidad</option>
+        <option value="Presencial">Presencial</option>
+        <option value="Virtual">Virtual</option>
+      </select>
+      <div class="error" *ngIf="modModel.invalid && (modModel.touched || f.submitted)">
+        Selecciona una modalidad.
+      </div>
+    </div>
+
+    <!-- HORAS -->
+    <div class="form-group">
+      <label for="hours">Horas que otorga</label>
+      <input
+        id="hours"
+        type="number"
+        [(ngModel)]="event.hours"
+        name="hours"
+        required
+        min="1"
+        #hoursModel="ngModel"
+        placeholder="Ej. 4"
+      />
+      <div class="error" *ngIf="hoursModel.invalid && (hoursModel.touched || f.submitted)">
+        <span *ngIf="hoursModel.errors?.['required']">Las horas son obligatorias.</span>
+        <span *ngIf="hoursModel.errors?.['min']">Debe ser al menos 1 hora.</span>
+      </div>
+    </div>
+
+    <!-- CUPOS -->
+    <div class="form-group">
+      <label for="slots">Cupos</label>
+      <input
+        id="slots"
+        type="number"
+        [(ngModel)]="event.slots"
+        name="slots"
+        required
+        min="1"
+        #slotsModel="ngModel"
+        placeholder="Ej. 50"
+      />
+      <div class="error" *ngIf="slotsModel.invalid && (slotsModel.touched || f.submitted)">
+        <span *ngIf="slotsModel.errors?.['required']">Los cupos son obligatorios.</span>
+        <span *ngIf="slotsModel.errors?.['min']">Debe ser al menos 1 cupo.</span>
+      </div>
+    </div>
+
+    <!-- MATERIA (OBLIGATORIA) -->
+    <div class="form-group form-group-full">
+      <label for="materiaId">Materia</label>
+      <select
+        id="materiaId"
+        [(ngModel)]="event.materiaId"
+        name="materiaId"
+        (change)="onMateriaChange()"
+        required
+        #materiaModel="ngModel"
+      >
+        <option value="">Seleccione una materia</option>
+        <option *ngFor="let m of materias" [value]="m.id">
+          {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
+        </option>
+      </select>
+      <div class="error" *ngIf="materiaModel.invalid && (materiaModel.touched || f.submitted)">
+        Debes seleccionar una materia.
+      </div>
+    </div>
+
+    <!-- DESCRIPCIÓN -->
+    <div class="form-group form-group-full">
+      <label for="description">Descripción</label>
+      <textarea
+        id="description"
+        [(ngModel)]="event.description"
+        name="description"
+        rows="4"
+        placeholder="Describe el objetivo, requisitos o detalles importantes del evento..."
+      ></textarea>
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary" [disabled]="f.invalid">
+      {{ event.id ? 'Actualizar' : 'Crear' }}
+    </button>
+  </div>
+</form>
+
   </section>
 </div>
