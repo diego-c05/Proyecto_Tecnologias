@@ -1,0 +1,67 @@
+<div class="page">
+  <header class="page-header">
+    <h1>Mis inscripciones</h1>
+    <p class="subtitle">Aquí ves tus eventos inscritos y su estado.</p>
+  </header>
+
+  <section class="card">
+    <div *ngIf="cargando" class="loading">Cargando...</div>
+
+    <div *ngIf="!cargando && inscripciones.length === 0" class="empty-state">
+      <div class="empty-icon">📝</div>
+      <div class="empty-text">
+        <strong>No tienes inscripciones aún.</strong>
+        <div class="empty-sub">
+          Ve a <a routerLink="/eventos/vereventos">Eventos</a> para inscribirte.
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!cargando && inscripciones.length > 0" class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Evento</th>
+            <th>Fecha</th>
+            <th>Horas</th>
+            <th>Estado</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let i of inscripciones">
+            <td class="strong">{{ i.eventoNombre || i.eventoId }}</td>
+            <td>{{ i.eventoFecha || '-' }}</td>
+            <td>
+              <span class="pill">{{ i.eventoHoras || '-' }}</span>
+            </td>
+            <td>
+              <span class="badge">{{ estadoBonito(i.estado) }}</span>
+            </td>
+            <td class="col-actions">
+              <button
+                class="btn btn-danger"
+                type="button"
+                (click)="cancelar(i)"
+                [disabled]="i.estado !== 'inscrito'"
+              >
+                Cancelar
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="!inscripciones || inscripciones.length === 0">
+            <td colspan="5" class="empty-row">No hay inscripciones registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Gestión de horas de vinculación</span>
+    <span class="dot">•</span>
+    <span>Mis inscripciones</span>
+  </footer>
+</div>

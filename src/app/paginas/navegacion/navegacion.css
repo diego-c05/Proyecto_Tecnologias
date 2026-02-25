@@ -10,10 +10,15 @@
   display: flex;
   align-items: center;
   gap: 18px;
+  justify-content: space-between;
+}
+
+.banner-left span{
+  color: #d32f2f;
 }
 
 .banner-logo {
-  max-height: 72px;     /* LOGO GRANDE CONTROLADO */
+  max-height: 72px;
   max-width: 260px;
   width: auto;
   height: auto;
@@ -35,6 +40,7 @@
   gap: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  overflow-x: auto;
 }
 
 /* LINKS */
@@ -48,26 +54,37 @@
   border-radius: 10px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+  opacity: 0.95;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  background: rgba(0, 0, 0, 0.18);
+  opacity: 1;
+}
+
+/* ✅ ACTIVO más opaco */
 .nav-link.active {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.28);
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
-/* ICONOS */
-.icon {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
+.nav-link:active {
+  transform: scale(0.98);
+}
+
+/* Angular Material icon sizes */
+.mat-nav-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
 }
 
 /* LOGOUT */
 .logout-btn {
-  margin-left: auto; /* 🔑 SIEMPRE A LA DERECHA */
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -78,36 +95,268 @@
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
 }
 
 .logout-btn:hover {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.logout-icon {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
+.logout-btn:active {
+  transform: scale(0.98);
 }
 
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-  .banner-title,
+/* ================= BURGER / SIDENAV (CSS toggle) ================= */
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.burger-btn {
+  display: none; /* solo móvil */
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  user-select: none;
+}
+
+.burger-btn:hover {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.burger-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+}
+
+/* Desktop links wrapper */
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+/* Sidenav */
+.sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 86%;
+  max-width: 340px;
+  background: #ffffff;
+  transform: translateX(-105%);
+  transition: transform 0.22s ease;
+  z-index: 1001;
+  box-shadow: 12px 0 22px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-header {
+  background: #d32f2f;
+  color: #fff;
+  padding: 14px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sidenav-brand {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.sidenav-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  grid-row: 1 / span 2;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 6px;
+}
+
+.sidenav-title {
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  font-size: 1.02rem;
+  line-height: 1.1;
+}
+
+.sidenav-subtitle {
+  opacity: 0.9;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.close-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.sidenav-content {
+  padding: 14px;
+  overflow: auto;
+}
+
+.section-title {
+  color: #6b7280;
+  font-weight: 900;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 6px 4px 10px;
+}
+
+.section-sep {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 12px 4px;
+}
+
+/* Side links */
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  color: #111827;
+  text-decoration: none;
+  font-weight: 800;
+  transition: background 0.2s ease;
+  margin-bottom: 6px;
+}
+
+.side-link mat-icon {
+  color: #b71c1c;
+}
+
+.side-link:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ✅ Activo en sidenav (opaco) */
+.side-link.active {
+  background: rgba(211, 47, 47, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(211, 47, 47, 0.22);
+}
+
+.side-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(211, 47, 47, 0.25);
+  background: rgba(211, 47, 47, 0.10);
+  color: #b71c1c;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.side-logout:hover {
+  background: rgba(211, 47, 47, 0.14);
+}
+
+/* Toggle open */
+.nav-toggle:checked ~ .overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-toggle:checked ~ .sidenav {
+  transform: translateX(0);
+}
+
+/* ================= 768px - 1023px (SOLO ICONOS) ================= */
+@media (max-width: 1023px) and (min-width: 641px) {
+
   .nav-link span,
   .logout-btn span {
     display: none;
+  }
+
+  .nav-link {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .logout-btn {
+    padding: 10px;
+  }
+
+  .mat-nav-icon {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+
+/* ================= MOBILE ================= */
+@media (max-width: 640px) {
+  /* Compact banner */
+  .banner {
+    padding: 12px 14px;
+  }
+
+  .banner-title {
+    font-size: 1.05rem;
   }
 
   .banner-logo {
     max-height: 48px;
   }
 
-  .icon,
-  .logout-icon {
-    width: 22px;
-    height: 22px;
+  /* Show burger, hide desktop links and top logout */
+  .burger-btn {
+    display: inline-flex;
   }
+
+  .nav-desktop {
+    display: none;
+  }
+
+  .logout-btn {
+    display: none;
+  }
+
+  /* To avoid content hidden behind mobile topbar? (topbar remains) */
 }

@@ -3,6 +3,7 @@
 /* ========================= */
 .crear-materia {
   width: 100%;
+  padding: 16px;
 }
 
 /* ========================= */
@@ -13,6 +14,7 @@
   font-weight: 800;
   margin-bottom: 18px;
   color: #b71c1c;
+  text-align: center;
 }
 
 /* ========================= */
@@ -82,14 +84,72 @@ form {
 }
 
 /* ========================= */
-/* RESPONSIVE                */
+/* TELEFONOS GRANDES         */
 /* ========================= */
-@media (max-width: 768px) {
+@media (min-width: 480px) {
+  .crear-materia {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  form {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .form-actions {
+    text-align: center;
+  }
+
   .crear-materia h2 {
-    font-size: 1.15rem;
+    font-size: 1.3rem;
   }
 
   .btn-primary {
+    font-size: 1rem;
+  }
+}
+
+/* ========================= */
+/* TABLETS                   */
+/* ========================= */
+@media (max-width: 767px) {
+  .crear-materia {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  form {
     width: 100%;
+    margin: 0 auto;
+  }
+
+  .form-actions {
+    text-align: center;
+  }
+}
+
+/* ========================= */
+/* ESCRITORIO                */
+/* ========================= */
+@media (min-width: 1028px) {
+  .crear-materia {
+    max-width: 750px;
+  }
+
+  .crear-materia h2 {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  form {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-actions {
+    grid-column: span 2;
   }
 }

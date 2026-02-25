@@ -28,7 +28,7 @@ export class RegistroComponent {
   ) {}
 
   async registrarse() {
-    console.log('🔵 Iniciando registro...');
+    console.log('Iniciando registro...');
     
     if (
       !this.nombreCompleto ||

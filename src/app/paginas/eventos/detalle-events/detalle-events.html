@@ -1,72 +1,86 @@
-<div class="contenedor-detalle" *ngIf="evento">
+<div class="contenedor-detalle" *ngIf="evento; else cargandoTpl">
   <header class="header-detalle">
-    <button class="btn-volver" (click)="volver()">
-      ← Volver a eventos
-    </button>
+    <button class="btn-volver" (click)="volver()">← Volver a eventos</button>
   </header>
 
   <div class="banner-evento">
-    <img [src]="evento.imagen" [alt]="evento.nombre">
-    <div class="overlay-banner" *ngIf="evento.estado === 'finalizado'">
+    <img
+      *ngIf="evento.imageUrl; else sinImg"
+      [src]="evento.imageUrl"
+      [alt]="evento.name"
+    />
+    <ng-template #sinImg>
+      <div class="banner-sin-img">Sin imagen</div>
+    </ng-template>
+
+    <div class="overlay-banner" *ngIf="esFinalizado(evento)">
       <span class="badge-finalizado">Evento Finalizado</span>
     </div>
   </div>
 
   <div class="contenido-principal">
     <div class="columna-info">
-      <h1 class="titulo-principal">{{ evento.nombre }}</h1>
-      
+      <h1 class="titulo-principal">{{ evento.name }}</h1>
+
       <div class="info-organizador">
         <div class="avatar-org">📍</div>
         <div>
-          <p class="nombre-org">Vinculación CEUTEC TGU</p>
+          <p class="nombre-org">Vinculación CEUTEC</p>
+          <p class="muted">{{ evento.location }} • {{ evento.modality }}</p>
         </div>
       </div>
 
       <section class="seccion">
         <h2>Descripción</h2>
-        <p class="descripcion-larga">{{ evento.descripcionCompleta }}</p>
-        <p class="categoria-texto">
-          <strong>Categoría:</strong> {{ evento.categoria }}
+        <p class="descripcion-larga">
+          {{ evento.description || 'Sin descripción.' }}
         </p>
       </section>
 
       <section class="seccion">
         <h2>Detalles del evento</h2>
         <div class="highlights">
-          <div class="highlight-item">📍 Presencial</div>
-          <div class="highlight-item">⏱️ {{ evento.horasVoluntariado }} horas de voluntariado</div>
-          <div class="highlight-item">👥 {{ evento.cuposDisponibles }} cupos disponibles</div>
+          <div class="highlight-item">📍 {{ evento.modality }}</div>
+          <div class="highlight-item">⏱️ {{ evento.hours }} horas</div>
+          <div class="highlight-item">👥 {{ evento.slots }} cupos</div>
         </div>
       </section>
 
       <section class="seccion">
-        <h2>Ubicación</h2>
-        <div class="info-ubicacion">
-          <p class="direccion-principal">{{ evento.direccion }}</p>
-          <p class="ciudad">{{ evento.ubicacion }}</p>
+        <h2>Materia</h2>
+        
+        <div *ngIf="materia.nombre; else sinMateria">
+          <p class="categoria-texto">
+            <strong>{{ materia.nombre }}</strong>
+            {{ materia.codigo }} - {{ materia.seccion }}
+          </p>
         </div>
+        <ng-template #sinMateria>
+          <em class="muted">Sin materia asignada</em>
+        </ng-template>
+        
       </section>
     </div>
 
     <div class="columna-inscripcion">
       <div class="tarjeta-sticky">
-        <div class="estado-inscripcion" [class.finalizado]="evento.estado === 'finalizado'">
-          <span *ngIf="evento.estado === 'disponible'">Inscripciones abiertas</span>
-          <span *ngIf="evento.estado === 'finalizado'">Evento Finalizado</span>
+        <div class="estado-inscripcion" [class.finalizado]="esFinalizado(evento)">
+          <span *ngIf="!esFinalizado(evento)">Inscripciones abiertas</span>
+          <span *ngIf="esFinalizado(evento)">Evento Finalizado</span>
         </div>
-        
+
         <p class="fecha-inscripcion">
-          {{ formatearFechaCompleta(evento.fecha) }} · {{ evento.hora }}
+          {{ formatearFechaCompleta(evento.date) }}
         </p>
-        
-        <button 
-          class="btn-inscribir" 
+
+        <button
+          class="btn-inscribir"
           (click)="inscribirse()"
-          [disabled]="evento.estado === 'finalizado'">
-          {{ evento.estado === 'disponible' ? 'Inscribirme al evento' : 'Inscripciones cerradas' }}
+          [disabled]="esFinalizado(evento)"
+        >
+          {{ !esFinalizado(evento) ? 'Inscribirme al evento' : 'Inscripciones cerradas' }}
         </button>
-        
+
         <div class="info-extra">
           <p>✓ Confirmación inmediata</p>
           <p>✓ Acreditación de horas automática</p>
@@ -75,3 +89,10 @@
     </div>
   </div>
 </div>
+
+<ng-template #cargandoTpl>
+  <div class="contenedor-detalle">
+    <p *ngIf="cargando">Cargando evento...</p>
+    <p *ngIf="!cargando">No se encontró el evento.</p>
+  </div>
+</ng-template>

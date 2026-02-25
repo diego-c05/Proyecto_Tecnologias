@@ -1,6 +1,15 @@
+/* ====================================
+   INICIO DE SESIÓN - MOBILE FIRST
+   ==================================== */
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
+
+/* ====================================
+   ESTILOS BASE - MÓVILES (≤480px)
+   Sin media queries
+   ==================================== */
 
 :host {
   display: flex;
@@ -14,7 +23,7 @@
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 16px;
+  padding: 14px;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #1f2937;
 }
@@ -34,16 +43,16 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
 .title {
   margin: 0 0 6px;
-  line-height: 1.2;
+  line-height: 1.22;
   letter-spacing: -0.2px;
   text-wrap: balance;
-  font-size: 26px;
+  font-size: 24px;
 }
 
 .subtitle {
@@ -56,7 +65,7 @@
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .field {
@@ -113,6 +122,11 @@
   filter: brightness(0.95);
 }
 
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn-ghost {
   background: transparent;
   border-color: transparent;
@@ -124,6 +138,11 @@
 
 .btn-ghost:hover {
   background: rgba(99, 102, 241, 0.08);
+}
+
+.btn-sm {
+  font-size: 13px;
+  padding: 6px 10px;
 }
 
 .mensaje {
@@ -155,28 +174,9 @@
   justify-content: center;
 }
 
-@media (max-width: 390px) {
-  :host {
-    padding: 18px 18px;
-  }
-
-  .page {
-    padding: 14px;
-  }
-
-  .title {
-    font-size: 24px;
-    line-height: 1.22;
-  }
-
-  .header {
-    margin-bottom: 16px;
-  }
-
-  .filters {
-    gap: 14px;
-  }
-}
+/* ====================================
+   BREAKPOINT 1: Teléfonos grandes (≥480px)
+   ==================================== */
 
 @media (min-width: 480px) {
   .page {
@@ -192,9 +192,21 @@
   .title {
     font-size: 28px;
   }
+
+  .filters {
+    gap: 16px;
+  }
+
+  .header {
+    margin-bottom: 18px;
+  }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+/* ====================================
+   BREAKPOINT 2: Tablets (≥768px)
+   ==================================== */
+
+@media (min-width: 768px) {
   .page {
     max-width: 900px;
     margin: 32px auto;
@@ -231,6 +243,10 @@
   }
 }
 
+/* ====================================
+   BREAKPOINT 3: Escritorio (≥1024px)
+   ==================================== */
+
 @media (min-width: 1024px) {
   .page {
     max-width: 560px;
@@ -242,6 +258,11 @@
     max-width: 560px;
   }
 
+  .header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
   .filters {
     display: flex;
     flex-direction: column;
@@ -251,5 +272,13 @@
   .title {
     font-size: 32px;
   }
-}
 
+  .field input {
+    font-size: 15px;
+  }
+
+  .mensaje,
+  .hint {
+    grid-column: auto;
+  }
+}
