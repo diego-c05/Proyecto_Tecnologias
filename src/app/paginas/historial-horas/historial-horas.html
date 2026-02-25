@@ -4,7 +4,6 @@
       <h1>Historial de horas</h1>
       <p class="subtitle">Consulta tus eventos registrados y el total de horas acumuladas.</p>
     </div>
-
     <div class="header-actions">
       <a class="btn btn-ghost" routerLink="/eventos/vereventos">Ver eventos</a>
     </div>
@@ -13,55 +12,46 @@
   <section class="card table-card">
     <div class="card-header">
       <h2>Registro de participación</h2>
-      <span class="count">(3)</span>
+      <span class="count">({{ historial.length }})</span>
     </div>
 
-    <div class="table-wrap">
+    <!-- Cargando -->
+    <div *ngIf="cargando" style="padding: 16px;">Cargando historial...</div>
+
+    <div class="table-wrap" *ngIf="!cargando">
       <table class="table">
         <thead>
           <tr>
             <th>Evento</th>
             <th>Fecha</th>
-            <th>Clase</th>
+            <th>Materia</th>
             <th>Horas</th>
-            <th>Coordinador</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td class="strong">Reforestación</td>
-            <td>10/11/2025</td>
-            <td>Biología</td>
-            <td><span class="pill pill-primary">5</span></td>
-            <td>Juan Castillo</td>
+          <tr *ngFor="let i of historial">
+            <td class="strong">{{ i.eventoNombre }}</td>
+            <td>{{ i.eventoFecha || '-' }}</td>
+            <td>
+              {{ i.materiaNombre || '-' }}
+              <span *ngIf="i.materiaCodigo"> · {{ i.materiaCodigo }}</span>
+            </td>
+            <td><span class="pill pill-primary">{{ i.eventoHoras }}</span></td>
           </tr>
 
-          <tr>
-            <td class="strong">Remodelación Escuela</td>
-            <td>18/07/2025</td>
-            <td>Gestión de Proyectos</td>
-            <td><span class="pill pill-primary">6</span></td>
-            <td>Claudia Romero</td>
-          </tr>
-
-          <tr>
-            <td class="strong">Limpieza de Playas</td>
-            <td>15/04/2025</td>
-            <td>Comunicación Oral y Escrita</td>
-            <td><span class="pill pill-primary">4</span></td>
-            <td>Ximena Pavón</td>
+          <tr *ngIf="historial.length === 0">
+            <td colspan="4" class="empty">Aún no tienes horas acreditadas.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="summary">
+    <div class="summary" *ngIf="!cargando">
       <div class="summary-item">
         <span class="summary-label">Total acumulado</span>
-        <span class="summary-value">12 horas</span>
+        <span class="summary-value">{{ totalHoras }} horas</span>
       </div>
-
       <div class="summary-actions">
         <a class="btn btn-primary" routerLink="/eventos/vereventos">Inscribirme a más eventos</a>
       </div>
