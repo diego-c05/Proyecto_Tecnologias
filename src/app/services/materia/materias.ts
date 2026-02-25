@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, getDocs, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, getDocs, deleteDoc, doc, updateDoc, onSnapshot, QuerySnapshot, DocumentData, getDoc } from '@angular/fire/firestore';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -58,5 +58,32 @@ export class Materias {
     await updateDoc(ref, cambios); 
     this.refrescarMaterias$.next(); 
   }
+
+  getMateriasRealtime(): Observable<any[]> {
+    return new Observable(observer => {
+      const ref = collection(this.firestore, 'materias');
+
+      const unsubscribe = onSnapshot(ref, (snapshot: QuerySnapshot<DocumentData>) => {
+        const materias = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        observer.next(materias);
+      }, error => {
+        observer.error(error);
+      });
+
+      // 🔥 limpieza al destruir el componente
+      return () => unsubscribe();
+    });
+  }
+
+  async getMateriaById(id: string): Promise<any | null> {
+  const ref = doc(this.firestore, 'materias', id);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return null;
+  return { id: snap.id, ...snap.data() };
+}
 }
 

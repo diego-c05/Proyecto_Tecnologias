@@ -24,10 +24,7 @@ export interface Evento {
   location: string;
   description?: string;
   imageUrl?: string; 
-  materiaId?: string;
-  materiaNombre?: string;
-  materiaCodigo?: string;
-  materiaSeccion?: string; 
+  materiaId?: string; 
 }
 
 

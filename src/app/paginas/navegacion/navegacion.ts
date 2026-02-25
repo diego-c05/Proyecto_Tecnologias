@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, Usuario } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule, MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navegacion',
@@ -13,17 +14,33 @@ import { Router } from '@angular/router';
   styleUrl: './navegacion.css',
 })
 export class Navegacion implements OnInit{
-        rol: string | null = null;
+        
+  rol: 'usuario' | 'coordinador' | null = null;
+  usuarioDatos: Usuario | null = null;
+
+  private rolSub?: Subscription;
+  private userSub?: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
 
 
   async ngOnInit() {
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      const datos = await this.authService.obtenerDatosUsuario(user.uid);
-      this.rol = datos?.rol ?? null;
-    }
+    this.rolSub = this.authService.rol$.subscribe(rol => {
+      this.rol = rol;
+    });
+
+    this.userSub = this.authService.usuario$.subscribe(async user => {
+      if(user){
+        this.usuarioDatos = await this.authService.obtenerDatosUsuario(user.uid);
+      }else{
+        this.usuarioDatos = null;
+      }
+    });  
+  }
+
+  ngOnDestroy() {
+    this.rolSub?.unsubscribe();
+    this.userSub?.unsubscribe();
   }
 
   async logout() {
@@ -33,7 +50,7 @@ export class Navegacion implements OnInit{
     
     localStorage.removeItem('eventoSeleccionado');
 
-    this.router.navigate(['/inicio-sesion']);
+    this.router.navigate(['/inicio-sesion'], { replaceUrl: true });
   } else {
     alert(res.error || 'No se pudo cerrar sesión');
   }

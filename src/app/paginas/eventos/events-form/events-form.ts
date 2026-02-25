@@ -80,9 +80,7 @@ export class EventsForm {
     );
 
     if (materia) {
-      this.event.materiaNombre = materia.nombre;
-      this.event.materiaCodigo = materia.codigo;
-      this.event.materiaSeccion = materia.seccion;
+      this.event.materiaId = materia.id;
     }
   }
 }
