@@ -4,11 +4,13 @@ import { Router, RouterModule } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
 import { combineLatest, Subscription } from 'rxjs';
+import { UsuariosService } from '../../../services/usuarios.service';
 
 interface EventoView extends Evento {
   materiaNombre?: string;
   materiaCodigo?: string;
   materiaSeccion?: string;
+  coordinadorNombre?: string;
 }
 
 @Component({
@@ -23,21 +25,26 @@ export class EventsList implements OnInit {
   events: EventoView[] = [];
   private sub!: Subscription;
 
-  constructor(private eventsService: EventsService, private materiasService: Materias) {}
+  constructor(private eventsService: EventsService, 
+    private materiasService: Materias,
+    private usuariosService: UsuariosService) {}
 
 async ngOnInit() {
   try {
     this.sub = combineLatest([
-      this.eventsService.getEvents(),            // 🔥 ya reactivo
-      this.materiasService.getMateriasRealtime() // 🔥 nuevo
-    ]).subscribe(([events, materias]) => {
+      this.eventsService.getEvents(),            
+      this.materiasService.getMateriasRealtime(),
+      this.usuariosService.getUsuarioRealtime()
+    ]).subscribe(([events, materias, usuarios]) => {
       this.events = events.map(event => {
         const materia = materias.find(m => m.id === event.materiaId);
+        const usuario = usuarios.find(u => u.uid === event.coordinadorId);
         return {
           ...event,
           materiaNombre: materia?.nombre ?? null,
           materiaCodigo: materia?.codigo ?? null,
-          materiaSeccion: materia?.seccion ?? null
+          materiaSeccion: materia?.seccion ?? null,
+          coordinadorNombre: usuario?.nombreCompleto ?? null,
         };
       });
     });

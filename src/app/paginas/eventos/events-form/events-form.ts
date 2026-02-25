@@ -4,6 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
+import { UsuariosService,Usuario } from '../../../services/usuarios.service';
 
 @Component({
   selector: 'app-events-form',
@@ -29,16 +30,21 @@ export class EventsForm {
   constructor(
     private eventsService: EventsService,
     private materiasService: Materias,
+    private usuariosService: UsuariosService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   materias: any[] = [];
+  coordinadores: Usuario[] = [];
 
   async ngOnInit() {
     this.eventId = this.route.snapshot.paramMap.get('id');
 
     this.materias = await this.materiasService.listarMaterias();
+
+    const usuarios = await this.usuariosService.listarUsuarios();
+    this.coordinadores = usuarios.filter(u=>u.rol === 'coordinador')
 
     if (this.eventId) {
       const data = await this.eventsService.getEventById(this.eventId);
@@ -81,6 +87,16 @@ export class EventsForm {
 
     if (materia) {
       this.event.materiaId = materia.id;
+    }
+  }
+
+  onCoordinadorChange() {
+    const coordinador = this.coordinadores.find(
+      c => c.uid === this.event.coordinadorId
+    );
+
+    if (coordinador) {
+      this.event.coordinadorId = coordinador.uid;
     }
   }
 }

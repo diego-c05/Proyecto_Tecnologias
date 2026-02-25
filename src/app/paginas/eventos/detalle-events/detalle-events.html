@@ -49,14 +49,29 @@
       <section class="seccion">
         <h2>Materia</h2>
         
-        <div *ngIf="materia.nombre; else sinMateria">
+        <div *ngIf="materia as m; else sinMateria">
           <p class="categoria-texto">
-            <strong>{{ materia.nombre }}</strong>
-            {{ materia.codigo }} - {{ materia.seccion }}
+            <strong>{{ m.nombre }}</strong>
+            {{ m.codigo }} - {{ m.seccion }}
           </p>
         </div>
         <ng-template #sinMateria>
           <em class="muted">Sin materia asignada</em>
+        </ng-template>
+        
+      </section>
+
+      <section class="seccion">
+        <h2>Coordinador</h2>
+        
+        <div *ngIf="coordinador as c; else sinCoordinador">
+          <p class="categoria-texto">
+            <strong>{{ c.nombreCompleto }}</strong>
+            {{ c.correoElectronico }} 
+          </p>
+        </div>
+        <ng-template #sinCoordinador>
+          <em class="muted">Sin Coordinador asignado</em>
         </ng-template>
         
       </section>

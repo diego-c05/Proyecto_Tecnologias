@@ -142,6 +142,27 @@
       </div>
     </div>
 
+    <!--COORDINADOR (OBLIGATORIO) -->
+    <div class="form-group form-group-full">
+      <label for="coordinadorId">Coordinador</label>
+      <select
+        id="coordinadorId"
+        [(ngModel)]="event.coordinadorId"
+        name="coordinadorId"
+        (change)="onCoordinadorChange()"
+        required
+        #coordinadorModel="ngModel"
+      >
+        <option value="">Seleccione un Coordinador</option>
+        <option *ngFor="let c of coordinadores" [value]="c.uid">
+          {{ c.nombreCompleto }} 
+        </option>
+      </select>
+      <div class="error" *ngIf="coordinadorModel.invalid && (coordinadorModel.touched || f.submitted)">
+        Debes seleccionar un Coordinador.
+      </div>
+    </div>
+
     <!-- DESCRIPCIÓN -->
     <div class="form-group form-group-full">
       <label for="description">Descripción</label>
