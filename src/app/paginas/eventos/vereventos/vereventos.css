@@ -319,7 +319,7 @@
    BREAKPOINT 1: Teléfonos grandes (≥480px)
    ==================================== */
 
-@media (min-width: 480px) {
+@media (min-width: 640px) {
   :host {
     padding: 18px 18px;
   }

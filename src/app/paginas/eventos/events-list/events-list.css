@@ -216,7 +216,7 @@
 /* ========================= */
 /* Responsive                */
 /* ========================= */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .page {
     padding: 16px 14px 30px;
   }
