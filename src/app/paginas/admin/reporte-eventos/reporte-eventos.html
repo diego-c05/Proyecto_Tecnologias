@@ -1,9 +1,12 @@
 <div class="page">
-  <!-- Header -->
+
+  <!-- HEADER -->
   <header class="page-header">
     <div>
       <h1>Reporte de eventos</h1>
-      <p class="subtitle">Panel administrativo · Reporte de eventos de vinculación</p>
+      <p class="subtitle">
+        Panel administrativo · Reporte de eventos de vinculación
+      </p>
     </div>
 
     <div class="header-actions">
@@ -13,80 +16,97 @@
     </div>
   </header>
 
-  <!-- Stats -->
+  <!-- STATS -->
   <section class="stats">
     <div class="card stat">
       <p class="stat-label">Eventos publicados</p>
-      <p class="stat-value">{{ eventos?.length || 0 }}</p>
+      <p class="stat-value">{{ eventosPublicados }}</p>
       <p class="stat-note">Registrados en el sistema</p>
     </div>
 
     <div class="card stat">
-      <p class="stat-label">Eventos activos</p>
-      <p class="stat-value">3</p>
-      <p class="stat-note">Disponibles actualmente</p>
-    </div>
-
-    <div class="card stat">
-      <p class="stat-label">Eventos cerrados</p>
-      <p class="stat-value">1</p>
-      <p class="stat-note">Finalizados</p>
-    </div>
-
-    <div class="card stat">
       <p class="stat-label">Cupos totales</p>
-      <p class="stat-value">120</p>
+      <p class="stat-value">{{ cuposTotales }}</p>
       <p class="stat-note">Suma de cupos publicados</p>
     </div>
 
     <div class="card stat">
       <p class="stat-label">Horas disponibles</p>
-      <p class="stat-value">45</p>
+      <p class="stat-value">{{ horasDisponibles }}</p>
       <p class="stat-note">Horas asignadas en eventos</p>
     </div>
   </section>
 
-  <!-- Filters -->
+  <!-- FILTROS -->
   <section class="card filters">
-    <div class="card-header">
-      <h2>Filtros</h2>
-      <span class="hint">Opcional</span>
+  <div class="card-header">
+    <h2>Filtros</h2>
+  </div>
+
+  <div class="filters-grid">
+  <div class="filters-row-1">
+    <div class="field">
+      <label>Buscar evento</label>
+      <input
+        type="text"
+        placeholder="Ej: reforestación..."
+        [(ngModel)]="searchText"
+        (input)="applyFilters()"
+      />
     </div>
 
-    <div class="filters-row">
-      <div class="field">
-        <label>Buscar evento</label>
-        <input type="text" placeholder="Ej: reforestación, donación..." />
-      </div>
-
-      <div class="field">
-        <label>Estado</label>
-        <select>
-          <option>Todos</option>
-          <option>Abierto</option>
-          <option>Cerrado</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Ordenar</label>
-        <select>
-          <option>Más recientes</option>
-          <option>Más horas</option>
-          <option>Más cupos</option>
-        </select>
-      </div>
-
-      <div class="filters-actions">
-        <button class="btn btn-primary" type="button">Aplicar</button>
-        <button class="btn btn-light" type="button">Limpiar</button>
-      </div>
+    <div class="field">
+      <label>Modalidad</label>
+      <select [(ngModel)]="modalityFilter" (change)="applyFilters()">
+        <option value="Todos">Todos</option>
+        <option value="Presencial">Presencial</option>
+        <option value="Virtual">Virtual</option>
+      </select>
     </div>
-  </section>
 
-  <hr class="divider" />
+    <div class="field">
+      <label>Materia</label>
+      <select [(ngModel)]="materiaFilter" (change)="applyFilters()">
+        <option value="Todos">Todos</option>
+        <option *ngFor="let m of materias" [value]="m.id">
+          {{ m.nombre }}
+        </option>
+      </select>
+    </div>
+  </div>
 
-  <!-- Tabla -->
+  <div class="filters-row-2">
+    <div class="field">
+      <label>Desde</label>
+      <input type="date" [(ngModel)]="dateFrom" (change)="applyFilters()" />
+    </div>
+
+    <div class="field">
+      <label>Hasta</label>
+      <input type="date" [(ngModel)]="dateTo" (change)="applyFilters()" />
+    </div>
+
+    <div class="field">
+      <label>Horas</label>
+      <input
+        type="number"
+        min="0"
+        placeholder="Ej: 8"
+        [ngModel]="hoursFilter"
+        (ngModelChange)="onHoursInput($event)"
+      />
+    </div>
+
+    <div class="filters-actions">
+      <button class="btn btn-clear" type="button" (click)="clearFilters()">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</div>
+</section>
+
+  <!-- TABLA -->
   <section class="card table-card">
     <div class="table-head">
       <h2 class="section-title">Listado de eventos</h2>
@@ -100,9 +120,11 @@
             <th>Evento</th>
             <th>Fecha</th>
             <th>Lugar</th>
+            <th>Materia</th>
+            <th>Modalidad</th>
+            <th>Sección</th>
             <th>Cupos</th>
             <th>Horas</th>
-            <th>Estado</th>
             <th class="col-actions">Modificar</th>
             <th class="col-actions">Eliminar</th>
           </tr>
@@ -119,36 +141,135 @@
 
             <td>{{ e.fecha }}</td>
             <td>{{ e.lugar }}</td>
+            <td>{{ e.materia }}</td>
+            <td>{{ e.modalidad }}</td>
+            <td>{{ e.seccion }}</td>
             <td>{{ e.cupos }}</td>
 
             <td>
               <span class="pill pill-primary">{{ e.horas }}</span>
             </td>
 
-            <td>
-              <span class="status status-open">Abierto</span>
+            <td class="col-actions">
+              <button class="btn btn-light btn-sm" (click)="onEdit(e)">
+                Modificar
+              </button>
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
-            </td>
-
-            <td class="col-actions">
-              <button class="btn btn-danger btn-sm" type="button">Eliminar</button>
+              <button class="btn btn-danger btn-sm" (click)="onDelete(e)">
+                Eliminar
+              </button>
             </td>
           </tr>
 
           <tr *ngIf="!eventos || eventos.length === 0">
-            <td colspan="8" class="empty">No hay eventos registrados.</td>
+            <td colspan="10" class="empty">
+              {{ emptyMessage }}
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
+  <!-- MODAL DE EDICIÓN -->
+  <div class="modal-overlay" *ngIf="editing" (click)="cancelEdit()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <section class="card edit-card">
+        <div class="card-header">
+          <h2>Modificar evento</h2>
+          <button class="btn btn-light btn-sm" (click)="cancelEdit()">
+            Cerrar
+          </button>
+        </div>
+
+        <div class="edit-grid">
+
+          <div class="field">
+            <label>Nombre del evento</label>
+            <input type="text" [(ngModel)]="form.name">
+          </div>
+
+          <div class="field">
+            <label>Fecha</label>
+            <input type="date" [(ngModel)]="form.date">
+          </div>
+
+          <div class="field">
+            <label>Horas</label>
+            <input type="number" min="0" [(ngModel)]="form.hours">
+          </div>
+
+          <div class="field">
+            <label>Cupos</label>
+            <input type="number" min="0" [(ngModel)]="form.slots">
+          </div>
+
+          <div class="field">
+            <label>Modalidad</label>
+            <select [(ngModel)]="form.modality">
+              <option value="Presencial">Presencial</option>
+              <option value="Virtual">Virtual</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Lugar</label>
+            <input type="text" [(ngModel)]="form.location">
+          </div>
+
+          <div class="field">
+            <label>Descripción</label>
+            <input type="text" [(ngModel)]="form.description">
+          </div>
+
+          <div class="field">
+            <label>Imagen</label>
+            <input type="text" [(ngModel)]="form.imageUrl">
+          </div>
+
+          <div class="field">
+            <label>Materia</label>
+            <select [(ngModel)]="form.materiaId" (change)="onMateriaChange(form.materiaId)">
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let m of materias" [value]="m.id">
+                {{ m.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Código</label>
+            <input type="text" [value]="form.materiaCodigo" readonly>
+          </div>
+
+          <div class="field">
+            <label>Sección</label>
+            <input type="text" [value]="form.materiaSeccion" readonly>
+          </div>
+
+        </div>
+
+        <div class="edit-actions">
+          <button class="btn btn-primary" (click)="saveEdit()">
+            Guardar cambios
+          </button>
+          <button class="btn btn-light" (click)="cancelEdit()">
+            Cancelar
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
   <footer class="footer">
     <span>Gestión de horas de vinculación</span>
     <span class="dot">•</span>
     <span>Panel administrativo</span>
   </footer>
+
 </div>
