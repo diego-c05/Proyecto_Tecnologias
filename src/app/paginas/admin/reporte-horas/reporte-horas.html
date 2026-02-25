@@ -1,5 +1,4 @@
 <div class="page">
-  <!-- Header -->
   <header class="page-header">
     <div>
       <h1>Reporte de horas</h1>
@@ -11,128 +10,125 @@
     </div>
   </header>
 
-  <!-- Stats -->
-  <section class="stats">
+  <section *ngIf="cargando" class="card" style="padding: 14px;">
+    Cargando reporte...
+  </section>
+
+  <section *ngIf="!cargando && errorMsg" class="card" style="padding: 14px;">
+    {{ errorMsg }}
+  </section>
+
+  <section class="stats" *ngIf="!cargando && !errorMsg">
     <div class="card stat">
       <p class="stat-label">Estudiantes registrados</p>
-      <p class="stat-value">{{ estudiantes?.length || 0 }}</p>
-      <p class="stat-note">Con horas registradas en el sistema</p>
+      <p class="stat-value">{{ totalEstudiantesRegistrados }}</p>
+      <p class="stat-note">Usuarios con rol usuario</p>
     </div>
 
     <div class="card stat">
-      <p class="stat-label">Horas completas</p>
-      <p class="stat-value">8</p>
+      <p class="stat-label">Estudiantes con horas de vinculación completas</p>
+      <p class="stat-value">{{ totalEstudiantesCompletas }}</p>
       <p class="stat-note">Cumplieron el requisito</p>
     </div>
 
     <div class="card stat">
-      <p class="stat-label">Horas pendientes</p>
-      <p class="stat-value">12</p>
+      <p class="stat-label">Estudiantes con horas de vinculación faltantes</p>
+      <p class="stat-value">{{ totalEstudiantesPendientes }}</p>
       <p class="stat-note">Aún no completan las horas</p>
     </div>
   </section>
 
-  <!-- Filters -->
-  <section class="card filters">
+  <section class="card filters" *ngIf="!cargando && !errorMsg">
     <div class="card-header">
       <h2>Filtros</h2>
-      <span class="hint">Opcional</span>
     </div>
 
-    <div class="filters-row">
+    <div class="filters-grid">
       <div class="field">
-        <label>Buscar por número de cuenta</label>
-        <input type="text" placeholder="Ej: 32211089" />
+        <label>Buscar estudiante</label>
+        <input
+          type="text"
+          placeholder="Ej: usuarioprueba"
+          [(ngModel)]="filtroNombre"
+          (ngModelChange)="aplicarFiltros()"
+        />
       </div>
 
       <div class="field">
-        <label>Estado</label>
-        <select>
-          <option>Todos</option>
-          <option>Horas completas</option>
-          <option>Pendiente</option>
-        </select>
+        <label>Horas totales</label>
+        <input
+          type="number"
+          placeholder="Ej: 20"
+          [(ngModel)]="filtroHorasTotales"
+          (ngModelChange)="aplicarFiltros()"
+        />
       </div>
 
       <div class="field">
-        <label>Ordenar</label>
-        <select>
-          <option>Mayor a menor (horas)</option>
-          <option>Menor a mayor (horas)</option>
-          <option>Por número de cuenta</option>
-        </select>
+        <label>Horas restantes</label>
+        <input
+          type="number"
+          placeholder="Ej: 10"
+          [(ngModel)]="filtroHorasRestantes"
+          (ngModelChange)="aplicarFiltros()"
+        />
       </div>
+    </div>
 
-      <div class="filters-actions">
-        <button class="btn btn-primary" type="button">Aplicar</button>
-        <button class="btn btn-light" type="button">Limpiar</button>
-      </div>
+    <div class="filters-actions-row">
+      <button class="btn btn-light" type="button" (click)="limpiarFiltros()">
+        Limpiar
+      </button>
     </div>
   </section>
 
   <hr class="divider" />
 
-  <!-- Tabla: Completas -->
-  <section class="card table-card">
+
+  <section class="card table-card" *ngIf="!cargando && !errorMsg">
     <div class="table-head">
-      <h2 class="section-title">Estudiantes con horas de vinculación completas</h2>
-      <span class="badge badge-success">Completas</span>
+      <h2 class="section-title">Historial de horas de vinculación de estudiantes</h2>
     </div>
 
     <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
-            <th>Cuenta</th>
             <th>Estudiante</th>
-            <th>Horas</th>
-            <th class="col-actions">Modificar</th>
+            <th>Total de horas registradas</th>
             <th class="col-actions">Detalles</th>
           </tr>
         </thead>
 
         <tbody>
-          <!-- Ejemplos (puedes reemplazar por ngFor cuando lo conectes) -->
-          <tr>
-            <td class="mono">32211089</td>
+          <tr *ngFor="let s of historial; trackBy: trackByUid">
             <td>
               <div class="student">
-                <div class="student-name">Josue Gonzales</div>
-                <div class="student-desc">Horas completadas</div>
+                <div class="student-name">{{ s.nombreUsuario }}</div>
+                <div class="student-desc">Historial de participación en vinculación</div>
               </div>
             </td>
-            <td><span class="pill pill-primary">40</span></td>
-            <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
+
+            <td>
+              <span class="pill pill-primary">{{ s.totalHoras }}</span>
             </td>
+
             <td class="col-actions">
-              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+              <button class="btn btn-ghost btn-sm" type="button" (click)="abrirHistorial(s)">
+                Ver historial del estudiante
+              </button>
             </td>
           </tr>
 
-          <tr>
-            <td class="mono">32144556</td>
-            <td>
-              <div class="student">
-                <div class="student-name">Maria Lopez</div>
-                <div class="student-desc">Horas completadas</div>
-              </div>
-            </td>
-            <td><span class="pill pill-primary">42</span></td>
-            <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
-            </td>
-            <td class="col-actions">
-              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
-            </td>
+          <tr *ngIf="!historial || historial.length === 0">
+            <td colspan="3" class="empty empty-center">No hay resultados con esos filtros.</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- Tabla: Pendientes -->
-  <section class="card table-card">
+  <section class="card table-card" *ngIf="!cargando && !errorMsg">
     <div class="table-head">
       <h2 class="section-title">Estudiantes pendientes de horas de vinculación</h2>
       <span class="badge badge-warning">Pendientes</span>
@@ -142,50 +138,35 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Cuenta</th>
             <th>Estudiante</th>
-            <th>Horas</th>
+            <th>Total de horas</th>
             <th>Horas faltantes</th>
-            <th class="col-actions">Modificar</th>
             <th class="col-actions">Detalles</th>
           </tr>
         </thead>
 
         <tbody>
-          <!-- Ejemplos -->
-          <tr>
-            <td class="mono">32199887</td>
+          <tr *ngFor="let s of pendientes; trackBy: trackByUid">
             <td>
               <div class="student">
-                <div class="student-name">Carlos Mejia</div>
+                <div class="student-name">{{ s.nombreUsuario }}</div>
                 <div class="student-desc">Pendiente de horas</div>
               </div>
             </td>
-            <td><span class="pill pill-primary">18</span></td>
-            <td><span class="pill pill-neutral">22</span></td>
+
+            <td><span class="pill pill-primary">{{ s.totalHoras }}</span></td>
+            <td><span class="pill pill-neutral">{{ s.horasFaltantes }}</span></td>
+
             <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
-            </td>
-            <td class="col-actions">
-              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+              <button class="btn btn-ghost btn-sm" type="button" (click)="abrirHistorial(s)">
+                Ver historial del estudiante
+              </button>
             </td>
           </tr>
 
-          <tr>
-            <td class="mono">32122334</td>
-            <td>
-              <div class="student">
-                <div class="student-name">Ana Martinez</div>
-                <div class="student-desc">Pendiente de horas</div>
-              </div>
-            </td>
-            <td><span class="pill pill-primary">30</span></td>
-            <td><span class="pill pill-neutral">10</span></td>
-            <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
-            </td>
-            <td class="col-actions">
-              <button class="btn btn-ghost btn-sm" type="button">Ver detalles</button>
+          <tr *ngIf="!pendientes || pendientes.length === 0">
+            <td colspan="4" class="empty empty-center">
+              No hay estudiantes con horas de vinculación faltantes.
             </td>
           </tr>
         </tbody>
@@ -193,55 +174,46 @@
     </div>
   </section>
 
-  <!-- Tabla: General (ya con ngFor que tenías) -->
-  <section class="card table-card">
+  <section class="card table-card" *ngIf="!cargando && !errorMsg">
     <div class="table-head">
-      <h2 class="section-title">Listado general de estudiantes</h2>
+      <h2 class="section-title">Estudiantes con horas de vinculación completas</h2>
+      <span class="badge badge-success">Completas</span>
     </div>
 
     <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
-            <th>Cuenta</th>
             <th>Estudiante</th>
-            <th>Horas registradas</th>
-            <th>Estado</th>
-            <th class="col-actions">Modificar</th>
+            <th>Total de horas</th>
+            <th>Horas faltantes</th>
             <th class="col-actions">Detalles</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr *ngFor="let s of estudiantes">
-            <td class="mono">{{ s.cuenta }}</td>
-
+          <tr *ngFor="let s of completas; trackBy: trackByUid">
             <td>
               <div class="student">
-                <div class="student-name">{{ s.nombre }}</div>
-                <div class="student-desc">Historial de participación en vinculación</div>
+                <div class="student-name">{{ s.nombreUsuario }}</div>
+                <div class="student-desc">Horas completadas</div>
               </div>
             </td>
 
-            <td>
-              <span class="pill pill-primary">{{ s.horas }}</span>
-            </td>
-
-            <td>
-              <span class="status status-open">Registrado</span>
-            </td>
+            <td><span class="pill pill-primary">{{ s.totalHoras }}</span></td>
+            <td><span class="pill pill-neutral">{{ s.horasFaltantes }}</span></td>
 
             <td class="col-actions">
-              <button class="btn btn-light btn-sm" type="button">Modificar</button>
-            </td>
-
-            <td class="col-actions">
-              <button class="btn btn-ghost btn-sm" type="button">Ver detalles del estudiante</button>
+              <button class="btn btn-ghost btn-sm" type="button" (click)="abrirHistorial(s)">
+                Ver historial del estudiante
+              </button>
             </td>
           </tr>
 
-          <tr *ngIf="!estudiantes || estudiantes.length === 0">
-            <td colspan="6" class="empty">No hay registros de horas todavía.</td>
+          <tr *ngIf="!completas || completas.length === 0">
+            <td colspan="4" class="empty empty-center">
+              No hay estudiantes con horas de vinculación completas.
+            </td>
           </tr>
         </tbody>
       </table>
@@ -253,4 +225,64 @@
     <span class="dot">•</span>
     <span>Reporte administrativo</span>
   </footer>
+
+  <div *ngIf="modalAbierto" class="modal-overlay" (click)="cerrarHistorial()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="card" style="padding: 16px;">
+        <div class="modal-header">
+          <div>
+            <h2 class="section-title" style="margin: 0;">Historial del estudiante</h2>
+            <p class="subtitle" style="margin: 4px 0 0;">{{ modalEstudianteNombre }}</p>
+          </div>
+
+          <button class="btn btn-light btn-sm" type="button" (click)="cerrarHistorial()">
+            Cerrar
+          </button>
+        </div>
+
+        <div class="table-wrap" style="margin-top: 12px;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Evento</th>
+                <th>Materia</th>
+                <th>Fecha</th>
+                <th>Horas</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let h of historialEventos; trackBy: trackByHistorial">
+                <td>{{ h.eventoNombre }}</td>
+                <td>{{ h.materiaNombre }}</td>
+                <td>{{ h.eventoFecha }}</td>
+                <td><span class="pill pill-primary">{{ h.eventoHoras }}</span></td>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'badge-success': (h.estado || '').toLowerCase() !== 'cancelado',
+                      'badge-warning': (h.estado || '').toLowerCase() === 'cancelado'
+                    }"
+                  >
+                    {{ h.estado }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr *ngIf="!historialEventos || historialEventos.length === 0">
+                <td colspan="5" class="empty empty-center">Este estudiante no tiene inscripciones.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-total" style="margin-top: 14px; display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+          <span class="badge badge-success">Total</span>
+          <span class="pill pill-neutral">{{ totalHorasHistorial }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
