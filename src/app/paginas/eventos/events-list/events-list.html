@@ -22,6 +22,7 @@
             <th>Modalidad</th>
             <th>Ubicación</th>
             <th>Materia</th>
+            <th>Coordinador</th>
             <th class="col-actions">Acciones</th>
           </tr>
         </thead>
@@ -52,6 +53,14 @@
               </span>
               <ng-template #sinMateria>
                 <em class="muted">Sin materia asignada</em>
+              </ng-template>
+            </td>
+            <td>
+              <span *ngIf="event.coordinadorNombre; else sinCoor">
+                {{ event.coordinadorNombre }}
+              </span>
+              <ng-template #sinCoor>
+                <em class="muted">Sin Coordinador asignado</em>
               </ng-template>
             </td>
 

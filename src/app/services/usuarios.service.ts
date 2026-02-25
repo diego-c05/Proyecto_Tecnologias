@@ -8,7 +8,12 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp,
+  onSnapshot,
+  QuerySnapshot,
+  DocumentData,
+  getDoc,
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 export type RolUsuario = 'coordinador' | 'usuario';
 
@@ -58,5 +63,31 @@ export class UsuariosService {
   async eliminarUsuario(docId: string) {
     const ref = doc(this.firestore, 'usuarios', docId);
     await deleteDoc(ref);
+  }
+
+  getUsuarioRealtime(): Observable<any[]> {
+    return new Observable(observer => {
+      const ref = collection(this.firestore, 'usuarios');
+
+      const unsubscribe = onSnapshot(ref, (snapshot: QuerySnapshot<DocumentData>) => {
+        const usuario = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        observer.next(usuario);
+      }, error => {
+        observer.error(error);
+      });
+
+      return () => unsubscribe();
+    });
+  }
+
+  async getUsuarioById(id: string): Promise<any | null> {
+    const ref = doc(this.firestore, 'usuarios', id);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() };
   }
 }

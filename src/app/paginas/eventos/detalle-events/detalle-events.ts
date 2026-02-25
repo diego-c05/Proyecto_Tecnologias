@@ -5,6 +5,7 @@ import { EventsService, Evento } from '../../../services/events.service';
 import { InscripcionesService } from '../../../services/inscripciones.service';
 import { AuthService } from '../../../services/auth.service';
 import { Materias } from '../../../services/materia/materias';
+import { UsuariosService, Usuario } from '../../../services/usuarios.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { Materias } from '../../../services/materia/materias';
 export class DetalleEvents implements OnInit {
   evento: Evento | null = null;
   materia: any | null = null;
+  coordinador: Usuario | null = null;
   cargando = true;
 
   constructor(
@@ -25,7 +27,8 @@ export class DetalleEvents implements OnInit {
     private eventsService: EventsService,
     private inscripcionesService: InscripcionesService,
     private authService: AuthService, 
-    private materiasService: Materias
+    private materiasService: Materias,
+    private usuarioService: UsuariosService
   ) { }
 
   async ngOnInit() {
@@ -41,6 +44,10 @@ export class DetalleEvents implements OnInit {
 
       if (this.evento?.materiaId) {
         this.materia = await this.materiasService.getMateriaById(this.evento.materiaId);
+      }
+
+      if (this.evento?.coordinadorId) {
+        this.coordinador = await this.usuarioService.getUsuarioById(this.evento.coordinadorId);
       }
 
       if (!this.evento) this.router.navigate(['/eventos/vereventos']);

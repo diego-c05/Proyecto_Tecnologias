@@ -19,7 +19,7 @@ export class Materias {
   insertarMateria(materia: any) {
     const ref = collection(this.firestore, 'materias');
     return addDoc(ref, materia).then(() => {
-      
+
       this.refrescarMaterias$.next();
     });
   }
@@ -37,26 +37,25 @@ export class Materias {
   //Eliminar
   async eliminarMateria(id: string) {
     const ref = doc(this.firestore, 'materias', id);
-    await deleteDoc(ref); 
+    await deleteDoc(ref);
     this.refrescarMaterias$.next();
   }
 
   //Editar
-  editarMateria(materia: any){
+  editarMateria(materia: any) {
     this.materia$.next(materia);
   }
 
   //Obtener los datos de la materia seleccionada
-  getMateria():Observable<any>
-  {
+  getMateria(): Observable<any> {
     return this.materia$.asObservable();
   }
 
   //Modificar en la base de datos
-  async actualizarMateria(id: string, cambios: any) { 
-    const ref = doc(this.firestore, 'materias', id); 
-    await updateDoc(ref, cambios); 
-    this.refrescarMaterias$.next(); 
+  async actualizarMateria(id: string, cambios: any) {
+    const ref = doc(this.firestore, 'materias', id);
+    await updateDoc(ref, cambios);
+    this.refrescarMaterias$.next();
   }
 
   getMateriasRealtime(): Observable<any[]> {
@@ -73,17 +72,16 @@ export class Materias {
       }, error => {
         observer.error(error);
       });
-
-      // 🔥 limpieza al destruir el componente
+      
       return () => unsubscribe();
     });
   }
 
   async getMateriaById(id: string): Promise<any | null> {
-  const ref = doc(this.firestore, 'materias', id);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return null;
-  return { id: snap.id, ...snap.data() };
-}
+    const ref = doc(this.firestore, 'materias', id);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() };
+  }
 }
 

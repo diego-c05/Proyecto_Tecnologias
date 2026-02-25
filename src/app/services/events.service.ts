@@ -9,7 +9,9 @@ import {
   deleteDoc, 
   updateDoc,
   getDocs,
-  getDoc
+  getDoc,
+  query,
+  where
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -25,6 +27,7 @@ export interface Evento {
   description?: string;
   imageUrl?: string; 
   materiaId?: string; 
+  coordinadorId?: string;
 }
 
 
@@ -74,4 +77,17 @@ export class EventsService {
     const ref = doc(this.firestore, `events/${id}`);
     return deleteDoc(ref);
   }
+
+  async listarEventosPorCoordinador(coordinadorId: string): Promise<Evento[]> {
+  const q = query(
+    collection(this.firestore, 'events'),
+    where('coordinadorId', '==', coordinadorId)
+  );
+
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({
+    id: d.id,
+    ...(d.data() as Omit<Evento, 'id'>),
+  }));
+}
 }
