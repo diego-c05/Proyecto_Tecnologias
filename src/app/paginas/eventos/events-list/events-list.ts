@@ -2,6 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
+import { Materias } from '../../../services/materia/materias';
+import { combineLatest, Subscription } from 'rxjs';
+
+interface EventoView extends Evento {
+  materiaNombre?: string;
+  materiaCodigo?: string;
+  materiaSeccion?: string;
+}
 
 @Component({
   selector: 'app-events-list',
@@ -12,15 +20,27 @@ import { EventsService, Evento } from '../../../services/events.service';
 })
 export class EventsList implements OnInit {
 
-  events: Evento[] = [];
+  events: EventoView[] = [];
+  private sub!: Subscription;
 
-  constructor(private eventsService: EventsService) {}
+  constructor(private eventsService: EventsService, private materiasService: Materias) {}
 
 async ngOnInit() {
   try {
-    const data = await this.eventsService.listEvents();
-    console.log('EVENTS (getDocs) =>', data);
-    this.events = data;
+    this.sub = combineLatest([
+      this.eventsService.getEvents(),            // 🔥 ya reactivo
+      this.materiasService.getMateriasRealtime() // 🔥 nuevo
+    ]).subscribe(([events, materias]) => {
+      this.events = events.map(event => {
+        const materia = materias.find(m => m.id === event.materiaId);
+        return {
+          ...event,
+          materiaNombre: materia?.nombre ?? null,
+          materiaCodigo: materia?.codigo ?? null,
+          materiaSeccion: materia?.seccion ?? null
+        };
+      });
+    });
   } catch (err) {
     console.error('ERROR LISTANDO EVENTS (getDocs) =>', err);
   }

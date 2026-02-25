@@ -41,7 +41,9 @@
             <span class="badge badge-horas">⏱️ {{ evento.hours }} horas</span>
             <span class="badge badge-cupos">👥 {{ evento.slots }} cupos</span>
           </div>
-
+          
+          
+          
           <div class="materia" *ngIf="evento.materiaNombre; else sinMateria">
             📚 {{ evento.materiaNombre }} {{ evento.materiaCodigo }} - {{ evento.materiaSeccion }}
           </div>

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { InscripcionesService } from '../../../services/inscripciones.service';
 import { AuthService } from '../../../services/auth.service';
+import { Materias } from '../../../services/materia/materias';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class DetalleEvents implements OnInit {
   evento: Evento | null = null;
+  materia: any | null = null;
   cargando = true;
 
   constructor(
@@ -22,8 +24,9 @@ export class DetalleEvents implements OnInit {
     private router: Router,
     private eventsService: EventsService,
     private inscripcionesService: InscripcionesService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService, 
+    private materiasService: Materias
+  ) { }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -35,6 +38,11 @@ export class DetalleEvents implements OnInit {
 
     try {
       this.evento = await this.eventsService.getEventById(id);
+
+      if (this.evento?.materiaId) {
+        this.materia = await this.materiasService.getMateriaById(this.evento.materiaId);
+      }
+
       if (!this.evento) this.router.navigate(['/eventos/vereventos']);
     } catch (err) {
       console.error('Error cargando detalle:', err);
@@ -48,37 +56,37 @@ export class DetalleEvents implements OnInit {
     this.router.navigate(['/eventos/vereventos']);
   }
 
- async inscribirse() {
-  if (!this.evento?.id) return;
+  async inscribirse() {
+    if (!this.evento?.id) return;
 
-  const user = this.authService.getCurrentUser();
-  if (!user) {
-    alert('Debes iniciar sesión para inscribirte.');
-    this.router.navigate(['/inicio-sesion']);
-    return;
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      alert('Debes iniciar sesión para inscribirte.');
+      this.router.navigate(['/inicio-sesion']);
+      return;
+    }
+
+    try {
+      await this.inscripcionesService.crearInscripcion({
+        eventoId: this.evento.id,
+        usuarioId: user.uid,
+        estado: 'inscrito',
+        usuarioCorreo: user.email ?? 'Sin correo',
+
+        // snapshot 
+        eventoNombre: this.evento.name,
+        eventoHoras: this.evento.hours,
+        eventoFecha: this.evento.date,
+        materiaNombre: this.materia.nombre,
+        materiaCodigo: this.materia.codigo,
+        materiaSeccion: this.materia.seccion,
+      });
+
+      alert('¡Inscripción registrada!');
+    } catch (e: any) {
+      alert(e?.message || 'No se pudo inscribir.');
+    }
   }
-
-  try {
-    await this.inscripcionesService.crearInscripcion({
-      eventoId: this.evento.id,
-      usuarioId: user.uid,
-      estado: 'inscrito',
-      usuarioCorreo: user.email ?? 'Sin correo',
-
-      // snapshot 
-      eventoNombre: this.evento.name,
-      eventoHoras: this.evento.hours,
-      eventoFecha: this.evento.date,
-      materiaNombre: this.evento.materiaNombre,
-      materiaCodigo: this.evento.materiaCodigo,
-      materiaSeccion: this.evento.materiaSeccion,
-    });
-
-    alert('¡Inscripción registrada!');
-  } catch (e: any) {
-    alert(e?.message || 'No se pudo inscribir.');
-  }
-}
 
   esFinalizado(e: Evento): boolean {
     const hoy = new Date();

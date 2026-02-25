@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { BehaviorSubject } from 'rxjs';
+import { authState } from '@angular/fire/auth';
 
 export interface Usuario {
   uid: string;
@@ -16,6 +18,33 @@ export class AuthService {
 
   private auth = inject(Auth);
   private firestore = inject(Firestore);
+
+  private usuarioSubject = new BehaviorSubject<User | null | undefined>(undefined);
+  usuario$ = this.usuarioSubject.asObservable();
+
+  private rolSubject = new BehaviorSubject<'usuario' | 'coordinador' | null>(null);
+  rol$ = this.rolSubject.asObservable();
+
+  constructor() {
+    authState(this.auth).subscribe(async (user) => {
+      this.usuarioSubject.next(user);
+
+      if (user) {
+        const ref = doc(this.firestore, 'usuarios', user.uid);
+        const snap = await getDoc(ref);
+
+        if (snap.exists()) {
+          this.rolSubject.next(snap.data()['rol']);
+        } else {
+          this.rolSubject.next(null);
+        }
+      } else {
+        this.rolSubject.next(null);
+      }
+    });
+  }
+
+  isLoading(): boolean { return this.usuarioSubject.value === undefined; }
 
   getCurrentUser(): User | null {
     return this.auth.currentUser;

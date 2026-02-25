@@ -48,15 +48,17 @@
 
       <section class="seccion">
         <h2>Materia</h2>
-        <div *ngIf="evento.materiaNombre; else sinMateria">
+        
+        <div *ngIf="materia.nombre; else sinMateria">
           <p class="categoria-texto">
-            <strong>{{ evento.materiaNombre }}</strong>
-            {{ evento.materiaCodigo }} - {{ evento.materiaSeccion }}
+            <strong>{{ materia.nombre }}</strong>
+            {{ materia.codigo }} - {{ materia.seccion }}
           </p>
         </div>
         <ng-template #sinMateria>
           <em class="muted">Sin materia asignada</em>
         </ng-template>
+        
       </section>
     </div>
 
