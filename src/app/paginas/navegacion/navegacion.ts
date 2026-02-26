@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule, MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-navegacion',
     standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, MatIconModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, MatIconModule, MatSnackBarModule],
   templateUrl: './navegacion.html',
   styleUrl: './navegacion.css',
 })
@@ -21,7 +23,8 @@ export class Navegacion implements OnInit{
   private rolSub?: Subscription;
   private userSub?: Subscription;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, 
+  private snackBar: MatSnackBar) {}
 
 
   async ngOnInit() {
@@ -52,8 +55,16 @@ export class Navegacion implements OnInit{
 
     this.router.navigate(['/inicio-sesion'], { replaceUrl: true });
   } else {
-    alert(res.error || 'No se pudo cerrar sesión');
+    this.showMsg(res.error || 'No se pudo cerrar sesión');
   }
+}
+
+private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
 }
 
 }

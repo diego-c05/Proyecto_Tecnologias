@@ -3,11 +3,16 @@ import { CommonModule } from '@angular/common';
 import { InscripcionesService, Inscripcion, EstadoInscripcion } from '../../../services/inscripciones.service';
 import { AuthService } from '../../../services/auth.service';
 import { EventsService } from '../../../services/events.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-inscripciones',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './admi-inscripciones.html',
   styleUrls: ['./admi-inscripciones.css'],
 })
@@ -17,7 +22,10 @@ export class AdminInscripcionesComponent implements OnInit {
 
   constructor(private inscripcionesService: InscripcionesService,
     private authService: AuthService,
-    private eventService: EventsService
+    private eventService: EventsService,
+    private snackBar: MatSnackBar,
+
+  private dialog: MatDialog
   ) { }
 
   // dentro de AdminInscripcionesComponent
@@ -65,25 +73,33 @@ export class AdminInscripcionesComponent implements OnInit {
     if (!i.id) return;
     try {
       await this.inscripcionesService.actualizarInscripcion(i.id, { estado });
-      await this.cargar(); // ✅ refresca pantalla
+      this.showMsg('Estado actualizado');
+      await this.cargar(); // refresca pantalla
     } catch (err) {
       console.error(err);
-      alert('No se pudo actualizar el estado.');
+        this.showMsg('No se pudo actualizar el estado.');
     }
   }
 
-  async eliminar(i: any) {
-    if (!i.id) return;
-    if (!confirm('¿Eliminar esta inscripción?')) return;
+async eliminar(i: any) {
+  if (!i.id) return;
 
-    try {
-      await this.inscripcionesService.eliminarInscripcion(i.id);
-      await this.cargar(); // ✅ refresca pantalla
-    } catch (err) {
-      console.error(err);
-      alert('No se pudo eliminar.');
-    }
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    data: { message: '¿Eliminar esta inscripción?' }
+  });
+
+  const confirmado = await firstValueFrom(dialogRef.afterClosed());
+  if (!confirmado) return;
+
+  try {
+    await this.inscripcionesService.eliminarInscripcion(i.id);
+    this.showMsg('Inscripción eliminada');
+    await this.cargar();
+  } catch (err) {
+    console.error(err);
+    this.showMsg('No se pudo eliminar.');
   }
+}
 
   async cargar() {
     this.cargando = true;
@@ -106,5 +122,13 @@ export class AdminInscripcionesComponent implements OnInit {
       this.cargando = false;
     }
   }
+
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 
 }

@@ -10,7 +10,9 @@
     <div class="card-header">
       <h2>Formulario de evento</h2>
     </div>
-
+<div *ngIf="msg" class="toast" [class.success]="msgType==='success'" [class.error]="msgType==='error'">
+  {{ msg }}
+</div>
     <form class="form" #f="ngForm" (ngSubmit)="saveEvent(f)">
   <div class="grid">
 
