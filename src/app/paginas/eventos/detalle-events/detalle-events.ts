@@ -6,12 +6,13 @@ import { InscripcionesService } from '../../../services/inscripciones.service';
 import { AuthService } from '../../../services/auth.service';
 import { Materias } from '../../../services/materia/materias';
 import { UsuariosService, Usuario } from '../../../services/usuarios.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-detalle-events',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, MatSnackBarModule],
   templateUrl: './detalle-events.html',
   styleUrl: './detalle-events.css',
 })
@@ -28,7 +29,8 @@ export class DetalleEvents implements OnInit {
     private inscripcionesService: InscripcionesService,
     private authService: AuthService, 
     private materiasService: Materias,
-    private usuarioService: UsuariosService
+    private usuarioService: UsuariosService,
+    private snackBar: MatSnackBar
   ) { }
 
   async ngOnInit() {
@@ -68,7 +70,7 @@ export class DetalleEvents implements OnInit {
 
     const user = this.authService.getCurrentUser();
     if (!user) {
-      alert('Debes iniciar sesión para inscribirte.');
+      this.showMsg('Debes iniciar sesión para inscribirte.');
       this.router.navigate(['/inicio-sesion']);
       return;
     }
@@ -89,9 +91,9 @@ export class DetalleEvents implements OnInit {
         materiaSeccion: this.materia.seccion,
       });
 
-      alert('¡Inscripción registrada!');
+      this.showMsg('¡Inscripción registrada!');
     } catch (e: any) {
-      alert(e?.message || 'No se pudo inscribir.');
+      this.showMsg(e?.message || 'No se pudo inscribir.');
     }
   }
 
@@ -110,4 +112,12 @@ export class DetalleEvents implements OnInit {
     const mes = meses[date.getMonth()];
     return `${dia} de ${mes}`;
   }
+
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 }

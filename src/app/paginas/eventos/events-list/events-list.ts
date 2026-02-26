@@ -5,6 +5,10 @@ import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
 import { combineLatest, Subscription } from 'rxjs';
 import { UsuariosService } from '../../../services/usuarios.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
 
 interface EventoView extends Evento {
   materiaNombre?: string;
@@ -16,7 +20,7 @@ interface EventoView extends Evento {
 @Component({
   selector: 'app-events-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './events-list.html',
   styleUrls: ['./events-list.css']
 })
@@ -27,7 +31,9 @@ export class EventsList implements OnInit {
 
   constructor(private eventsService: EventsService, 
     private materiasService: Materias,
-    private usuariosService: UsuariosService) {}
+    private usuariosService: UsuariosService,
+    private snackBar: MatSnackBar,
+  private dialog: MatDialog) {}
 
 async ngOnInit() {
   try {
@@ -53,18 +59,32 @@ async ngOnInit() {
   }
 }
 
-  async deleteEvent(id?: string) {
+ async deleteEvent(id?: string) {
   if (!id) return;
 
-  if (confirm('¿Seguro que quieres eliminar este evento?')) {
-    try {
-      await this.eventsService.deleteEvent(id);
-      
-      this.events = this.events.filter(e => e.id !== id);
-    } catch (err) {
-      console.error('Error eliminando:', err);
-    }
+  const ref = this.dialog.open(ConfirmDialogComponent, {
+    data: { message: '¿Seguro que quieres eliminar este evento?' }
+  });
+
+  const ok = await firstValueFrom(ref.afterClosed());
+  if (!ok) return;
+
+  try {
+    await this.eventsService.deleteEvent(id);
+    this.showMsg('Evento eliminado');
+    this.events = this.events.filter(e => e.id !== id);
+  } catch (err) {
+    console.error('Error eliminando:', err);
+    this.showMsg('No se pudo eliminar el evento.');
   }
+}
+
+private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
 }
 
 }

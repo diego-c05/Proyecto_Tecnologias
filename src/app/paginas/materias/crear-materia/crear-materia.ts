@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Materias } from '../../../services/materia/materias';
+import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 interface Materia {
   id?: string;
@@ -12,7 +15,7 @@ interface Materia {
 @Component({
   selector: 'app-crear-materia',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './crear-materia.html',
   styleUrl: './crear-materia.css',
 })
@@ -25,7 +28,10 @@ export class CrearMateria implements OnInit {
 
   titulo = "Agregar Materia";
 
-  constructor(private materiasService: Materias) { }
+  constructor(private materiasService: Materias,
+
+  private snackBar: MatSnackBar
+  ) { }
 
   //Obtener los datos y colocarlos en el formulario
   ngOnInit(): void {
@@ -52,13 +58,13 @@ export class CrearMateria implements OnInit {
           seccion: this.materia.seccion
         });
 
-        alert('Materia actualizada correctamente');
+        this.showMsg('Materia actualizada correctamente');
       } else {
         await this.materiasService.insertarMateria({
           ...this.materia
         });
         console.log('✅ Materia insertada');
-        alert('Materia guardada correctamente');
+        this.showMsg('Materia guardada correctamente');
       }
 
       this.materia = { nombre: '', codigo: '', seccion: '' }; 
@@ -66,6 +72,16 @@ export class CrearMateria implements OnInit {
 
     } catch (error) {
       console.error('❌ Error al guardar', error);
+
+    this.showMsg('Ocurrió un error al guardar.');
     }
   }
+
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 }

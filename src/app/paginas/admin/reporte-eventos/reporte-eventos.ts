@@ -6,6 +6,10 @@ import { FormsModule } from '@angular/forms';
 
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
 
 type EventoTabla = {
   id: string;
@@ -36,7 +40,7 @@ type MateriaItem = {
 @Component({
   selector: 'app-reporte-eventos',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './reporte-eventos.html',
   styleUrl: './reporte-eventos.css',
 })
@@ -44,6 +48,8 @@ export class ReporteEventos {
   private destroyRef = inject(DestroyRef);
   private eventsService = inject(EventsService);
   private materiasService = inject(Materias);
+  private snackBar = inject(MatSnackBar);
+private dialog = inject(MatDialog);
 
   eventosAll: EventoTabla[] = [];
   eventos: EventoTabla[] = [];
@@ -204,14 +210,18 @@ export class ReporteEventos {
   async onDelete(e: EventoTabla): Promise<void> {
     if (!e.id) return;
 
-    const ok = window.confirm(`¿Seguro que deseas eliminar el evento "${e.nombre}"?`);
-    if (!ok) return;
+      const ref = this.dialog.open(ConfirmDialogComponent, {
+    data: { message: `¿Seguro que deseas eliminar el evento "${e.nombre}"?` },
+  });
 
+  const ok = await firstValueFrom(ref.afterClosed());
+  if (!ok) return;
     try {
       await this.eventsService.deleteEvent(e.id);
+       this.showMsg('Evento eliminado');
       if (this.editing && this.form.id === e.id) this.cancelEdit();
     } catch {
-      alert('No se pudo eliminar el evento. Intenta de nuevo.');
+      this.showMsg('No se pudo eliminar el evento. Intenta de nuevo.');
     }
   }
 
@@ -265,14 +275,13 @@ export class ReporteEventos {
 
   async saveEdit(): Promise<void> {
     if (!this.form.id) return;
-
-    if (!this.form.name.trim()) return alert('El nombre del evento es obligatorio.');
-    if (!this.form.date) return alert('La fecha es obligatoria.');
-    if (!this.form.location.trim()) return alert('El lugar es obligatorio.');
-    if (this.form.hours === null || this.form.hours < 0) return alert('Horas inválidas.');
-    if (this.form.slots === null || this.form.slots < 0) return alert('Cupos inválidos.');
-    if (!this.form.modality) return alert('La modalidad es obligatoria.');
-    if (!this.form.materiaId) return alert('Selecciona una materia.');
+if (!this.form.name.trim()) { this.showMsg('El nombre del evento es obligatorio.'); return; }
+if (!this.form.date) { this.showMsg('La fecha es obligatoria.'); return; }
+if (!this.form.location.trim()) { this.showMsg('El lugar es obligatorio.'); return; }
+if (this.form.hours === null || this.form.hours < 0) { this.showMsg('Horas inválidas.'); return; }
+if (this.form.slots === null || this.form.slots < 0) { this.showMsg('Cupos inválidos.'); return; }
+if (!this.form.modality) { this.showMsg('La modalidad es obligatoria.'); return; }
+if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
 
     this.saving = true;
 
@@ -293,9 +302,10 @@ export class ReporteEventos {
 
     try {
       await this.eventsService.updateEvent(this.form.id, payload as Evento);
+      this.showMsg('Evento actualizado');
       this.cancelEdit();
     } catch {
-      alert('No se pudo actualizar el evento. Intenta de nuevo.');
+    this.showMsg('No se pudo actualizar el evento. Intenta de nuevo.');
     } finally {
       this.saving = false;
     }
@@ -358,4 +368,12 @@ export class ReporteEventos {
     const t = d.getTime();
     return Number.isFinite(t) ? t : 0;
   }
+
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 }

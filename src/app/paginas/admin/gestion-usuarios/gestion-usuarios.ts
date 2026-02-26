@@ -2,17 +2,23 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { UsuariosService, Usuario, RolUsuario } from '../../../services/usuarios.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
 
 @Component({
   selector: 'app-gestion-usuarios',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './gestion-usuarios.html',
   styleUrl: './gestion-usuarios.css',
 })
 export class GestionUsuarios {
   private fb = inject(FormBuilder);
   private usuariosService = inject(UsuariosService);
+ private snackBar = inject(MatSnackBar);
+private dialog = inject(MatDialog);
 
   usuarios: (Usuario & { docId: string })[] = [];
   errorMsg: string | null = null;
@@ -71,22 +77,25 @@ export class GestionUsuarios {
       rol: val.rol,
     });
 
-    alert(`Usuario ${val.nombreCompleto} creado correctamente`);
-
+this.showMsg(`Usuario ${val.nombreCompleto} creado correctamente`);
     this.form.reset({ rol: 'usuario' as RolUsuario });
     await this.cargar();
   }
 
   async eliminar(docId: string) {
-    const ok = confirm('¿Desea eliminar este usuario?');
-    if (!ok) return;
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    data: { message: '¿Desea eliminar este usuario?' }
+  });
+
+  const confirmado = await dialogRef.afterClosed().toPromise();
+  if (!confirmado) return;
 
     if (this.editandoDocId === docId) {
       this.cancelarEdicion();
     }
 
     await this.usuariosService.eliminarUsuario(docId);
-    alert('Usuario eliminado correctamente');
+  this.showMsg('Usuario eliminado correctamente');
     await this.cargar();
   }
 
@@ -119,8 +128,16 @@ export class GestionUsuarios {
       rol: val.rol,
     });
 
-    alert(`Usuario ${val.nombreCompleto} actualizado correctamente`);
+    this.showMsg(`Usuario ${val.nombreCompleto} actualizado correctamente`);
     this.editandoDocId = null;
     await this.cargar();
   }
+
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 }

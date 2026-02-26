@@ -170,6 +170,14 @@ textarea:focus {
   transform: scale(0.98);
 }
 
+.toast{
+  margin: 10px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.toast.success{ background: #e9f7ef; color: #1e7e34; }
+.toast.error{ background: #fdecea; color: #b02a37; } 
 /* ========================= */
 /* RESPONSIVE                */
 /* ========================= */

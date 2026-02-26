@@ -5,11 +5,13 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
 import { UsuariosService,Usuario } from '../../../services/usuarios.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-events-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, MatSnackBarModule],
   templateUrl: './events-form.html',
   styleUrls: ['./events-form.css']
 })
@@ -32,7 +34,8 @@ export class EventsForm {
     private materiasService: Materias,
     private usuariosService: UsuariosService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+  private snackBar: MatSnackBar
   ) { }
 
   materias: any[] = [];
@@ -56,10 +59,10 @@ export class EventsForm {
       const data = await this.eventsService.getEventById(this.eventId);
       if (data) {
         this.event = data;
-      } else {
-        alert('Evento no encontrado');
-        this.router.navigate(['/eventos/events-list']);
-      }
+     } else {
+  this.showMsg('Evento no encontrado');
+  this.router.navigate(['/eventos/events-list']);
+}
     }
   }
 
@@ -72,16 +75,16 @@ this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg';
   try {
     if (this.eventId) {
       await this.eventsService.updateEvent(this.eventId, this.event);
-      alert('Evento actualizado');
+      this.showMsg('Evento actualizado');
     } else {
       await this.eventsService.createEvent(this.event);
-      alert('Evento creado');
+     this.showMsg('Evento creado');
     }
 
     this.router.navigate(['/eventos/events-list']);
   } catch (err) {
     console.error('Error guardando:', err);
-    alert('Ocurrió un error');
+    this.showMsg('Ocurrió un error al guardar');
   }
 }
 
@@ -105,4 +108,23 @@ this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg';
       this.event.coordinadorId = coordinador.uid;
     }
   }
+
+  msg = '';
+msgType: 'success' | 'error' | '' = '';
+
+private setMsg(text: string, type: 'success' | 'error') {
+  this.msg = text;
+  this.msgType = type;
+  setTimeout(() => {
+    this.msg = '';
+    this.msgType = '';
+  }, 2500);
+}
+  private showMsg(message: string) {
+  this.snackBar.open(message, 'OK', {
+    duration: 2500,
+    horizontalPosition: 'right',
+    verticalPosition: 'bottom',
+  });
+}
 }
