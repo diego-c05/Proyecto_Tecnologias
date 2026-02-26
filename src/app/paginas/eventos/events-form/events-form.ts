@@ -38,6 +38,12 @@ export class EventsForm {
   materias: any[] = [];
   coordinadores: Usuario[] = [];
 
+  imagenesDisponibles = [
+  { label: 'Predeterminada (Vinculación)', url: 'vinculacion-default.jpg' },
+  { label: 'Reforestación', url: 'vinculacion-default3.png' },
+  { label: 'Comunidad', url: 'vinculacion-default1.png' },
+];
+
   async ngOnInit() {
     this.eventId = this.route.snapshot.paramMap.get('id');
 
@@ -62,7 +68,7 @@ export class EventsForm {
     form.control.markAllAsTouched();
     return;
   }
-
+this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg'; 
   try {
     if (this.eventId) {
       await this.eventsService.updateEvent(this.eventId, this.event);
