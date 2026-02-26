@@ -163,6 +163,33 @@
       </div>
     </div>
 
+    <!-- IMAGEN (PREDEFINIDA) -->
+<div class="form-group form-group-full">
+  <label for="imageUrl">Imagen del evento</label>
+
+  <select
+    id="imageUrl"
+    [(ngModel)]="event.imageUrl"
+    name="imageUrl"
+    required
+    #imgModel="ngModel"
+  >
+    <option value="" disabled>Seleccione una imagen</option>
+    <option *ngFor="let img of imagenesDisponibles" [value]="img.url">
+      {{ img.label }}
+    </option>
+  </select>
+
+  <div class="error" *ngIf="imgModel.invalid && (imgModel.touched || f.submitted)">
+    Debes seleccionar una imagen.
+  </div>
+
+  <!-- Vista previa -->
+  <div class="preview" *ngIf="event.imageUrl">
+  <img [src]="event.imageUrl" alt="Vista previa imagen del evento" />
+</div>
+</div>
+
     <!-- DESCRIPCIÓN -->
     <div class="form-group form-group-full">
       <label for="description">Descripción</label>
