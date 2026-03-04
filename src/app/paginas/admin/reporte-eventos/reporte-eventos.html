@@ -1,6 +1,5 @@
 <div class="page">
 
-  <!-- HEADER -->
   <header class="page-header">
     <div>
       <h1>Reporte de eventos</h1>
@@ -16,8 +15,8 @@
     </div>
   </header>
 
-  <!-- STATS -->
   <section class="stats">
+
     <div class="card stat">
       <p class="stat-label">Eventos publicados</p>
       <p class="stat-value">{{ eventosPublicados }}</p>
@@ -35,86 +34,96 @@
       <p class="stat-value">{{ horasDisponibles }}</p>
       <p class="stat-note">Horas asignadas en eventos</p>
     </div>
+
   </section>
 
-  <!-- FILTROS -->
   <section class="card filters">
-  <div class="card-header">
-    <h2>Filtros</h2>
-  </div>
 
-  <div class="filters-grid">
-  <div class="filters-row-1">
-    <div class="field">
-      <label>Buscar evento</label>
-      <input
-        type="text"
-        placeholder="Ej: reforestación..."
-        [(ngModel)]="searchText"
-        (input)="applyFilters()"
-      />
+    <div class="card-header">
+      <h2>Filtros</h2>
     </div>
 
-    <div class="field">
-      <label>Modalidad</label>
-      <select [(ngModel)]="modalityFilter" (change)="applyFilters()">
-        <option value="Todos">Todos</option>
-        <option value="Presencial">Presencial</option>
-        <option value="Virtual">Virtual</option>
-      </select>
+    <div class="filters-grid">
+
+      <div class="filters-row-1">
+
+        <div class="field">
+          <label>Buscar evento</label>
+          <input
+            type="text"
+            placeholder="Ej: reforestación..."
+            [(ngModel)]="searchText"
+            (input)="applyFilters()"
+          />
+        </div>
+
+        <div class="field">
+          <label>Modalidad</label>
+          <select [(ngModel)]="modalityFilter" (change)="applyFilters()">
+            <option value="Todos">Todos</option>
+            <option value="Presencial">Presencial</option>
+            <option value="Virtual">Virtual</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Materia</label>
+          <select [(ngModel)]="materiaFilter" (change)="applyFilters()">
+            <option value="Todos">Todos</option>
+            <option *ngFor="let m of materias" [value]="m.id">
+              {{ m.nombre }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="filters-row-2">
+
+        <div class="field">
+          <label>Desde</label>
+          <input type="date" [(ngModel)]="dateFrom" (change)="applyFilters()" />
+        </div>
+
+        <div class="field">
+          <label>Hasta</label>
+          <input type="date" [(ngModel)]="dateTo" (change)="applyFilters()" />
+        </div>
+
+        <div class="field">
+          <label>Horas</label>
+          <input
+            type="number"
+            min="0"
+            placeholder="Ej: 8"
+            [ngModel]="hoursFilter"
+            (ngModelChange)="onHoursInput($event)"
+          />
+        </div>
+
+        <div class="filters-actions">
+          <button class="btn btn-clear" type="button" (click)="clearFilters()">
+            Limpiar
+          </button>
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="field">
-      <label>Materia</label>
-      <select [(ngModel)]="materiaFilter" (change)="applyFilters()">
-        <option value="Todos">Todos</option>
-        <option *ngFor="let m of materias" [value]="m.id">
-          {{ m.nombre }}
-        </option>
-      </select>
-    </div>
-  </div>
+  </section>
 
-  <div class="filters-row-2">
-    <div class="field">
-      <label>Desde</label>
-      <input type="date" [(ngModel)]="dateFrom" (change)="applyFilters()" />
-    </div>
-
-    <div class="field">
-      <label>Hasta</label>
-      <input type="date" [(ngModel)]="dateTo" (change)="applyFilters()" />
-    </div>
-
-    <div class="field">
-      <label>Horas</label>
-      <input
-        type="number"
-        min="0"
-        placeholder="Ej: 8"
-        [ngModel]="hoursFilter"
-        (ngModelChange)="onHoursInput($event)"
-      />
-    </div>
-
-    <div class="filters-actions">
-      <button class="btn btn-clear" type="button" (click)="clearFilters()">
-        Limpiar
-      </button>
-    </div>
-  </div>
-</div>
-</section>
-
-  <!-- TABLA -->
   <section class="card table-card">
+
     <div class="table-head">
       <h2 class="section-title">Listado de eventos</h2>
       <span class="count">({{ eventos?.length || 0 }})</span>
     </div>
 
     <div class="table-wrap">
+
       <table class="table">
+
         <thead>
           <tr>
             <th>Evento</th>
@@ -131,11 +140,15 @@
         </thead>
 
         <tbody>
+
           <tr *ngFor="let e of eventos">
+
             <td>
               <div class="event">
                 <div class="event-name">{{ e.nombre }}</div>
-                <div class="event-desc">Actividad de voluntariado institucional</div>
+                <div class="event-desc">
+                  Actividad de voluntariado institucional
+                </div>
               </div>
             </td>
 
@@ -147,20 +160,31 @@
             <td>{{ e.cupos }}</td>
 
             <td>
-              <span class="pill pill-primary">{{ e.horas }}</span>
+              <span class="pill pill-primary">
+                {{ e.horas }}
+              </span>
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-light btn-sm" (click)="onEdit(e)">
-                Modificar
+              <button
+                class="icon-btn icon-btn--edit"
+                (click)="onEdit(e)"
+                title="Modificar"
+              >
+                <span class="material-icons">edit</span>
               </button>
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-danger btn-sm" (click)="onDelete(e)">
-                Eliminar
+              <button
+                class="icon-btn icon-btn--delete"
+                (click)="onDelete(e)"
+                title="Eliminar"
+              >
+                <span class="material-icons">delete</span>
               </button>
             </td>
+
           </tr>
 
           <tr *ngIf="!eventos || eventos.length === 0">
@@ -168,18 +192,24 @@
               {{ emptyMessage }}
             </td>
           </tr>
+
         </tbody>
+
       </table>
+
     </div>
+
   </section>
 
-  <!-- MODAL DE EDICIÓN -->
   <div class="modal-overlay" *ngIf="editing" (click)="cancelEdit()">
+
     <div class="modal" (click)="$event.stopPropagation()">
 
       <section class="card edit-card">
+
         <div class="card-header">
           <h2>Modificar evento</h2>
+
           <button class="btn btn-light btn-sm" (click)="cancelEdit()">
             Cerrar
           </button>
@@ -253,17 +283,21 @@
         </div>
 
         <div class="edit-actions">
+
           <button class="btn btn-primary" (click)="saveEdit()">
             Guardar cambios
           </button>
+
           <button class="btn btn-light" (click)="cancelEdit()">
             Cancelar
           </button>
+
         </div>
 
       </section>
 
     </div>
+
   </div>
 
   <footer class="footer">
