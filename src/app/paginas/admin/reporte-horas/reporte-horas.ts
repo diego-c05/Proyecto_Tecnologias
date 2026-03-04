@@ -30,6 +30,7 @@ interface HistorialItem {
   styleUrl: './reporte-horas.css',
 })
 export class ReporteHoras implements OnInit {
+
   private usuariosService = inject(UsuariosService);
   private inscripcionesService = inject(InscripcionesService);
 
@@ -55,9 +56,10 @@ export class ReporteHoras implements OnInit {
   modalEstudianteUid = '';
   historialEventos: HistorialItem[] = [];
   totalHorasHistorial = 0;
+
   filtroNombre = '';
-  filtroHorasTotales = '';   
-  filtroHorasRestantes = ''; 
+  filtroHorasTotales = '';
+  filtroHorasRestantes = '';
 
   async ngOnInit(): Promise<void> {
     await this.cargarReporte();
@@ -94,19 +96,25 @@ export class ReporteHoras implements OnInit {
       const horasPorUsuario = new Map<string, number>();
 
       for (const ins of inscripciones) {
+
         const usuarioId = (ins.usuarioId || '').toString();
         if (!usuarioId) continue;
 
         const estado = this.estadoNorm(ins.estado);
-        if (estado === 'cancelado') continue;
+
+        
+        if (estado !== 'acreditado') continue;
 
         const horas = this.horasDeInscripcion(ins);
         const prev = horasPorUsuario.get(usuarioId) ?? 0;
+
         horasPorUsuario.set(usuarioId, prev + horas);
       }
 
       const lista: EstudianteHoras[] = estudiantesBase.map(u => {
+
         const total = Math.max(0, Math.round((horasPorUsuario.get(u.uid) ?? 0) * 100) / 100);
+
         return {
           uid: u.uid,
           nombreUsuario: u.nombreUsuario,
@@ -125,8 +133,11 @@ export class ReporteHoras implements OnInit {
       this.totalEstudiantesCompletas = this.historialBase.filter(s => s.totalHoras >= this.META_HORAS).length;
 
       this.aplicarFiltros();
+
     } catch (err: any) {
+
       this.errorMsg = err?.message || 'Ocurrió un error cargando el reporte.';
+
       this.historialBase = [];
       this.historial = [];
       this.pendientes = [];
@@ -137,12 +148,16 @@ export class ReporteHoras implements OnInit {
       this.totalEstudiantesCompletas = 0;
 
       this.inscripcionesCache = [];
+
     } finally {
+
       this.cargando = false;
+
     }
   }
 
   aplicarFiltros(): void {
+
     const nombre = (this.filtroNombre || '').trim().toLowerCase();
 
     const totalesTxt = (this.filtroHorasTotales ?? '').toString().trim();
@@ -155,6 +170,7 @@ export class ReporteHoras implements OnInit {
     const restantesVal = Number(restantesTxt);
 
     const filtrado = this.historialBase.filter(s => {
+
       const okNombre =
         nombre === '' || (s.nombreUsuario || '').toLowerCase().includes(nombre);
 
@@ -162,25 +178,34 @@ export class ReporteHoras implements OnInit {
       const okRestantes = !usarRestantes || s.horasFaltantes === restantesVal;
 
       return okNombre && okTotales && okRestantes;
+
     });
 
     this.historial = filtrado;
     this.pendientes = filtrado.filter(s => s.totalHoras < this.META_HORAS);
     this.completas = filtrado.filter(s => s.totalHoras >= this.META_HORAS);
+
   }
 
   limpiarFiltros(): void {
+
     this.filtroNombre = '';
     this.filtroHorasTotales = '';
     this.filtroHorasRestantes = '';
+
     this.aplicarFiltros();
+
   }
 
   abrirHistorial(est: EstudianteHoras): void {
+
     this.modalEstudianteNombre = est.nombreUsuario;
     this.modalEstudianteUid = est.uid;
 
-    const registros = this.inscripcionesCache.filter(i => (i.usuarioId || '').toString() === est.uid);
+    const registros = this.inscripcionesCache.filter(i =>
+      (i.usuarioId || '').toString() === est.uid &&
+      this.estadoNorm(i.estado) === 'acreditado'
+    );
 
     const lista: HistorialItem[] = registros.map(i => ({
       eventoNombre: (i.eventoNombre || 'Sin evento').toString(),
@@ -190,11 +215,11 @@ export class ReporteHoras implements OnInit {
       estado: (i.estado || 'Sin estado').toString(),
     }));
 
-    lista.sort((a, b) => (a.eventoFecha || '').localeCompare(b.eventoFecha || ''));
+    lista.sort((a, b) =>
+      (a.eventoFecha || '').localeCompare(b.eventoFecha || '')
+    );
 
     const total = lista.reduce((acc, it) => {
-      const e = this.estadoNorm(it.estado);
-      if (e === 'cancelado') return acc;
       return acc + (Number(it.eventoHoras) || 0);
     }, 0);
 
@@ -202,14 +227,18 @@ export class ReporteHoras implements OnInit {
     this.totalHorasHistorial = Math.max(0, Math.round(total * 100) / 100);
 
     this.modalAbierto = true;
+
   }
 
   cerrarHistorial(): void {
+
     this.modalAbierto = false;
     this.modalEstudianteNombre = '';
     this.modalEstudianteUid = '';
+
     this.historialEventos = [];
     this.totalHorasHistorial = 0;
+
   }
 
   trackByUid(_: number, item: EstudianteHoras) {
