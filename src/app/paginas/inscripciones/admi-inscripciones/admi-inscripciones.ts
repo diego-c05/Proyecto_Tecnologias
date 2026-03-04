@@ -14,14 +14,13 @@ import { EventsService } from '../../../services/events.service';
 export class AdminInscripcionesComponent implements OnInit {
   inscripciones: Inscripcion[] = [];
   cargando = true;
+  inscripcionesPorEvento: { eventoId: string; eventoNombre: string; lista: any[] }[] = [];
 
-  constructor(private inscripcionesService: InscripcionesService,
+  constructor(
+    private inscripcionesService: InscripcionesService,
     private authService: AuthService,
     private eventService: EventsService
-  ) { }
-
-  // dentro de AdminInscripcionesComponent
-  inscripcionesPorEvento: { eventoId: string; eventoNombre: string; lista: any[] }[] = [];
+  ) {}
 
   async ngOnInit() {
     await this.cargar();
@@ -32,10 +31,8 @@ export class AdminInscripcionesComponent implements OnInit {
     this.cargando = true;
 
     try {
-      
       const eventos = await this.eventService.listarEventosPorCoordinador(user.uid);
-
-      const inscripciones = await this.inscripcionesService.listarInscripciones();    
+      const inscripciones = await this.inscripcionesService.listarInscripciones();
 
       const map = new Map<string, any>();
 
@@ -53,19 +50,28 @@ export class AdminInscripcionesComponent implements OnInit {
         }
       }
 
-
       this.inscripcionesPorEvento = Array.from(map.values());
-
     } catch (err) {
       console.error(err);
+    } finally {
+      this.cargando = false;
     }
   }
 
-  async cambiarEstado(i: any, estado: any) {
+  async cambiarEstado(i: any, estado: EstadoInscripcion) {
     if (!i.id) return;
     try {
-      await this.inscripcionesService.actualizarInscripcion(i.id, { estado });
-      await this.cargar(); // ✅ refresca pantalla
+      if (estado === 'acreditado') {
+        await this.inscripcionesService.acreditarInscripcion(
+          i.id,
+          i.eventoNombre || 'Sin nombre',
+          i.usuarioId
+        );
+      } else {
+        await this.inscripcionesService.actualizarInscripcion(i.id, { estado });
+      }
+
+      await this.cargar();
     } catch (err) {
       console.error(err);
       alert('No se pudo actualizar el estado.');
@@ -78,7 +84,7 @@ export class AdminInscripcionesComponent implements OnInit {
 
     try {
       await this.inscripcionesService.eliminarInscripcion(i.id);
-      await this.cargar(); // ✅ refresca pantalla
+      await this.cargar();
     } catch (err) {
       console.error(err);
       alert('No se pudo eliminar.');
@@ -106,5 +112,4 @@ export class AdminInscripcionesComponent implements OnInit {
       this.cargando = false;
     }
   }
-
 }

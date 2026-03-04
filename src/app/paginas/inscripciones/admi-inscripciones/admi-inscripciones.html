@@ -25,8 +25,23 @@
             <td>{{ i.usuarioCorreo || i.usuarioId }}</td>
             <td><span class="badge">{{ i.estado }}</span></td>
             <td class="col-actions">
-              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'asistio')">Asistió</button>
-              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'acreditado')">Acreditar</button>
+
+              <button
+                class="btn btn-ghost"
+                (click)="cambiarEstado(i, 'asistio')"
+                [disabled]="i.estado !== 'inscrito'"
+              >
+                Asistió
+              </button>
+
+              <button
+                class="btn btn-ghost"
+                (click)="cambiarEstado(i, 'acreditado')"
+                [disabled]="i.estado !== 'asistio'"
+              >
+                Acreditar
+              </button>
+
               <button class="btn btn-danger" (click)="eliminar(i)">Eliminar</button>
             </td>
           </tr>
@@ -35,5 +50,3 @@
     </div>
   </section>
 </div>
-
-
