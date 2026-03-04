@@ -427,3 +427,36 @@
     border-radius: 14px;
   }
 }
+
+.table thead th.col-actions,
+.table tbody td.col-actions{
+  text-align: center !important;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 80px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.icon-only{
+  width: 36px;
+  height: 36px;
+  padding: 0 !important;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-only .material-icons{
+  font-size: 18px;
+  line-height: 1;
+}
+
+.icon-only--edit{
+  color: #b45309;
+}
+
+.icon-only--delete{
+  color: #b91c1c;
+}

@@ -55,6 +55,7 @@
                 <em class="muted">Sin materia asignada</em>
               </ng-template>
             </td>
+
             <td>
               <span *ngIf="event.coordinadorNombre; else sinCoor">
                 {{ event.coordinadorNombre }}
@@ -65,13 +66,27 @@
             </td>
 
             <td class="col-actions">
-              <button class="btn btn-ghost" [routerLink]="['/eventos/editar', event.id]">
-                Editar
+
+              <button
+                class="icon-btn icon-btn--edit"
+                [routerLink]="['/eventos/editar', event.id]"
+                title="Modificar"
+                aria-label="Modificar"
+              >
+                <span class="material-icons">edit</span>
               </button>
-              <button class="btn btn-danger" (click)="deleteEvent(event.id)">
-                Eliminar
+
+              <button
+                class="icon-btn icon-btn--delete"
+                (click)="deleteEvent(event.id)"
+                title="Eliminar"
+                aria-label="Eliminar"
+              >
+                <span class="material-icons">delete</span>
               </button>
+
             </td>
+
           </tr>
         </tbody>
       </table>

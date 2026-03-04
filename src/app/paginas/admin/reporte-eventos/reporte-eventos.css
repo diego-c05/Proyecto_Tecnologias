@@ -308,9 +308,16 @@
   border-bottom: none;
 }
 
-.col-actions {
-  text-align: right;
+.col-actions{
+  text-align: center;
   white-space: nowrap;
+  width: 76px;           
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.table thead th.col-actions{
+  text-align: center;
 }
 
 .event-name {
@@ -468,4 +475,76 @@
     padding: 18px;
     border-radius: 14px;
   }
+}
+.material-icons{
+font-size:18px;
+vertical-align:middle;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,.10);
+  background:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.icon-btn:hover{
+  background:#f9fafb;
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
+  transform:translateY(-1px);
+}
+
+.icon-btn:active{
+  transform:scale(.96);
+}
+
+.icon-btn .material-icons{
+  font-size:18px;
+}
+
+.icon-btn--edit{
+  color:#b45309;
+  border-color:rgba(180,83,9,.25);
+}
+
+.icon-btn--edit:hover{
+  background:rgba(180,83,9,.08);
+}
+
+.icon-btn--delete{
+  color:#b91c1c;
+  border-color:rgba(185,28,28,.25);
+}
+
+.icon-btn--delete:hover{
+  background:rgba(185,28,28,.10);
+}
+.table thead th.col-actions,
+.table tbody td.col-actions{
+  text-align: center !important;
+  vertical-align: middle;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  width: 80px;                 
+}
+
+.table tbody td.col-actions .btn.btn-sm{
+  width: 36px;
+  height: 36px;
+  padding: 0 !important;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.table tbody td.col-actions .btn.btn-sm .material-icons{
+  font-size: 18px;
+  line-height: 1;
+  margin: 0;
 }

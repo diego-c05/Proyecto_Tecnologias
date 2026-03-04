@@ -5,13 +5,12 @@
     <span class="count" *ngIf="!cargando">({{ materias.length || 0 }})</span>
   </div>
 
-  <!-- Estado de carga -->
   <div class="loading" *ngIf="cargando">
     <span class="spinner"></span>
     Cargando materias...
   </div>
 
-  <!-- Tabla -->
+
   <ng-container *ngIf="!cargando">
     <div class="table-wrapper" *ngIf="(materias.length || 0) > 0; else sinMaterias">
       <table class="materias-table">
@@ -29,20 +28,36 @@
             <td class="nombre">{{ m.nombre }}</td>
             <td>{{ m.codigo }}</td>
             <td>{{ m.seccion }}</td>
+
             <td class="acciones">
-              <button class="btn btn-ghost" (click)="editMateria(m)">
-                Editar
+        
+              <button
+                class="icon-btn icon-btn--edit"
+                type="button"
+                (click)="editMateria(m)"
+                title="Modificar"
+                aria-label="Modificar"
+              >
+                <span class="material-icons">edit</span>
               </button>
-              <button class="btn btn-danger" (click)="eliminarMateria(m.id)">
-                Eliminar
+
+            
+              <button
+                class="icon-btn icon-btn--delete"
+                type="button"
+                (click)="eliminarMateria(m.id)"
+                title="Eliminar"
+                aria-label="Eliminar"
+              >
+                <span class="material-icons">delete</span>
               </button>
             </td>
+
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Estado vacío -->
     <ng-template #sinMaterias>
       <div class="empty-state">
         <div class="empty-icon">📚</div>
