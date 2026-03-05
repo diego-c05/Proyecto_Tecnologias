@@ -8,6 +8,9 @@ import { Materias } from '../../../services/materia/materias';
 import { UsuariosService, Usuario } from '../../../services/usuarios.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-events',
@@ -27,10 +30,11 @@ export class DetalleEvents implements OnInit {
     private router: Router,
     private eventsService: EventsService,
     private inscripcionesService: InscripcionesService,
-    private authService: AuthService, 
+    private authService: AuthService,
     private materiasService: Materias,
     private usuarioService: UsuariosService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   async ngOnInit() {
@@ -75,6 +79,13 @@ export class DetalleEvents implements OnInit {
       return;
     }
 
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: '¿Seguro que quieres inscribirte a este evento?' }
+    });
+
+    const ok = await firstValueFrom(ref.afterClosed());
+    if (!ok) return;
+
     try {
       await this.inscripcionesService.crearInscripcion({
         eventoId: this.evento.id,
@@ -114,10 +125,10 @@ export class DetalleEvents implements OnInit {
   }
 
   private showMsg(message: string) {
-  this.snackBar.open(message, 'OK', {
-    duration: 2500,
-    horizontalPosition: 'right',
-    verticalPosition: 'bottom',
-  });
-}
+    this.snackBar.open(message, 'OK', {
+      duration: 2500,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+  }
 }
