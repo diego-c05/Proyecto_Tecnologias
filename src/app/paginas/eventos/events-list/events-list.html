@@ -7,10 +7,10 @@
   <section class="card">
     <div class="card-header">
       <h2>Listado de eventos</h2>
-      <span class="count">({{ events?.length || 0 }})</span>
+      <span class="count">({{ events.length || 0 }})</span>
     </div>
 
-    <div class="table-wrapper" *ngIf="(events?.length || 0) > 0; else sinEventos">
+    <div class="table-wrapper" *ngIf="(events.length || 0) > 0; else sinEventos">
       <table class="data-table">
         <thead>
           <tr>

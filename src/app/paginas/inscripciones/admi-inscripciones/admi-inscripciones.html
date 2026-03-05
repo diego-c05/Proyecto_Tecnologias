@@ -10,7 +10,7 @@
       <span class="count">({{ grupo.lista.length }})</span>
     </div>
 
-    <div class="table-wrapper">
+    <div class="table-wrap">
       <table class="data-table">
         <thead>
           <tr>
@@ -28,7 +28,7 @@
             <td class="col-actions">
               <button
                 class="btn btn-ghost"
-                (click)="cambiarEstado(i, 'asistio')"
+                (click)="cambiarEstado(i, 'asistio')" 
                 [disabled]="i.estado !== 'inscrito'"
               >
                 Asistió
