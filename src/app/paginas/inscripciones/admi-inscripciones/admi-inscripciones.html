@@ -26,12 +26,22 @@
             <td><span class="badge">{{ i.estado }}</span></td>
 
             <td class="col-actions">
-              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'asistio')">
+              <button
+                class="btn btn-ghost"
+                (click)="cambiarEstado(i, 'asistio')"
+                [disabled]="i.estado !== 'inscrito'"
+              >
                 Asistió
               </button>
-              <button class="btn btn-ghost" (click)="cambiarEstado(i, 'acreditado')">
+
+              <button
+                class="btn btn-ghost"
+                (click)="cambiarEstado(i, 'acreditado')"
+                [disabled]="i.estado !== 'asistio'"
+              >
                 Acreditar
               </button>
+
               <button
                 class="icon-btn icon-btn--delete"
                 (click)="eliminar(i)"
@@ -40,9 +50,7 @@
               >
                 <span class="material-icons">delete</span>
               </button>
-
             </td>
-
           </tr>
         </tbody>
       </table>

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
+import { NotificacionesService, Notificacion } from '../../../services/notificaciones.service';
+import { AuthService } from '../../../services/auth.service';
 import { combineLatest } from 'rxjs';
 
 interface EventoView extends Evento {
@@ -19,50 +21,69 @@ interface EventoView extends Evento {
   styleUrl: './vereventos.css',
 })
 export class Vereventos implements OnInit {
-
   eventos: EventoView[] = [];
+  mostrarModal = false;
+  notificaciones: Notificacion[] = [];
 
-  constructor(private eventsService: EventsService,
-  private materiasService: Materias) {}
+  constructor(
+    private eventsService: EventsService,
+    private materiasService: Materias,
+    private notificacionesService: NotificacionesService,
+    private authService: AuthService
+  ) {}
 
   async ngOnInit() {
-  try {
-    combineLatest([
-    this.eventsService.getEvents(),                 
-    this.materiasService.getMateriasRealtime()      
-  ]).subscribe(([events, materias]) => {
+    try {
+      combineLatest([
+        this.eventsService.getEvents(),
+        this.materiasService.getMateriasRealtime()
+      ]).subscribe(([events, materias]) => {
+        const eventosOrdenados = events
+          .map(event => {
+            const materia = materias.find(m => m.id === event.materiaId);
+            return {
+              ...event,
+              materiaNombre: materia?.nombre ?? null,
+              materiaCodigo: materia?.codigo ?? null,
+              materiaSeccion: materia?.seccion ?? null
+            };
+          })
+          .sort((a, b) => {
+            const aFin = this.esFinalizado(a);
+            const bFin = this.esFinalizado(b);
+            if (aFin !== bFin) return aFin ? 1 : -1;
+            const aTime = new Date(a.date + 'T00:00:00').getTime();
+            const bTime = new Date(b.date + 'T00:00:00').getTime();
+            return aTime - bTime;
+          });
+        this.eventos = eventosOrdenados;
+      });
+    } catch (err) {
+      console.error('Error cargando eventos (estudiante):', err);
+    }
 
-    const eventosOrdenados = events
-      .map(event => {
-        const materia = materias.find(m => m.id === event.materiaId);
-        return {
-          ...event,
-          materiaNombre: materia?.nombre ?? null,
-          materiaCodigo: materia?.codigo ?? null,
-          materiaSeccion: materia?.seccion ?? null
-        };
-      })
-      .sort((a, b) => {
-      const aFin = this.esFinalizado(a);
-      const bFin = this.esFinalizado(b);
-
-     
-      if (aFin !== bFin) return aFin ? 1 : -1;
-
-     
-      const aTime = new Date(a.date + 'T00:00:00').getTime();
-      const bTime = new Date(b.date + 'T00:00:00').getTime();
-      return aTime - bTime;
-    });
-
-    this.eventos = eventosOrdenados;
-  });
-    console.log('EVENTOS (estudiante) =>', this.eventos);
-  } catch (err) {
-    console.error('Error cargando eventos (estudiante):', err);
+    await this.cargarNotificaciones();
   }
-}
 
+  async cargarNotificaciones() {
+    const user = this.authService.getCurrentUser();
+    if (!user) return;
+
+    const noLeidas = await this.notificacionesService.obtenerNoLeidas(user.uid);
+    if (noLeidas.length > 0) {
+      this.notificaciones = noLeidas;
+      this.mostrarModal = true;
+    }
+  }
+
+  async cerrarModal() {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      await this.notificacionesService.marcarTodasLeidas(user.uid);
+    }
+    this.mostrarModal = false;
+    this.notificaciones = [];
+  }
 
   formatearFecha(fecha: string): string {
     const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -77,10 +98,8 @@ export class Vereventos implements OnInit {
   }
 
   esFinalizado(e: Evento): boolean {
-  const hoy = new Date();
-  const fechaEvento = new Date(e.date + 'T23:59:59');
-  return fechaEvento < hoy;
+    const hoy = new Date();
+    const fechaEvento = new Date(e.date + 'T23:59:59');
+    return fechaEvento < hoy;
+  }
 }
-
-}
-

@@ -41,16 +41,14 @@
             <span class="badge badge-horas">⏱️ {{ evento.hours }} horas</span>
             <span class="badge badge-cupos">👥 {{ evento.slots }} cupos</span>
           </div>
-          
-          
-          
+
           <div class="materia" *ngIf="evento.materiaNombre; else sinMateria">
             📚 {{ evento.materiaNombre }} {{ evento.materiaCodigo }} - {{ evento.materiaSeccion }}
           </div>
           <ng-template #sinMateria>
             <em class="muted">Sin materia asignada</em>
           </ng-template>
-          
+
           <a
             class="btn btn-primary"
             [routerLink]="['/eventos/detalle-events', evento.id]"
@@ -78,4 +76,33 @@
     <span class="dot">•</span>
     <span>Eventos</span>
   </footer>
+
+  <!-- Modal de notificaciones -->
+  <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="card" style="padding: 20px; min-width: 320px; max-width: 480px;">
+
+        <div class="card-header" style="margin-bottom: 16px;">
+          <h2 style="margin: 0;">🔔 Tienes notificaciones nuevas</h2>
+        </div>
+
+        <ul style="list-style: none; padding: 0; margin: 0 0 16px 0; display: flex; flex-direction: column; gap: 10px;">
+          <li
+            *ngFor="let n of notificaciones"
+            style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 14px; font-size: 0.9rem; color: #166534;"
+          >
+            {{ n.mensaje }}
+          </li>
+        </ul>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button class="btn btn-primary" (click)="cerrarModal()">
+            Entendido
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>

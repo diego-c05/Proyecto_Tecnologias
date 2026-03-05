@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { InscripcionesService, Inscripcion, EstadoInscripcion } from '../../../services/inscripciones.service';
 import { AuthService } from '../../../services/auth.service';
 import { EventsService } from '../../../services/events.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
 import { firstValueFrom } from 'rxjs';
@@ -19,17 +18,15 @@ import { firstValueFrom } from 'rxjs';
 export class AdminInscripcionesComponent implements OnInit {
   inscripciones: Inscripcion[] = [];
   cargando = true;
+  inscripcionesPorEvento: { eventoId: string; eventoNombre: string; lista: any[] }[] = [];
 
-  constructor(private inscripcionesService: InscripcionesService,
+  constructor(
+    private inscripcionesService: InscripcionesService,
     private authService: AuthService,
     private eventService: EventsService,
     private snackBar: MatSnackBar,
-
-  private dialog: MatDialog
-  ) { }
-
-  // dentro de AdminInscripcionesComponent
-  inscripcionesPorEvento: { eventoId: string; eventoNombre: string; lista: any[] }[] = [];
+    private dialog: MatDialog
+  ) {}
 
   async ngOnInit() {
     await this.cargar();
@@ -40,10 +37,8 @@ export class AdminInscripcionesComponent implements OnInit {
     this.cargando = true;
 
     try {
-      
       const eventos = await this.eventService.listarEventosPorCoordinador(user.uid);
-
-      const inscripciones = await this.inscripcionesService.listarInscripciones();    
+      const inscripciones = await this.inscripcionesService.listarInscripciones();
 
       const map = new Map<string, any>();
 
@@ -61,45 +56,55 @@ export class AdminInscripcionesComponent implements OnInit {
         }
       }
 
-
       this.inscripcionesPorEvento = Array.from(map.values());
-
     } catch (err) {
       console.error(err);
+    } finally {
+      this.cargando = false;
     }
   }
 
-  async cambiarEstado(i: any, estado: any) {
+  async cambiarEstado(i: any, estado: EstadoInscripcion) {
     if (!i.id) return;
     try {
-      await this.inscripcionesService.actualizarInscripcion(i.id, { estado });
+      // Si es acreditado, usa el método especial que crea la notificación
+      if (estado === 'acreditado') {
+        await this.inscripcionesService.acreditarInscripcion(
+          i.id,
+          i.eventoNombre || 'Sin nombre',
+          i.usuarioId
+        );
+      } else {
+        await this.inscripcionesService.actualizarInscripcion(i.id, { estado });
+      }
+
       this.showMsg('Estado actualizado');
-      await this.cargar(); // refresca pantalla
+      await this.cargar();
     } catch (err) {
       console.error(err);
-        this.showMsg('No se pudo actualizar el estado.');
+      this.showMsg('No se pudo actualizar el estado.');
     }
   }
 
-async eliminar(i: any) {
-  if (!i.id) return;
+  async eliminar(i: any) {
+    if (!i.id) return;
 
-  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    data: { message: '¿Eliminar esta inscripción?' }
-  });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: '¿Eliminar esta inscripción?' }
+    });
 
-  const confirmado = await firstValueFrom(dialogRef.afterClosed());
-  if (!confirmado) return;
+    const confirmado = await firstValueFrom(dialogRef.afterClosed());
+    if (!confirmado) return;
 
-  try {
-    await this.inscripcionesService.eliminarInscripcion(i.id);
-    this.showMsg('Inscripción eliminada');
-    await this.cargar();
-  } catch (err) {
-    console.error(err);
-    this.showMsg('No se pudo eliminar.');
+    try {
+      await this.inscripcionesService.eliminarInscripcion(i.id);
+      this.showMsg('Inscripción eliminada');
+      await this.cargar();
+    } catch (err) {
+      console.error(err);
+      this.showMsg('No se pudo eliminar.');
+    }
   }
-}
 
   async cargar() {
     this.cargando = true;
@@ -124,11 +129,10 @@ async eliminar(i: any) {
   }
 
   private showMsg(message: string) {
-  this.snackBar.open(message, 'OK', {
-    duration: 2500,
-    horizontalPosition: 'right',
-    verticalPosition: 'bottom',
-  });
-}
-
+    this.snackBar.open(message, 'OK', {
+      duration: 2500,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+  }
 }
