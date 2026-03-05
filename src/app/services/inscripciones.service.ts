@@ -11,20 +11,16 @@ import {
   query,
   where,
   serverTimestamp,
-  orderBy,
   limit,
 } from '@angular/fire/firestore';
+import { NotificacionesService } from './notificaciones.service';
 
 export type EstadoInscripcion = 'inscrito' | 'cancelado' | 'asistio' | 'acreditado';
 
 export interface Inscripcion {
   id?: string;
-
-  // relaciones
   eventoId: string;
   usuarioId: string;
-
-  // snapshot 
   eventoNombre?: string;
   eventoHoras?: number;
   eventoFecha?: string;
@@ -32,8 +28,6 @@ export interface Inscripcion {
   materiaCodigo?: string;
   materiaSeccion?: string;
   usuarioCorreo?: string;
-
-  // control
   estado: EstadoInscripcion;
   fechaInscripcion?: any;
 }
@@ -41,11 +35,10 @@ export interface Inscripcion {
 @Injectable({ providedIn: 'root' })
 export class InscripcionesService {
   private firestore = inject(Firestore);
+  private notificacionesService = inject(NotificacionesService);
   private colRef = collection(this.firestore, 'inscripciones');
 
-  // CREATE
   async crearInscripcion(data: Omit<Inscripcion, 'id' | 'fechaInscripcion'>): Promise<string> {
-    // Evita duplicados
     const existe = await this.existeInscripcion(data.eventoId, data.usuarioId);
     if (existe) throw new Error('Ya estás inscrito en este evento.');
 
@@ -57,13 +50,11 @@ export class InscripcionesService {
     return ref.id;
   }
 
-  // READ 
   async listarInscripciones(): Promise<Inscripcion[]> {
     const snap = await getDocs(this.colRef);
     return snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Inscripcion, 'id'>) }));
   }
 
-  // READ (por id)
   async getInscripcionById(id: string): Promise<Inscripcion | null> {
     const ref = doc(this.firestore, `inscripciones/${id}`);
     const snap = await getDoc(ref);
@@ -71,21 +62,18 @@ export class InscripcionesService {
     return { id: snap.id, ...(snap.data() as Omit<Inscripcion, 'id'>) };
   }
 
-  // READ (por usuario)
   async listarPorUsuario(usuarioId: string): Promise<Inscripcion[]> {
     const q = query(this.colRef, where('usuarioId', '==', usuarioId));
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Inscripcion, 'id'>) }));
   }
 
-  // READ (por evento)
   async listarPorEvento(eventoId: string): Promise<Inscripcion[]> {
     const q = query(this.colRef, where('eventoId', '==', eventoId));
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...(d.data() as Omit<Inscripcion, 'id'>) }));
   }
 
-  // READ (inscrito exacto)
   async existeInscripcion(eventoId: string, usuarioId: string): Promise<boolean> {
     const q = query(
       this.colRef,
@@ -97,19 +85,24 @@ export class InscripcionesService {
     return !snap.empty;
   }
 
-  // UPDATE
   async actualizarInscripcion(id: string, cambios: Partial<Omit<Inscripcion, 'id' | 'eventoId' | 'usuarioId'>>) {
     const ref = doc(this.firestore, `inscripciones/${id}`);
     await updateDoc(ref, cambios as any);
   }
 
-  // DELETE (o “cancelar”)
+  async acreditarInscripcion(id: string, eventoNombre: string, usuarioId: string): Promise<void> {
+    await this.actualizarInscripcion(id, { estado: 'acreditado' });
+    await this.notificacionesService.crearNotificacion(
+      usuarioId,
+      `Se te han acreditado las horas del evento: ${eventoNombre}`
+    );
+  }
+
   async eliminarInscripcion(id: string) {
     const ref = doc(this.firestore, `inscripciones/${id}`);
     await deleteDoc(ref);
   }
 
-  //  cancelar sin borrar
   async cancelarInscripcion(id: string) {
     await this.actualizarInscripcion(id, { estado: 'cancelado' });
   }
