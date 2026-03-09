@@ -60,6 +60,7 @@ private dialog = inject(MatDialog);
     this.usuarios = await this.usuariosService.listarUsuarios();
   }
 
+  /*
   async crear() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -81,6 +82,7 @@ this.showMsg(`Usuario ${val.nombreCompleto} creado correctamente`);
     this.form.reset({ rol: 'usuario' as RolUsuario });
     await this.cargar();
   }
+    */
 
   async eliminar(docId: string) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {

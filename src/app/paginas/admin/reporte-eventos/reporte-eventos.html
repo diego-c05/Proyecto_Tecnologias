@@ -37,6 +37,31 @@
 
   </section>
 
+  <section class="card charts-grid">
+
+    <div class="chart-box">
+      <h3>Eventos por materia</h3>
+      <div class="chart-container" *ngIf="eventosAll.length > 0; else sinDatos">
+        <canvas baseChart [data]="chartMateria" [options]="chartMateriaOpts" type="bar">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <h3>Inscritos y Cupos Totales por Evento</h3>
+      <div class="chart-container" *ngIf="chartCupos.labels && chartCupos.labels.length > 0; else sinDatos">
+        <canvas baseChart [data]="chartCupos" [options]="chartCuposOpts" type="bar">
+        </canvas>
+      </div>
+    </div>
+
+    <ng-template #sinDatos>
+      <div class="chart-empty">
+        <p>No hay datos para mostrar</p>
+      </div>
+    </ng-template>
+  </section>
+
   <section class="card filters">
 
     <div class="card-header">
@@ -49,12 +74,7 @@
 
         <div class="field">
           <label>Buscar evento</label>
-          <input
-            type="text"
-            placeholder="Ej: reforestación..."
-            [(ngModel)]="searchText"
-            (input)="applyFilters()"
-          />
+          <input type="text" placeholder="Ej: reforestación..." [(ngModel)]="searchText" (input)="applyFilters()" />
         </div>
 
         <div class="field">
@@ -92,13 +112,8 @@
 
         <div class="field">
           <label>Horas</label>
-          <input
-            type="number"
-            min="0"
-            placeholder="Ej: 8"
-            [ngModel]="hoursFilter"
-            (ngModelChange)="onHoursInput($event)"
-          />
+          <input type="number" min="0" placeholder="Ej: 8" [ngModel]="hoursFilter"
+            (ngModelChange)="onHoursInput($event)" />
         </div>
 
         <div class="filters-actions">
@@ -164,21 +179,13 @@
             </td>
 
             <td class="col-actions">
-              <button
-                class="icon-btn icon-btn--edit"
-                (click)="onEdit(e)"
-                title="Modificar"
-              >
+              <button class="icon-btn icon-btn--edit" (click)="onEdit(e)" title="Modificar">
                 <span class="material-icons">edit</span>
               </button>
             </td>
 
             <td class="col-actions">
-              <button
-                class="icon-btn icon-btn--delete"
-                (click)="onDelete(e)"
-                title="Eliminar"
-              >
+              <button class="icon-btn icon-btn--delete" (click)="onDelete(e)" title="Eliminar">
                 <span class="material-icons">delete</span>
               </button>
             </td>

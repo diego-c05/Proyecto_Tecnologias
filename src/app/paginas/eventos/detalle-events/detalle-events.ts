@@ -86,6 +86,14 @@ export class DetalleEvents implements OnInit {
       return;
     }
 
+    const inscripciones = await this.inscripcionesService.listarPorEvento(this.evento.id);
+    const activos = inscripciones.filter(i => i.estado !== 'cancelado').length;
+
+    if (activos >= this.evento.slots) {
+      this.showMsg('Este evento ya no tiene cupos disponibles.');
+      return;
+    }
+
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: { message: '¿Seguro que quieres inscribirte a este evento?' }
     });
