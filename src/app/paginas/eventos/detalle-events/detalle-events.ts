@@ -79,6 +79,13 @@ export class DetalleEvents implements OnInit {
       return;
     }
 
+    const inscrito = await this.inscripcionesService.existeInscripcion(this.evento.id, user.uid);
+
+    if(inscrito){
+      this.showMsg('Ya estas inscrito en este evento.');
+      return;
+    }
+
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: { message: '¿Seguro que quieres inscribirte a este evento?' }
     });
