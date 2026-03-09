@@ -1,83 +1,109 @@
-<div class="page card">
-  <div class="header">
-    <div>
-      <h1 class="title">Gestión de Voluntariados</h1>
-      <p class="subtitle">Registro de estudiantes</p>
-    </div>
-  </div>
- 
-  <form class="filters" (ngSubmit)="registrarse()">
-    <div class="field">
-      <label>Nombre Completo</label>
-      <input 
-        type="text" 
-        [(ngModel)]="nombreCompleto"
-        name="nombreCompleto"
-        placeholder="Nombre completo"
-        [disabled]="cargando"
-        required>
+<div class="layout">
+
+  <!-- HEADER SUPERIOR -->
+  <header class="top-header">
+
+    
+
+    <div class="header-title">
+      <h1>Registro de Estudiantes</h1>
+      <div class="banner"></div>
+      
     </div>
 
-    <div class="field">
-      <label>Correo Electrónico</label>
-      <input 
-        type="email" 
-        [(ngModel)]="correoElectronico"
-        name="correoElectronico"
-        placeholder="correo@ejemplo.com"
-        [disabled]="cargando"
-        required>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="main-container">
+
+    <div class="page card">
+
+      <div class="header">
+        <h2 class="title">Crear cuenta</h2>
+        <p class="subtitle">Ingresa tus Datos</p>
+      </div>
+
+      <form class="filters" (ngSubmit)="registrarse()">
+
+        <div class="field">
+          <label>Nombre Completo</label>
+          <input 
+            type="text" 
+            [(ngModel)]="nombreCompleto"
+            name="nombreCompleto"
+            placeholder="Nombre completo"
+            [disabled]="cargando"
+            required>
+        </div>
+
+        <div class="field">
+          <label>Correo Electrónico</label>
+          <input 
+            type="email" 
+            [(ngModel)]="correoElectronico"
+            name="correoElectronico"
+            placeholder="correo@ejemplo.com"
+            [disabled]="cargando"
+            required>
+        </div>
+
+        <div class="field">
+          <label>Nombre de Usuario</label>
+          <input 
+            type="text" 
+            [(ngModel)]="nombreUsuario"
+            name="nombreUsuario"
+            placeholder="nombre_usuario"
+            [disabled]="cargando"
+            required>
+        </div>
+
+        <div class="field">
+          <label>Contraseña</label>
+          <input 
+            type="password" 
+            [(ngModel)]="contrasena"
+            name="contrasena"
+            placeholder="Mínimo 6 caracteres"
+            [disabled]="cargando"
+            required>
+        </div>
+
+        <div class="field">
+          <label>Confirmar Contraseña</label>
+          <input 
+            type="password" 
+            [(ngModel)]="confirmarContrasena"
+            name="confirmarContrasena"
+            placeholder="Repite tu contraseña"
+            [disabled]="cargando"
+            required>
+        </div>
+
+        <p *ngIf="mensaje" class="mensaje" [class.error]="mensaje.includes('❌')">
+          {{ mensaje }}
+        </p>
+
+        <div class="filters-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="cargando">
+            {{ cargando ? 'Registrando...' : 'Registrarse' }}
+          </button>
+        </div>
+
+      </form>
+
+      <p class="hint">
+        ¿Ya tienes cuenta?
+        <a [routerLink]="'/inicio-sesion'" class="btn btn-ghost btn-sm">
+          Inicia sesión
+        </a>
+      </p>
+
     </div>
 
-    <div class="field">
-      <label>Nombre de Usuario</label>
-      <input 
-        type="text" 
-        [(ngModel)]="nombreUsuario"
-        name="nombreUsuario"
-        placeholder="nombre_usuario"
-        [disabled]="cargando"
-        required>
-    </div>
- 
-    <div class="field">
-      <label>Contraseña</label>
-      <input 
-        type="password" 
-        [(ngModel)]="contrasena"
-        name="contrasena"
-        placeholder="Mínimo 6 caracteres"
-        [disabled]="cargando"
-        required>
-    </div>
+  </main>
 
-    <div class="field">
-      <label>Confirmar Contraseña</label>
-      <input 
-        type="password" 
-        [(ngModel)]="confirmarContrasena"
-        name="confirmarContrasena"
-        placeholder="Repite tu contraseña"
-        [disabled]="cargando"
-        required>
-    </div>
-
-    <p *ngIf="mensaje" class="mensaje" [class.error]="mensaje.includes('❌')">
-      {{ mensaje }}
-    </p>
- 
-    <div class="filters-actions">
-      <button 
-        type="submit" 
-        class="btn btn-primary"
-        [disabled]="cargando">
-        {{ cargando ? 'Registrando...' : 'Registrarse' }}
-      </button>
-    </div>
-  </form>
- 
-  <p class="hint">
-    ¿Ya tienes cuenta?
-    <a [routerLink]="'/inicio-sesion'" class="btn btn-ghost btn-sm">Inicia sesión</a>
-  </p>
 </div>

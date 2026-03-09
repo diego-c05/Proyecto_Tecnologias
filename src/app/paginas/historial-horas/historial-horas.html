@@ -1,25 +1,31 @@
 <div class="page">
+
   <header class="page-header">
+
     <div>
       <h1>Historial de horas</h1>
-      <p class="subtitle">Consulta tus eventos registrados y el total de horas acumuladas.</p>
+      <p class="subtitle">
+        Consulta tus eventos registrados y el total de horas acumuladas.
+      </p>
     </div>
-    <div class="header-actions">
-      <a class="btn btn-ghost" routerLink="/eventos/vereventos">Ver eventos</a>
-    </div>
+
   </header>
 
   <section class="card table-card">
+
     <div class="card-header">
       <h2>Registro de participación</h2>
       <span class="count">({{ historial.length }})</span>
     </div>
 
-    <!-- Cargando -->
-    <div *ngIf="cargando" style="padding: 16px;">Cargando historial...</div>
+    <div *ngIf="cargando" style="padding:16px;">
+      Cargando historial...
+    </div>
 
     <div class="table-wrap" *ngIf="!cargando">
+
       <table class="table">
+
         <thead>
           <tr>
             <th>Evento</th>
@@ -30,32 +36,57 @@
         </thead>
 
         <tbody>
+
           <tr *ngFor="let i of historial">
+
             <td class="strong">{{ i.eventoNombre }}</td>
+
             <td>{{ i.eventoFecha || '-' }}</td>
+
             <td>
               {{ i.materiaNombre || '-' }}
-              <span *ngIf="i.materiaCodigo"> · {{ i.materiaCodigo }}</span>
+              <span *ngIf="i.materiaCodigo">
+                · {{ i.materiaCodigo }}
+              </span>
             </td>
-            <td><span class="pill pill-primary">{{ i.eventoHoras }}</span></td>
+
+            <td>
+              <span class="pill pill-primary">
+                {{ i.eventoHoras }}
+              </span>
+            </td>
+
           </tr>
 
           <tr *ngIf="historial.length === 0">
-            <td colspan="4" class="empty">Aún no tienes horas acreditadas.</td>
+            <td colspan="4" class="empty">
+              Aún no tienes horas acreditadas.
+            </td>
           </tr>
+
         </tbody>
+
       </table>
+
     </div>
 
     <div class="summary" *ngIf="!cargando">
+
       <div class="summary-item">
         <span class="summary-label">Total acumulado</span>
-        <span class="summary-value">{{ totalHoras }} horas</span>
+        <span class="summary-value">
+          {{ totalHoras }} horas
+        </span>
       </div>
+<br>
       <div class="summary-actions">
-        <a class="btn btn-primary" routerLink="/eventos/vereventos">Inscribirme a más eventos</a>
+        <a class="btn btn-primary" routerLink="/eventos/vereventos">
+          Inscribirme a más eventos
+        </a>
       </div>
+
     </div>
+
   </section>
 
   <footer class="footer">
@@ -63,4 +94,5 @@
     <span class="dot">•</span>
     <span>Historial del estudiante</span>
   </footer>
+
 </div>
