@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,6 +10,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { combineLatest, firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
+import { InscripcionesService } from '../../../services/inscripciones.service';
+
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartData, ChartOptions, registerables } from 'chart.js/auto';
+
+Chart.register(...registerables);
 
 type EventoTabla = {
   id: string;
@@ -40,16 +46,17 @@ type MateriaItem = {
 @Component({
   selector: 'app-reporte-eventos',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, MatSnackBarModule, MatDialogModule],
+  imports: [CommonModule, RouterLink, FormsModule, MatSnackBarModule, MatDialogModule, BaseChartDirective],
   templateUrl: './reporte-eventos.html',
   styleUrl: './reporte-eventos.css',
 })
-export class ReporteEventos {
+export class ReporteEventos implements OnInit {
   private destroyRef = inject(DestroyRef);
   private eventsService = inject(EventsService);
   private materiasService = inject(Materias);
   private snackBar = inject(MatSnackBar);
-private dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
+  private inscripcionesService = inject(InscripcionesService);
 
   eventosAll: EventoTabla[] = [];
   eventos: EventoTabla[] = [];
@@ -94,38 +101,149 @@ private dialog = inject(MatDialog);
       return `No hay eventos disponibles con esa cantidad de horas (${this.hoursFilter}).`;
     }
     return 'No hay eventos para mostrar.';
-  }  
+  }
+
+  //Propiedades de los graficos
+  chartMateria: ChartData<'bar'> = { labels: [], datasets: [] };
+  chartMateriaOpts: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 } },
+      x: {
+        ticks: {
+          maxRotation: 45,   // ✅ inclina las etiquetas
+          minRotation: 45,
+          font: { size: 10 }, // ✅ letra más pequeña en móvil
+          callback: function (value, index) {
+            const label = this.getLabelForValue(index);
+            // ✅ Trunca etiquetas largas
+            return label.length > 15 ? label.slice(0, 15) + '…' : label;
+          }
+        }
+      }
+    }
+  };
+
+  chartCupos: ChartData<'bar'> = { labels: [], datasets: [] };
+  chartCuposOpts: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 } },
+      x: {
+        ticks: {
+          maxRotation: 45,
+          minRotation: 45,
+          font: { size: 10 },
+          callback: function (value, index) {
+            const label = this.getLabelForValue(index);
+            return label.length > 15 ? label.slice(0, 15) + '…' : label;
+          }
+        }
+      }
+    }
+  };
 
   constructor() {
-  // Reemplaza el loadMaterias() inicial y el subscribe de eventos por un combineLatest
-  combineLatest([
-    this.eventsService.getEvents(),
-    this.materiasService.getMateriasRealtime()
-  ])
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe(([events, materias]) => {
-      // Sincroniza la lista de materias para el filtro
-      this.materias = (materias || []).map((m: any) => ({
-        id: String(m.id ?? ''),
-        codigo: String(m.codigo ?? ''),
-        nombre: String(m.nombre ?? ''),
-        seccion: m.seccion ?? '',
-      }));
+    // Reemplaza el loadMaterias() inicial y el subscribe de eventos por un combineLatest
+    combineLatest([
+      this.eventsService.getEvents(),
+      this.materiasService.getMateriasRealtime()
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async ([events, materias]) => {
+        // Sincroniza la lista de materias para el filtro
+        this.materias = (materias || []).map((m: any) => ({
+          id: String(m.id ?? ''),
+          codigo: String(m.codigo ?? ''),
+          nombre: String(m.nombre ?? ''),
+          seccion: m.seccion ?? '',
+        }));
 
-      // Mapea eventos enriqueciendo con datos de materia por ID
-      const lista = (events || []).map((e) => {
-        const materia = materias.find(m => m.id === (e as any).materiaId);
-        return this.mapToTable(e, materia);
+        // Mapea eventos enriqueciendo con datos de materia por ID
+        const lista = (events || []).map((e) => {
+          const materia = materias.find(m => m.id === (e as any).materiaId);
+          return this.mapToTable(e, materia);
+        });
+
+        this.eventosAll = lista;
+        this.eventosPublicados = lista.length;
+        this.cuposTotales = lista.reduce((acc, x) => acc + (Number(x.cupos) || 0), 0);
+        this.horasDisponibles = lista.reduce((acc, x) => acc + (Number(x.horas) || 0), 0);
+
+        this.applyFilters();
+        this.buildCharts();
+        await this.buildChartCupos(lista);
       });
+  }
 
-      this.eventosAll = lista;
-      this.eventosPublicados = lista.length;
-      this.cuposTotales = lista.reduce((acc, x) => acc + (Number(x.cupos) || 0), 0);
-      this.horasDisponibles = lista.reduce((acc, x) => acc + (Number(x.horas) || 0), 0);
-
-      this.applyFilters();
+  buildCharts(): void {
+    const lista = this.eventosAll;
+    
+    const porMateria = new Map<string, number>();
+    lista.forEach(e => {
+      const nombre = e.materia || 'Sin materia';
+      porMateria.set(nombre, (porMateria.get(nombre) ?? 0) + 1);
     });
-}
+    this.chartMateria = {
+      labels: [...porMateria.keys()],
+      datasets: [{
+        data: [...porMateria.values()],
+        backgroundColor: '#b71c1c',
+        borderRadius: 6
+      }]
+    };
+  }
+
+  async buildChartCupos(lista: EventoTabla[]): Promise<void> {
+    try {
+      
+      const todasInscripciones = await this.inscripcionesService.listarInscripciones();
+      
+      const inscritosPorEvento = new Map<string, number>();
+      todasInscripciones
+        .filter(i => i.estado !== 'cancelado')
+        .forEach(i => {
+          inscritosPorEvento.set(i.eventoId, (inscritosPorEvento.get(i.eventoId) ?? 0) + 1);
+        });
+      
+      const top10 = [...lista]
+        .sort((a, b) => b.cupos - a.cupos)
+        .slice(0, 10);
+
+      const labels = top10.map(e =>
+        e.nombre.length > 15 ? e.nombre.slice(0, 15) + '…' : e.nombre
+      );
+
+      this.chartCupos = {
+        labels,
+        datasets: [
+          {
+            label: 'Cupos disponibles',
+            data: top10.map(e => e.cupos),
+            backgroundColor: '#6366f1',
+            borderRadius: 6
+          },
+          {
+            label: 'Inscritos',
+            data: top10.map(e => inscritosPorEvento.get(e.id) ?? 0),
+            backgroundColor: '#b71c1c',
+            borderRadius: 6
+          }
+        ]
+      };
+    } catch {
+      this.showMsg('No se pudieron cargar las inscripciones.');
+    }
+  }
+
+
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
 
   async loadMaterias(): Promise<void> {
     try {
@@ -215,15 +333,15 @@ private dialog = inject(MatDialog);
   async onDelete(e: EventoTabla): Promise<void> {
     if (!e.id) return;
 
-      const ref = this.dialog.open(ConfirmDialogComponent, {
-    data: { message: `¿Seguro que deseas eliminar el evento "${e.nombre}"?` },
-  });
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: `¿Seguro que deseas eliminar el evento "${e.nombre}"?` },
+    });
 
-  const ok = await firstValueFrom(ref.afterClosed());
-  if (!ok) return;
+    const ok = await firstValueFrom(ref.afterClosed());
+    if (!ok) return;
     try {
       await this.eventsService.deleteEvent(e.id);
-       this.showMsg('Evento eliminado');
+      this.showMsg('Evento eliminado');
       if (this.editing && this.form.id === e.id) this.cancelEdit();
     } catch {
       this.showMsg('No se pudo eliminar el evento. Intenta de nuevo.');
@@ -280,13 +398,13 @@ private dialog = inject(MatDialog);
 
   async saveEdit(): Promise<void> {
     if (!this.form.id) return;
-if (!this.form.name.trim()) { this.showMsg('El nombre del evento es obligatorio.'); return; }
-if (!this.form.date) { this.showMsg('La fecha es obligatoria.'); return; }
-if (!this.form.location.trim()) { this.showMsg('El lugar es obligatorio.'); return; }
-if (this.form.hours === null || this.form.hours < 0) { this.showMsg('Horas inválidas.'); return; }
-if (this.form.slots === null || this.form.slots < 0) { this.showMsg('Cupos inválidos.'); return; }
-if (!this.form.modality) { this.showMsg('La modalidad es obligatoria.'); return; }
-if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
+    if (!this.form.name.trim()) { this.showMsg('El nombre del evento es obligatorio.'); return; }
+    if (!this.form.date) { this.showMsg('La fecha es obligatoria.'); return; }
+    if (!this.form.location.trim()) { this.showMsg('El lugar es obligatorio.'); return; }
+    if (this.form.hours === null || this.form.hours < 0) { this.showMsg('Horas inválidas.'); return; }
+    if (this.form.slots === null || this.form.slots < 0) { this.showMsg('Cupos inválidos.'); return; }
+    if (!this.form.modality) { this.showMsg('La modalidad es obligatoria.'); return; }
+    if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
 
     this.saving = true;
 
@@ -307,7 +425,7 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
       this.showMsg('Evento actualizado');
       this.cancelEdit();
     } catch {
-    this.showMsg('No se pudo actualizar el evento. Intenta de nuevo.');
+      this.showMsg('No se pudo actualizar el evento. Intenta de nuevo.');
     } finally {
       this.saving = false;
     }
@@ -331,7 +449,7 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
     };
   }
 
-  private mapToTable(e: Evento,  materia?: any): EventoTabla {
+  private mapToTable(e: Evento, materia?: any): EventoTabla {
     const rawDate = (e as any).date ?? '';
 
     return {
@@ -372,10 +490,10 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
   }
 
   private showMsg(message: string) {
-  this.snackBar.open(message, 'OK', {
-    duration: 2500,
-    horizontalPosition: 'right',
-    verticalPosition: 'bottom',
-  });
-}
+    this.snackBar.open(message, 'OK', {
+      duration: 2500,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+  }
 }

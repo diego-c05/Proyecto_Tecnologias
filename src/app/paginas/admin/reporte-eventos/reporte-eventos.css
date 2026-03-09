@@ -110,6 +110,7 @@
 
 .filters {
   margin-bottom: 14px;
+  margin-top: 14px;
 }
 
 .field label {
@@ -547,4 +548,44 @@ vertical-align:middle;
   font-size: 18px;
   line-height: 1;
   margin: 0;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.chart-box {
+  width: 100%;
+  overflow: hidden;
+}
+
+.chart-container {
+  position: relative;
+  height: 250px;   /* altura en móvil */
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .chart-container {
+    height: 300px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en desktop */
+  }
+
+  .chart-container {
+    height: 350px;
+  }
+}
+
+.chart-empty p {
+  font-size: 0.9rem;
 }
