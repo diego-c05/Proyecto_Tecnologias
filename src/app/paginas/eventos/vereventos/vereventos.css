@@ -1,27 +1,19 @@
-/* ====================================
-   VER EVENTOS - MOBILE FIRST
-   ==================================== */
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* ====================================
-   ESTILOS BASE - MÓVILES (≤480px)
-   Sin media queries
-   ==================================== */
-
 :host {
   display: block;
   min-height: 100vh;
-  padding: 18px 14px;
+  padding: 0;
 }
 
 .page {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 24px 16px 28px;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #1f2937;
 }
@@ -358,7 +350,7 @@
   }
 
   .page {
-    padding: 24px;
+    padding: 20px;
   }
 
   .page-header {
