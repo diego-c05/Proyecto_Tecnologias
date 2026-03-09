@@ -131,7 +131,6 @@
             <th>Lugar</th>
             <th>Materia</th>
             <th>Modalidad</th>
-            <th>Sección</th>
             <th>Cupos</th>
             <th>Horas</th>
             <th class="col-actions">Modificar</th>
@@ -154,9 +153,8 @@
 
             <td>{{ e.fecha }}</td>
             <td>{{ e.lugar }}</td>
-            <td>{{ e.materia }}</td>
+            <td>{{ e.materia }} {{ e.materiaCodigo }} - {{ e.seccion }}</td>
             <td>{{ e.modalidad }}</td>
-            <td>{{ e.seccion }}</td>
             <td>{{ e.cupos }}</td>
 
             <td>
@@ -265,19 +263,9 @@
             <select [(ngModel)]="form.materiaId" (change)="onMateriaChange(form.materiaId)">
               <option value="">Seleccionar...</option>
               <option *ngFor="let m of materias" [value]="m.id">
-                {{ m.nombre }}
+                {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
               </option>
             </select>
-          </div>
-
-          <div class="field">
-            <label>Código</label>
-            <input type="text" [value]="form.materiaCodigo" readonly>
-          </div>
-
-          <div class="field">
-            <label>Sección</label>
-            <input type="text" [value]="form.materiaSeccion" readonly>
           </div>
 
         </div>

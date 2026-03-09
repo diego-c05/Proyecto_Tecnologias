@@ -8,7 +8,7 @@ import { EventsService, Evento } from '../../../services/events.service';
 import { Materias } from '../../../services/materia/materias';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { firstValueFrom } from 'rxjs';
+import { combineLatest, firstValueFrom } from 'rxjs';
 import { ConfirmDialogComponent } from '../../../Confirm/confirm-dialog.ts/confirm-dialog.ts';
 
 type EventoTabla = {
@@ -94,33 +94,38 @@ private dialog = inject(MatDialog);
       return `No hay eventos disponibles con esa cantidad de horas (${this.hoursFilter}).`;
     }
     return 'No hay eventos para mostrar.';
-  }
+  }  
 
   constructor() {
-    this.loadMaterias();
+  // Reemplaza el loadMaterias() inicial y el subscribe de eventos por un combineLatest
+  combineLatest([
+    this.eventsService.getEvents(),
+    this.materiasService.getMateriasRealtime()
+  ])
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe(([events, materias]) => {
+      // Sincroniza la lista de materias para el filtro
+      this.materias = (materias || []).map((m: any) => ({
+        id: String(m.id ?? ''),
+        codigo: String(m.codigo ?? ''),
+        nombre: String(m.nombre ?? ''),
+        seccion: m.seccion ?? '',
+      }));
 
-    // Si tu service emite cuando cambia algo en materias (lo traías antes)
-    if ((this.materiasService as any).refrescar$) {
-      (this.materiasService as any).refrescar$
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => this.loadMaterias());
-    }
-
-    this.eventsService
-      .getEvents()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
-        const lista = (data || []).map((e) => this.mapToTable(e));
-
-        this.eventosAll = lista;
-
-        this.eventosPublicados = lista.length;
-        this.cuposTotales = lista.reduce((acc, x) => acc + (Number(x.cupos) || 0), 0);
-        this.horasDisponibles = lista.reduce((acc, x) => acc + (Number(x.horas) || 0), 0);
-
-        this.applyFilters();
+      // Mapea eventos enriqueciendo con datos de materia por ID
+      const lista = (events || []).map((e) => {
+        const materia = materias.find(m => m.id === (e as any).materiaId);
+        return this.mapToTable(e, materia);
       });
-  }
+
+      this.eventosAll = lista;
+      this.eventosPublicados = lista.length;
+      this.cuposTotales = lista.reduce((acc, x) => acc + (Number(x.cupos) || 0), 0);
+      this.horasDisponibles = lista.reduce((acc, x) => acc + (Number(x.horas) || 0), 0);
+
+      this.applyFilters();
+    });
+}
 
   async loadMaterias(): Promise<void> {
     try {
@@ -294,10 +299,7 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
       location: this.form.location.trim(),
       description: (this.form.description || '').trim(),
       imageUrl: (this.form.imageUrl || '').trim(),
-      materiaId: this.form.materiaId,
-      materiaNombre: this.form.materiaNombre,
-      materiaCodigo: this.form.materiaCodigo,
-      materiaSeccion: this.form.materiaSeccion,
+      materiaId: this.form.materiaId
     };
 
     try {
@@ -329,7 +331,7 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
     };
   }
 
-  private mapToTable(e: Evento): EventoTabla {
+  private mapToTable(e: Evento,  materia?: any): EventoTabla {
     const rawDate = (e as any).date ?? '';
 
     return {
@@ -340,13 +342,13 @@ if (!this.form.materiaId) { this.showMsg('Selecciona una materia.'); return; }
       lugar: (e as any).location ?? '',
       cupos: Number((e as any).slots) || 0,
       horas: Number((e as any).hours) || 0,
-      materia: (e as any).materiaNombre ?? '',
       modalidad: (e as any).modality ?? '',
-      seccion: (e as any).materiaSeccion ?? '',
       description: (e as any).description ?? '',
       imageUrl: (e as any).imageUrl ?? '',
       materiaId: (e as any).materiaId ?? '',
-      materiaCodigo: (e as any).materiaCodigo ?? '',
+      seccion: materia?.seccion ?? (e as any).materiaSeccion ?? '',
+      materia: materia?.nombre ?? (e as any).materiaNombre ?? '',
+      materiaCodigo: materia?.codigo ?? (e as any).materiaCodigo ?? '',
     };
   }
 
