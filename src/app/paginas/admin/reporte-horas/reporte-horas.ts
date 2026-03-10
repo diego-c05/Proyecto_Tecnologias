@@ -6,6 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { UsuariosService, Usuario } from '../../../services/usuarios.service';
 import { InscripcionesService, Inscripcion } from '../../../services/inscripciones.service';
 
+import { BaseChartDirective } from 'ng2-charts';
+import { Chart, ChartData, ChartOptions, registerables } from 'chart.js/auto';
+
+Chart.register(...registerables);
+
 interface EstudianteHoras {
   uid: string;
   nombreUsuario: string;
@@ -25,7 +30,7 @@ interface HistorialItem {
 @Component({
   selector: 'app-reporte-horas',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, BaseChartDirective],
   templateUrl: './reporte-horas.html',
   styleUrl: './reporte-horas.css',
 })
@@ -60,6 +65,36 @@ export class ReporteHoras implements OnInit {
   filtroNombre = '';
   filtroHorasTotales = '';
   filtroHorasRestantes = '';
+
+  //Gráfica estado de estudiantes
+chartEstadoHoras: ChartData<'doughnut'> = { labels: [], datasets: [] };
+
+chartEstadoHorasOpts: ChartOptions<'doughnut'> = {
+  responsive: true,
+  maintainAspectRatio: false
+};
+
+//Top estudiantes con más horas
+chartTopHoras: ChartData<'bar'> = { labels: [], datasets: [] };
+
+chartTopHorasOpts: ChartOptions<'bar'> = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false }
+  },
+  scales: {
+    y: { beginAtZero: true }
+  }
+};
+
+// Distribución de progreso de horas
+chartProgresoHoras: ChartData<'doughnut'> = { labels: [], datasets: [] };
+
+chartProgresoHorasOpts: ChartOptions<'doughnut'> = {
+  responsive: true,
+  maintainAspectRatio: false
+};
 
   async ngOnInit(): Promise<void> {
     await this.cargarReporte();
@@ -133,6 +168,7 @@ export class ReporteHoras implements OnInit {
       this.totalEstudiantesCompletas = this.historialBase.filter(s => s.totalHoras >= this.META_HORAS).length;
 
       this.aplicarFiltros();
+      this.buildCharts();
 
     } catch (err: any) {
 
@@ -155,6 +191,53 @@ export class ReporteHoras implements OnInit {
 
     }
   }
+
+buildCharts(): void {
+
+  // Gráfica completas vs pendientes
+  this.chartEstadoHoras = {
+    labels: ['Horas completas', 'Horas pendientes'],
+    datasets: [
+      {
+        data: [this.totalEstudiantesCompletas, this.totalEstudiantesPendientes],
+        backgroundColor: ['#2e7d32', '#f59e0b']
+      }
+    ]
+  };
+
+  // gráfica progreso
+  const sinHoras = this.historialBase.filter(s => s.totalHoras === 0).length;
+  const enProceso = this.historialBase.filter(s => s.totalHoras > 0 && s.totalHoras < this.META_HORAS).length;
+  const completas = this.historialBase.filter(s => s.totalHoras >= this.META_HORAS).length;
+
+  this.chartProgresoHoras = {
+    labels: ['Sin horas', 'En proceso', 'Completas'],
+    datasets: [{
+      data: [sinHoras, enProceso, completas],
+      backgroundColor: ['#9ca3af','#f59e0b','#2e7d32']
+    }]
+  };
+
+  // Top estudiantes
+  const top10 = [...this.historialBase]
+    .sort((a, b) => b.totalHoras - a.totalHoras)
+    .slice(0, 10);
+
+  this.chartTopHoras = {
+    labels: top10.map(s =>
+      s.nombreUsuario.length > 12
+        ? s.nombreUsuario.slice(0, 12) + '…'
+        : s.nombreUsuario
+    ),
+    datasets: [
+      {
+        data: top10.map(s => s.totalHoras),
+        backgroundColor: '#b71c1c',
+        borderRadius: 6
+      }
+    ]
+  };
+}
 
   aplicarFiltros(): void {
 
