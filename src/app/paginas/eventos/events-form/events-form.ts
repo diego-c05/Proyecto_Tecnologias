@@ -29,23 +29,27 @@ export class EventsForm {
 
   eventId: string | null = null;
 
+  readonly currentYear: number = new Date().getFullYear();
+  readonly minDate: string = `${new Date().getFullYear()}-01-01`;
+  readonly maxDate: string = `${new Date().getFullYear()}-12-31`;
+
   constructor(
     private eventsService: EventsService,
     private materiasService: Materias,
     private usuariosService: UsuariosService,
     private route: ActivatedRoute,
     private router: Router,
-  private snackBar: MatSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   materias: any[] = [];
   coordinadores: Usuario[] = [];
 
   imagenesDisponibles = [
-  { label: 'Predeterminada (Vinculación)', url: 'vinculacion-default.jpg' },
-  { label: 'Reforestación', url: 'vinculacion-default3.png' },
-  { label: 'Comunidad', url: 'vinculacion-default1.png' },
-];
+    { label: 'Predeterminada (Vinculación)', url: 'vinculacion-default.jpg' },
+    { label: 'Reforestación', url: 'vinculacion-default3.png' },
+    { label: 'Comunidad', url: 'vinculacion-default1.png' },
+  ];
 
   async ngOnInit() {
     this.eventId = this.route.snapshot.paramMap.get('id');
@@ -53,41 +57,49 @@ export class EventsForm {
     this.materias = await this.materiasService.listarMaterias();
 
     const usuarios = await this.usuariosService.listarUsuarios();
-    this.coordinadores = usuarios.filter(u=>u.rol === 'coordinador')
+    this.coordinadores = usuarios.filter(u => u.rol === 'coordinador');
 
     if (this.eventId) {
       const data = await this.eventsService.getEventById(this.eventId);
       if (data) {
         this.event = data;
-     } else {
-  this.showMsg('Evento no encontrado');
-  this.router.navigate(['/eventos/events-list']);
-}
+      } else {
+        this.showMsg('Evento no encontrado');
+        this.router.navigate(['/eventos/events-list']);
+      }
     }
   }
 
- async saveEvent(form: NgForm) {
-  if (form.invalid) {
-    form.control.markAllAsTouched();
-    return;
-  }
-this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg'; 
-  try {
-    if (this.eventId) {
-      await this.eventsService.updateEvent(this.eventId, this.event);
-      this.showMsg('Evento actualizado');
-    } else {
-      await this.eventsService.createEvent(this.event);
-     this.showMsg('Evento creado');
+  async saveEvent(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+    if (this.event.date) {
+      const selectedYear = new Date(this.event.date + 'T00:00:00').getFullYear();
+      if (selectedYear !== this.currentYear) {
+        this.showMsg(`Solo se pueden crear eventos para el año ${this.currentYear}.`);
+        return;
+      }
     }
 
-    this.router.navigate(['/eventos/events-list']);
-  } catch (err) {
-    console.error('Error guardando:', err);
-    this.showMsg('Ocurrió un error al guardar');
-  }
-}
+    this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg';
 
+    try {
+      if (this.eventId) {
+        await this.eventsService.updateEvent(this.eventId, this.event);
+        this.showMsg('Evento actualizado');
+      } else {
+        await this.eventsService.createEvent(this.event);
+        this.showMsg('Evento creado');
+      }
+
+      this.router.navigate(['/eventos/events-list']);
+    } catch (err) {
+      console.error('Error guardando:', err);
+      this.showMsg('Ocurrió un error al guardar');
+    }
+  }
 
   onMateriaChange() {
     const materia = this.materias.find(
@@ -110,21 +122,22 @@ this.event.imageUrl = this.event.imageUrl || 'vinculacion-default.jpg';
   }
 
   msg = '';
-msgType: 'success' | 'error' | '' = '';
+  msgType: 'success' | 'error' | '' = '';
 
-private setMsg(text: string, type: 'success' | 'error') {
-  this.msg = text;
-  this.msgType = type;
-  setTimeout(() => {
-    this.msg = '';
-    this.msgType = '';
-  }, 2500);
-}
+  private setMsg(text: string, type: 'success' | 'error') {
+    this.msg = text;
+    this.msgType = type;
+    setTimeout(() => {
+      this.msg = '';
+      this.msgType = '';
+    }, 2500);
+  }
+
   private showMsg(message: string) {
-  this.snackBar.open(message, 'OK', {
-    duration: 2500,
-    horizontalPosition: 'right',
-    verticalPosition: 'bottom',
-  });
-}
+    this.snackBar.open(message, 'OK', {
+      duration: 2500,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+  }
 }
