@@ -30,7 +30,7 @@ export class EventsForm {
   eventId: string | null = null;
 
   readonly currentYear: number = new Date().getFullYear();
-  readonly minDate: string = `${new Date().getFullYear()}-01-01`;
+  readonly minDate: string = new Date().toISOString().split('T')[0];
   readonly maxDate: string = `${new Date().getFullYear()}-12-31`;
 
   constructor(
@@ -75,8 +75,17 @@ export class EventsForm {
       form.control.markAllAsTouched();
       return;
     }
+
     if (this.event.date) {
-      const selectedYear = new Date(this.event.date + 'T00:00:00').getFullYear();
+      const selected = new Date(this.event.date + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedYear = selected.getFullYear();
+
+      if (selected < today) {
+        this.showMsg('No se pueden crear eventos en fechas pasadas.');
+        return;
+      }
       if (selectedYear !== this.currentYear) {
         this.showMsg(`Solo se pueden crear eventos para el año ${this.currentYear}.`);
         return;
@@ -105,7 +114,6 @@ export class EventsForm {
     const materia = this.materias.find(
       m => m.id === this.event.materiaId
     );
-
     if (materia) {
       this.event.materiaId = materia.id;
     }
@@ -115,7 +123,6 @@ export class EventsForm {
     const coordinador = this.coordinadores.find(
       c => c.uid === this.event.coordinadorId
     );
-
     if (coordinador) {
       this.event.coordinadorId = coordinador.uid;
     }
