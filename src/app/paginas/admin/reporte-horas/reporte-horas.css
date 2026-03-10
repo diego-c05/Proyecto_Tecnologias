@@ -370,7 +370,50 @@
   opacity: 0.6;
 }
 
+.charts-section{
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+
+.chart-box{
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.chart-box h3{
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #333;
+}
+
+.chart-container {
+  position: relative;
+  height: 260px;
+  width: 100%; 
+  max-width: 100%;
+  overflow: hidden; 
+  }
+
+@media (max-width: 600px) {
+  .chart-container {
+    height: 220px; 
+  }
+}
+
 @media (max-width: 900px) {
+   .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .chart-wide {
+    grid-column: span 1; 
+  }
+
   .stats {
     grid-template-columns: 1fr;
   }

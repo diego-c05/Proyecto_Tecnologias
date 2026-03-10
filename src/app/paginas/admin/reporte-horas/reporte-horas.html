@@ -38,6 +38,46 @@
     </div>
   </section>
 
+  <section class="charts-section" *ngIf="!cargando && !errorMsg">
+  <div class="card charts-grid">
+  <div class="chart-box">
+      <h3>Estado de horas</h3>
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [data]="chartEstadoHoras"
+          [options]="chartEstadoHorasOpts"
+          type="doughnut">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <h3>Progreso de horas</h3>
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [data]="chartProgresoHoras"
+          [options]="chartProgresoHorasOpts"
+          type="doughnut">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="chart-box chart-wide">
+      <h3>Top estudiantes con más horas</h3>
+      <div class="chart-container">
+        <canvas
+          baseChart
+          [data]="chartTopHoras"
+          [options]="chartTopHorasOpts"
+          type="bar">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
   <section class="card filters" *ngIf="!cargando && !errorMsg">
     <div class="card-header">
       <h2>Filtros</h2>
