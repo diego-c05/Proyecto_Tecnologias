@@ -42,10 +42,15 @@
         [(ngModel)]="event.date"
         name="date"
         required
+        [min]="minDate"
+        [max]="maxDate"
         #dateModel="ngModel"
       />
       <div class="error" *ngIf="dateModel.invalid && (dateModel.touched || f.submitted)">
-        La fecha es obligatoria.
+        <span *ngIf="dateModel.errors?.['required']">La fecha es obligatoria.</span>
+        <span *ngIf="dateModel.errors?.['min'] || dateModel.errors?.['max']">
+          La fecha debe estar dentro del año {{ currentYear }}.
+        </span>
       </div>
     </div>
 
