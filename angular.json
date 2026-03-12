@@ -20,6 +20,7 @@
             "outputPath": "dist/gestion-horas-vinculacion",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "serviceWorker": "ngsw-config.json",
             "polyfills": [
               "zone.js"
             ],
