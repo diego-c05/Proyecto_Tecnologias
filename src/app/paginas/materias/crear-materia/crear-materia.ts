@@ -47,8 +47,11 @@ export class CrearMateria implements OnInit {
     })
   }
 
-  async guardar() {
+  async guardar(form: any) {
     try {
+      if (form.invalid) {
+        return;  
+      }
 
       //Si el id no viene vacio se modificaria, si id es vacio se agregaria
       if (this.materia.id) {
@@ -69,6 +72,7 @@ export class CrearMateria implements OnInit {
 
       this.materia = { nombre: '', codigo: '', seccion: '' }; 
       this.titulo = "Agregar Materia"
+      form.resetForm();
 
     } catch (error) {
       console.error('❌ Error al guardar', error);
