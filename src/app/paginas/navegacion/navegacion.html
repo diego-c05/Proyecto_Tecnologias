@@ -1,5 +1,5 @@
 <!-- ================= BANNER ================= -->
-<header class="banner">
+<header class="banner" role="banner" aria-label="Encabezado del sistema">
   <div class="banner-left">
     <img
       src="https://firebasestorage.googleapis.com/v0/b/gestion-horas-de-vinculacion.firebasestorage.app/o/logo%2Flogo.png?alt=media&token=546ab76a-b545-4b19-80ee-e107c8342842"
@@ -17,7 +17,7 @@
 <label class="overlay" for="navToggle" aria-hidden="true"></label>
 
 <!-- ================= TOPBAR ================= -->
-<nav class="topbar" aria-label="Navegación principal">
+<nav class="topbar" role="navigation" aria-label="Navegación principal">
   <!-- Burger button (solo móvil) -->
   <label class="burger-btn" for="navToggle" aria-label="Abrir menú">
     <mat-icon class="burger-icon">menu</mat-icon>
@@ -28,17 +28,17 @@
     <!-- SOLO USUARIO -->
     <ng-container *ngIf="rol === 'usuario'">
       <a routerLink="/eventos/vereventos" routerLinkActive="active" class="nav-link" title="Ver Eventos">
-        <mat-icon class="mat-nav-icon">event</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">event</mat-icon>
         <span>Ver Eventos</span>
       </a>
 
       <a routerLink="/mis-inscripciones" routerLinkActive="active" class="nav-link" title="Mis inscripciones">
-        <mat-icon class="mat-nav-icon">list</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">list</mat-icon>
         <span>Mis inscripciones</span>
       </a>
 
       <a routerLink="/historial-horas" routerLinkActive="active" class="nav-link" title="Historial de Horas">
-        <mat-icon class="mat-nav-icon">schedule</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">schedule</mat-icon>
         <span>Historial</span>
       </a>
     </ng-container>
@@ -46,32 +46,32 @@
     <!-- SOLO COORDINADOR -->
     <ng-container *ngIf="rol === 'coordinador'">
       <a routerLink="/admin/reporte-eventos" routerLinkActive="active" class="nav-link" title="Reportes de Eventos">
-        <mat-icon class="mat-nav-icon">bar_chart</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">bar_chart</mat-icon>
         <span>Reportes</span>
       </a>
 
       <a routerLink="/admin/reporte-horas" routerLinkActive="active" class="nav-link" title="Reporte de Horas">
-        <mat-icon class="mat-nav-icon">description</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">description</mat-icon>
         <span>Horas</span>
       </a>
 
       <a routerLink="/admin/gestion-usuarios" routerLinkActive="active" class="nav-link" title="Gestión de Usuarios">
-        <mat-icon class="mat-nav-icon">people</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">people</mat-icon>
         <span>Usuarios</span>
       </a>
 
       <a routerLink="/materias/materias-pagina" routerLinkActive="active" class="nav-link" title="Materias">
-        <mat-icon class="mat-nav-icon">menu_book</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">menu_book</mat-icon>
         <span>Materias</span>
       </a>
 
       <a routerLink="/eventos/events-list" routerLinkActive="active" class="nav-link" title="Administrar Eventos">
-        <mat-icon class="mat-nav-icon">checklist</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">checklist</mat-icon>
         <span>Admin Eventos</span>
       </a>
 
       <a routerLink="/eventos/crear" routerLinkActive="active" class="nav-link" title="Crear Evento">
-        <mat-icon class="mat-nav-icon">add_circle</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">add_circle</mat-icon>
         <span>Crear Evento</span>
       </a>
 
@@ -81,7 +81,7 @@
         class="nav-link"
         title="Administrar Inscripciones"
       >
-        <mat-icon class="mat-nav-icon">task_alt</mat-icon>
+        <mat-icon class="mat-nav-icon" aria-hidden="true">task_alt</mat-icon>
         <span>Admin Inscripciones</span>
       </a>
     </ng-container>
@@ -89,13 +89,13 @@
 
   <!-- Logout desktop (derecha) -->
   <button class="logout-btn" title="Cerrar sesión" type="button" (click)="logout()">
-    <mat-icon class="mat-nav-icon">logout</mat-icon>
+    <mat-icon class="mat-nav-icon" aria-hidden="true">logout</mat-icon>
     <span>Cerrar sesión</span>
   </button>
 </nav>
 
 <!-- ================= SIDENAV (MÓVIL) ================= -->
-<aside class="sidenav" aria-label="Menú lateral">
+<aside class="sidenav" role="navigation" aria-label="Menú lateral">
   <div class="sidenav-header">
     <div class="sidenav-brand">
       <img
@@ -108,8 +108,8 @@
       <div class="sidenav-subtitle">Vinculación</div>
     </div>
 
-    <label class="close-btn" for="navToggle" aria-label="Cerrar menú">
-      <mat-icon>close</mat-icon>
+    <label class="close-btn" for="navToggle" aria-label="Cerrar menú lateral">
+      <mat-icon aria-hidden="true">close</mat-icon>
     </label>
   </div>
 
@@ -120,17 +120,17 @@
     <ng-container *ngIf="rol === 'usuario'">
       <a routerLink="/eventos/vereventos" routerLinkActive="active" class="side-link"
          title="Ver Eventos">
-        <mat-icon>event</mat-icon>
+        <mat-icon aria-hidden="true">event</mat-icon>
         <span>Ver Eventos</span>
       </a>
 
       <a routerLink="/mis-inscripciones" routerLinkActive="active" class="side-link" title="Mis inscripciones">
-        <mat-icon>list</mat-icon>
+        <mat-icon aria-hidden="true">list</mat-icon>
         <span>Mis inscripciones</span>
       </a>
 
       <a routerLink="/historial-horas" routerLinkActive="active" class="side-link" title="Historial de Horas">
-        <mat-icon>schedule</mat-icon>
+        <mat-icon aria-hidden="true">schedule</mat-icon>
         <span>Historial</span>
       </a>
     </ng-container>
@@ -138,46 +138,46 @@
     <!-- SOLO COORDINADOR -->
     <ng-container *ngIf="rol === 'coordinador'">
       <a routerLink="/admin/reporte-eventos" routerLinkActive="active" class="side-link" title="Reportes de Eventos">
-        <mat-icon>bar_chart</mat-icon>
+        <mat-icon aria-hidden="true">bar_chart</mat-icon>
         <span>Reportes</span>
       </a>
 
       <a routerLink="/admin/reporte-horas" routerLinkActive="active" class="side-link" title="Reporte de Horas">
-        <mat-icon>description</mat-icon>
+        <mat-icon aria-hidden="true">description</mat-icon>
         <span>Horas</span>
       </a>
 
       <a routerLink="/admin/gestion-usuarios" routerLinkActive="active" class="side-link" title="Gestión de Usuarios">
-        <mat-icon>people</mat-icon>
+        <mat-icon aria-hidden="true">people</mat-icon>
         <span>Usuarios</span>
       </a>
 
       <a routerLink="/materias/materias-pagina" routerLinkActive="active" class="side-link" title="Materias">
-        <mat-icon>menu_book</mat-icon>
+        <mat-icon aria-hidden="true">menu_book</mat-icon>
         <span>Materias</span>
       </a>
 
       <a routerLink="/eventos/events-list" routerLinkActive="active" class="side-link" title="Administrar Eventos">
-        <mat-icon>checklist</mat-icon>
+        <mat-icon aria-hidden="true">checklist</mat-icon>
         <span>Admin Eventos</span>
       </a>
 
       <a routerLink="/eventos/crear" routerLinkActive="active" class="side-link" title="Crear Evento">
-        <mat-icon>add_circle</mat-icon>
+        <mat-icon aria-hidden="true">add_circle</mat-icon>
         <span>Crear Evento</span>
       </a>
 
       <a routerLink="/inscripciones/admi-inscripciones" routerLinkActive="active" class="side-link"
          title="Administrar Inscripciones">
-        <mat-icon>task_alt</mat-icon>
+        <mat-icon aria-hidden="true">task_alt</mat-icon>
         <span>Admin Inscripciones</span>
       </a>
     </ng-container>
 
     <div class="section-sep"></div>
 
-    <button class="side-logout" type="button" (click)="logout()">
-      <mat-icon>logout</mat-icon>
+    <button class="side-logout" type="button" (click)="logout()" aria-label="Cerrar Sesion">
+      <mat-icon aria-hidden="true">logout</mat-icon>
       <span>Cerrar sesión</span>
     </button>
   </div>

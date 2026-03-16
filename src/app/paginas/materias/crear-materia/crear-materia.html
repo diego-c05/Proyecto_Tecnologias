@@ -1,8 +1,8 @@
 <div class="crear-materia">
 
-  <h2>{{ titulo }}</h2>
+  <h2 id="titulo-formulario">{{ titulo }}</h2>
 
-  <form (ngSubmit)="guardar()" #materiaForm="ngForm">
+  <form (ngSubmit)="guardar(materiaForm)" #materiaForm="ngForm" aria-labelledby="titulo-formulario">    
 
     <div class="form-group">
       <label for="nombre">Nombre</label>
@@ -12,8 +12,16 @@
         name="nombre"
         [(ngModel)]="materia.nombre"
         required
+        aria-required="true"
+        aria-describedby="nombre-error"
+        [attr.aria-invalid]="nombre.invalid && (nombre.touched || materiaForm.submitted)"
+        #nombre="ngModel"
+        (input)="materia.nombre = materia.nombre.trim()"
         placeholder="Ej. Matemática I"
       />
+      <div class="error" id="nombre-error" role="alert" *ngIf="nombre.invalid && (nombre.touched || materiaForm.submitted)">
+        El nombre es obligatorio.
+      </div>
     </div>
 
     <div class="form-group">
@@ -24,20 +32,35 @@
         name="codigo"
         [(ngModel)]="materia.codigo"
         required
+        aria-required="true"
+        aria-describedby="codigo-error"
+        [attr.aria-invalid]="codigo.invalid && (codigo.touched || materiaForm.submitted)"
+        #codigo="ngModel"
+        (input)="materia.codigo = materia.codigo.toUpperCase().trim()"
         placeholder="Ej. MAT-101"
       />
+      <div class="error" id="codigo-error" role="alert" *ngIf="codigo.invalid && (codigo.touched || materiaForm.submitted)">
+        El Codigo es obligatorio.
+      </div>
     </div>
 
     <div class="form-group">
       <label for="seccion">Sección</label>
       <input
-        type="text"
+        type="number"
         id="seccion"
         name="seccion"
         [(ngModel)]="materia.seccion"
         required
+        aria-required="true"
+        aria-describedby="seccion-error"
+        [attr.aria-invalid]="seccion.invalid && (seccion.touched || materiaForm.submitted)"
+        #seccion="ngModel"
         placeholder="Ej. A"
       />
+      <div class="error" id="seccion-error" role="alert" *ngIf="seccion.invalid && (seccion.touched || materiaForm.submitted)">
+        El Seccion es obligatorio. Solo se aceptan numeros.
+      </div>
     </div>
 
     <div class="form-actions">

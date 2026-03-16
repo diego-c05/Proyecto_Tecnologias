@@ -8,14 +8,14 @@
 
   <section class="card">
     <div class="card-header">
-      <h2>Formulario de evento</h2>
+      <h2 id="titulo-formulario">Formulario de evento</h2>
     </div>
 
     <div *ngIf="msg" class="toast" [class.success]="msgType==='success'" [class.error]="msgType==='error'">
       {{ msg }}
     </div>
 
-    <form class="form" #f="ngForm" (ngSubmit)="saveEvent(f)">
+    <form class="form" #f="ngForm" (ngSubmit)="saveEvent(f)" aria-labelledby="titulo-formulario">
       <div class="grid">
 
         <!-- NOMBRE -->
@@ -27,10 +27,13 @@
             [(ngModel)]="event.name"
             name="name"
             required
+            aria-required="true"
+            aria-describedby="nombre-error"
+            [attr.aria-invalid]="nameModel.invalid && (nameModel.touched || f.submitted)"
             #nameModel="ngModel"
             placeholder="Ej. Jornada de reforestación"
           />
-          <div class="error" *ngIf="nameModel.invalid && (nameModel.touched || f.submitted)">
+          <div class="error" id="nombre-error" role="alert" *ngIf="nameModel.invalid && (nameModel.touched || f.submitted)">
             El nombre es obligatorio.
           </div>
         </div>
@@ -44,11 +47,14 @@
             [(ngModel)]="event.date"
             name="date"
             required
+            aria-required="true"
+            aria-describedby="fecha-error"
+            [attr.aria-invalid]="dateModel.invalid && (dateModel.touched || f.submitted)"
             [min]="minDate"
             [max]="maxDate"
             #dateModel="ngModel"
           />
-          <div class="error" *ngIf="dateModel.invalid && (dateModel.touched || f.submitted)">
+          <div class="error" id="fecha-error" role="alert" *ngIf="dateModel.invalid && (dateModel.touched || f.submitted)">
             <span *ngIf="dateModel.errors?.['required']">La fecha es obligatoria.</span>
             <span *ngIf="dateModel.errors?.['min']">No se pueden crear eventos en fechas pasadas.</span>
             <span *ngIf="dateModel.errors?.['max']">La fecha debe estar dentro del año {{ currentYear }}.</span>
@@ -64,10 +70,13 @@
             [(ngModel)]="event.location"
             name="location"
             required
+            aria-required="true"
+            aria-describedby="ubicacion-error"
+            [attr.aria-invalid]="locModel.invalid && (locModel.touched || f.submitted)"
             #locModel="ngModel"
             placeholder="Ej. Campus Central"
           />
-          <div class="error" *ngIf="locModel.invalid && (locModel.touched || f.submitted)">
+          <div class="error" id="ubicacion-error" role="alert" *ngIf="locModel.invalid && (locModel.touched || f.submitted)">
             La ubicación es obligatoria.
           </div>
         </div>
@@ -80,13 +89,16 @@
             [(ngModel)]="event.modality"
             name="modality"
             required
+            aria-required="true"
+            aria-describedby="modalidad-error"
+            [attr.aria-invalid]="modModel.invalid && (modModel.touched || f.submitted)"
             #modModel="ngModel"
           >
             <option value="" disabled>Seleccione una modalidad</option>
             <option value="Presencial">Presencial</option>
             <option value="Virtual">Virtual</option>
           </select>
-          <div class="error" *ngIf="modModel.invalid && (modModel.touched || f.submitted)">
+          <div class="error" id="modalidad-error" role="alert" *ngIf="modModel.invalid && (modModel.touched || f.submitted)">
             Selecciona una modalidad.
           </div>
         </div>
@@ -100,11 +112,14 @@
             [(ngModel)]="event.hours"
             name="hours"
             required
+            aria-required="true"
+            aria-describedby="horas-error"
+            [attr.aria-invalid]="hoursModel.invalid && (hoursModel.touched || f.submitted)"
             min="1"
             #hoursModel="ngModel"
             placeholder="Ej. 4"
           />
-          <div class="error" *ngIf="hoursModel.invalid && (hoursModel.touched || f.submitted)">
+          <div class="error" id="horas-error" role="alert" *ngIf="hoursModel.invalid && (hoursModel.touched || f.submitted)">
             <span *ngIf="hoursModel.errors?.['required']">Las horas son obligatorias.</span>
             <span *ngIf="hoursModel.errors?.['min']">Debe ser al menos 1 hora.</span>
           </div>
@@ -119,11 +134,14 @@
             [(ngModel)]="event.slots"
             name="slots"
             required
+            aria-required="true"
+            aria-describedby="cupos-error"
+            [attr.aria-invalid]="slotsModel.invalid && (slotsModel.touched || f.submitted)"
             min="1"
             #slotsModel="ngModel"
             placeholder="Ej. 50"
-          />
-          <div class="error" *ngIf="slotsModel.invalid && (slotsModel.touched || f.submitted)">
+          /> 
+          <div class="error" id="cupos-error" role="alert" *ngIf="slotsModel.invalid && (slotsModel.touched || f.submitted)">
             <span *ngIf="slotsModel.errors?.['required']">Los cupos son obligatorios.</span>
             <span *ngIf="slotsModel.errors?.['min']">Debe ser al menos 1 cupo.</span>
           </div>
@@ -138,6 +156,9 @@
             name="materiaId"
             (change)="onMateriaChange()"
             required
+            aria-required="true"
+            aria-describedby="materia-error"
+            [attr.aria-invalid]="materiaModel.invalid && (materiaModel.touched || f.submitted)"
             #materiaModel="ngModel"
           >
             <option value="">Seleccione una materia</option>
@@ -145,7 +166,7 @@
               {{ m.nombre }} - {{ m.codigo }} ({{ m.seccion }})
             </option>
           </select>
-          <div class="error" *ngIf="materiaModel.invalid && (materiaModel.touched || f.submitted)">
+          <div class="error" id="materia-error" role="alert" *ngIf="materiaModel.invalid && (materiaModel.touched || f.submitted)">
             Debes seleccionar una materia.
           </div>
         </div>
@@ -159,6 +180,9 @@
             name="coordinadorId"
             (change)="onCoordinadorChange()"
             required
+            aria-required="true"
+            aria-describedby="coordinador-error"
+            [attr.aria-invalid]="coordinadorModel.invalid && (coordinadorModel.touched || f.submitted)"
             #coordinadorModel="ngModel"
           >
             <option value="">Seleccione un Coordinador</option>
@@ -166,7 +190,7 @@
               {{ c.nombreCompleto }}
             </option>
           </select>
-          <div class="error" *ngIf="coordinadorModel.invalid && (coordinadorModel.touched || f.submitted)">
+          <div class="error" id="coordinador-error" role="alert" *ngIf="coordinadorModel.invalid && (coordinadorModel.touched || f.submitted)">
             Debes seleccionar un Coordinador.
           </div>
         </div>
@@ -179,6 +203,9 @@
             [(ngModel)]="event.imageUrl"
             name="imageUrl"
             required
+            aria-required="true"
+            aria-describedby="imagen-error"
+            [attr.aria-invalid]="imgModel.invalid && (imgModel.touched || f.submitted)"
             #imgModel="ngModel"
           >
             <option value="" disabled>Seleccione una imagen</option>
@@ -186,7 +213,7 @@
               {{ img.label }}
             </option>
           </select>
-          <div class="error" *ngIf="imgModel.invalid && (imgModel.touched || f.submitted)">
+          <div class="error" id="imagen-error" role="alert" *ngIf="imgModel.invalid && (imgModel.touched || f.submitted)">
             Debes seleccionar una imagen.
           </div>
           <!-- Vista previa -->
